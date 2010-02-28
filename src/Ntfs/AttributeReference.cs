@@ -29,7 +29,7 @@ namespace DiscUtils.Ntfs
     /// </summary>
     internal class AttributeReference : IComparable<AttributeReference>, IEquatable<AttributeReference>
     {
-        private FileReference _fileReference;
+        private FileRecordReference _fileReference;
         private ushort _attributeId;
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace DiscUtils.Ntfs
         /// </summary>
         /// <param name="fileReference">The file containing the attribute</param>
         /// <param name="attributeId">The identity of the attribute within the file record</param>
-        public AttributeReference(FileReference fileReference, ushort attributeId)
+        public AttributeReference(FileRecordReference fileReference, ushort attributeId)
         {
             _fileReference = fileReference;
             _attributeId = attributeId;
@@ -46,7 +46,7 @@ namespace DiscUtils.Ntfs
         /// <summary>
         /// The file containing the attribute.
         /// </summary>
-        public FileReference File
+        public FileRecordReference File
         {
             get { return _fileReference; }
         }

@@ -36,7 +36,7 @@ namespace DiscUtils.Ntfs
             _index = new IndexView<Key, Data>(file.GetIndex("$R"));
         }
 
-        internal void Add(uint tag, FileReference file)
+        internal void Add(uint tag, FileRecordReference file)
         {
             Key newKey = new Key();
             newKey.Tag = tag;
@@ -48,7 +48,7 @@ namespace DiscUtils.Ntfs
             _file.UpdateRecordInMft();
         }
 
-        internal void Remove(uint tag, FileReference file)
+        internal void Remove(uint tag, FileRecordReference file)
         {
             Key key = new Key();
             key.Tag = tag;
@@ -73,14 +73,14 @@ namespace DiscUtils.Ntfs
         internal sealed class Key : IByteArraySerializable
         {
             public uint Tag;
-            public FileReference File;
+            public FileRecordReference File;
 
             #region IByteArraySerializable Members
 
             public void ReadFrom(byte[] buffer, int offset)
             {
                 Tag = Utilities.ToUInt32LittleEndian(buffer, offset);
-                File = new FileReference(Utilities.ToUInt64LittleEndian(buffer, offset + 4));
+                File = new FileRecordReference(Utilities.ToUInt64LittleEndian(buffer, offset + 4));
             }
 
             public void WriteTo(byte[] buffer, int offset)

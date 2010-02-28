@@ -388,7 +388,7 @@ namespace DiscUtils.Ntfs
             if (indexName == "$I30")
             {
                 keyValue = new FileNameRecord();
-                dataValue = new FileReference();
+                dataValue = new FileRecordReference();
             }
             else if (fileName == "$ObjId" && indexName == "$O")
             {

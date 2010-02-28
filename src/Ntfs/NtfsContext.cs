@@ -25,9 +25,9 @@ using System.IO;
 namespace DiscUtils.Ntfs
 {
     internal delegate File GetFileByIndexFn(long index);
-    internal delegate File GetFileByRefFn(FileReference reference);
+    internal delegate File GetFileByRefFn(FileRecordReference reference);
     internal delegate Directory GetDirectoryByIndexFn(long index);
-    internal delegate Directory GetDirectoryByRefFn(FileReference reference);
+    internal delegate Directory GetDirectoryByRefFn(FileRecordReference reference);
     internal delegate File AllocateFileFn(FileRecordFlags flags);
     internal delegate void ForgetFileFn(File file);
 

@@ -26,17 +26,17 @@ namespace DiscUtils.Ntfs
     internal class DirectoryEntry
     {
         private Directory _directory;
-        private FileReference _fileReference;
+        private FileRecordReference _fileReference;
         private FileNameRecord _fileDetails;
 
-        public DirectoryEntry(Directory directory, FileReference fileReference, FileNameRecord fileDetails)
+        public DirectoryEntry(Directory directory, FileRecordReference fileReference, FileNameRecord fileDetails)
         {
             _directory = directory;
             _fileReference = fileReference;
             _fileDetails = fileDetails;
         }
 
-        public FileReference Reference
+        public FileRecordReference Reference
         {
             get { return _fileReference; }
         }

@@ -57,7 +57,7 @@ namespace DiscUtils.Ntfs
 
     internal class FileNameRecord : IByteArraySerializable, IDiagnosticTraceable, IEquatable<FileNameRecord>
     {
-        public FileReference ParentDirectory;
+        public FileRecordReference ParentDirectory;
         public DateTime CreationTime;
         public DateTime ModificationTime;
         public DateTime MftChangedTime;
@@ -125,7 +125,7 @@ namespace DiscUtils.Ntfs
 
         public void ReadFrom(byte[] buffer, int offset)
         {
-            ParentDirectory = new FileReference(Utilities.ToUInt64LittleEndian(buffer, offset + 0x00));
+            ParentDirectory = new FileRecordReference(Utilities.ToUInt64LittleEndian(buffer, offset + 0x00));
             CreationTime = ReadDateTime(buffer, offset + 0x08);
             ModificationTime = ReadDateTime(buffer, offset + 0x10);
             MftChangedTime = ReadDateTime(buffer, offset + 0x18);

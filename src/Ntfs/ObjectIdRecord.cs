@@ -27,14 +27,14 @@ namespace DiscUtils.Ntfs
 {
     internal sealed class ObjectIdRecord : IByteArraySerializable
     {
-        public FileReference MftReference;
+        public FileRecordReference MftReference;
         public Guid BirthVolumeId;
         public Guid BirthObjectId;
         public Guid BirthDomainId;
 
         public void ReadFrom(byte[] buffer, int offset)
         {
-            MftReference = new FileReference();
+            MftReference = new FileRecordReference();
             MftReference.ReadFrom(buffer, offset);
 
             BirthVolumeId = Utilities.ToGuidLittleEndian(buffer, offset + 0x08);
