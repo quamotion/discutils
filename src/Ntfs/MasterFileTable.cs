@@ -253,7 +253,7 @@ namespace DiscUtils.Ntfs
             return newRecord;
         }
 
-        public void RemoveRecord(FileReference fileRef)
+        public void RemoveRecord(FileRecordReference fileRef)
         {
             FileRecord record = GetRecord(fileRef.MftIndex, false);
             record.Reset();
@@ -264,7 +264,7 @@ namespace DiscUtils.Ntfs
             _self.UpdateRecordInMft();
         }
 
-        public FileRecord GetRecord(FileReference fileReference)
+        public FileRecord GetRecord(FileRecordReference fileReference)
         {
             FileRecord result = GetRecord(fileReference.MftIndex, false);
 
@@ -354,7 +354,7 @@ namespace DiscUtils.Ntfs
             }
         }
 
-        public long GetRecordOffset(FileReference fileReference)
+        public long GetRecordOffset(FileRecordReference fileReference)
         {
             return fileReference.MftIndex * _recordLength;
         }

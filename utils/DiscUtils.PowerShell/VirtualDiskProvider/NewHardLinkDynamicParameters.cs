@@ -1,5 +1,5 @@
 ﻿//
-// Copyright (c) 2009, Kenneth Bell
+// Copyright (c) 2008-2010, Kenneth Bell
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
@@ -20,43 +20,17 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
+using System.Management.Automation;
 
-namespace DiscUtils.Iscsi
+namespace DiscUtils.PowerShell.VirtualDiskProvider
 {
-    internal class ScsiReportLunsCommand : ScsiCommand
+    public class NewHardLinkDynamicParameters
     {
-        public const int InitialResponseSize = 16;
-
-        private uint _expected;
-
-        public ScsiReportLunsCommand(uint expected)
-            : base(0)
+        [Parameter]
+        public string SourcePath
         {
-            _expected = expected;
-        }
-
-        public override int ReadFrom(byte[] buffer, int offset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void WriteTo(byte[] buffer, int offset)
-        {
-            buffer[offset] = 0xA0;
-            buffer[offset + 1] = 0; // Reserved
-            buffer[offset + 2] = 0; // Report Type = 0
-            buffer[offset + 3] = 0; // Reserved
-            buffer[offset + 4] = 0; // Reserved
-            buffer[offset + 5] = 0; // Reserved
-            Utilities.WriteBytesBigEndian(_expected, buffer, offset + 6);
-            buffer[offset + 10] = 0; // Reserved
-            buffer[offset + 11] = 0; // Control
-        }
-
-        public override int Size
-        {
-            get { return 12; }
+            get;
+            set;
         }
     }
 }

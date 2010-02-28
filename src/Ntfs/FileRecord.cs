@@ -46,7 +46,7 @@ namespace DiscUtils.Ntfs
         private FileRecordFlags _flags;
         private uint _recordRealSize;
         private uint _recordAllocatedSize;
-        private FileReference _baseFile;
+        private FileRecordReference _baseFile;
         private ushort _nextAttributeId;
         private uint _index; // Self-reference (on XP+)
         private List<AttributeRecord> _attributes;
@@ -105,7 +105,7 @@ namespace DiscUtils.Ntfs
             get { return _recordRealSize; }
         }
 
-        public FileReference BaseFile
+        public FileRecordReference BaseFile
         {
             get { return _baseFile; }
         }
@@ -264,7 +264,7 @@ namespace DiscUtils.Ntfs
             _flags = (FileRecordFlags)Utilities.ToUInt16LittleEndian(buffer, offset + 0x16);
             _recordRealSize = Utilities.ToUInt32LittleEndian(buffer, offset + 0x18);
             _recordAllocatedSize = Utilities.ToUInt32LittleEndian(buffer, offset + 0x1C);
-            _baseFile = new FileReference(Utilities.ToUInt64LittleEndian(buffer, offset + 0x20));
+            _baseFile = new FileRecordReference(Utilities.ToUInt64LittleEndian(buffer, offset + 0x20));
             _nextAttributeId = Utilities.ToUInt16LittleEndian(buffer, offset + 0x28);
 
             if (UpdateSequenceOffset >= 0x30)
@@ -358,7 +358,7 @@ namespace DiscUtils.Ntfs
             {
                 if (attr.AttributeType == AttributeType.FileName)
                 {
-                    StructuredNtfsAttribute<FileNameRecord> fnAttr = (StructuredNtfsAttribute<FileNameRecord>)NtfsAttribute.FromRecord(null, new FileReference(0), attr);
+                    StructuredNtfsAttribute<FileNameRecord> fnAttr = (StructuredNtfsAttribute<FileNameRecord>)NtfsAttribute.FromRecord(null, new FileRecordReference(0), attr);
                     return fnAttr.Content.FileName;
                 }
             }

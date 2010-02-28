@@ -31,7 +31,7 @@ namespace DiscUtils.Ntfs
         private bool _initialized;
         private bool _hasContent;
 
-        public StructuredNtfsAttribute(File file, FileReference containingFile, AttributeRecord record)
+        public StructuredNtfsAttribute(File file, FileRecordReference containingFile, AttributeRecord record)
             : base(file, containingFile, record)
         {
             _structure = new T();

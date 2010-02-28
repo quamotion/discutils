@@ -30,11 +30,11 @@ namespace DiscUtils.Ntfs
     internal class NtfsAttribute : IDiagnosticTraceable
     {
         protected File _file;
-        protected FileReference _containingFile;
+        protected FileRecordReference _containingFile;
         protected AttributeRecord _record;
         protected Dictionary<AttributeReference, AttributeRecord> _extents;
 
-        protected NtfsAttribute(File file, FileReference containingFile, AttributeRecord record)
+        protected NtfsAttribute(File file, FileRecordReference containingFile, AttributeRecord record)
         {
             _file = file;
             _containingFile = containingFile;
@@ -43,7 +43,7 @@ namespace DiscUtils.Ntfs
             _extents.Add(new AttributeReference(containingFile, record.AttributeId), _record);
         }
 
-        public void AddExtent(FileReference containingFile, AttributeRecord record)
+        public void AddExtent(FileRecordReference containingFile, AttributeRecord record)
         {
             _extents.Add(new AttributeReference(containingFile, record.AttributeId), record);
         }
@@ -141,7 +141,7 @@ namespace DiscUtils.Ntfs
             attrBuffer.Write(0, tempBuffer, 0, tempBuffer.Length);
         }
 
-        public static NtfsAttribute FromRecord(File file, FileReference recordFile, AttributeRecord record)
+        public static NtfsAttribute FromRecord(File file, FileRecordReference recordFile, AttributeRecord record)
         {
             switch (record.AttributeType)
             {

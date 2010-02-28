@@ -24,13 +24,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using DirectoryIndexEntry = System.Collections.Generic.KeyValuePair<DiscUtils.Ntfs.FileNameRecord, DiscUtils.Ntfs.FileReference>;
+using DirectoryIndexEntry = System.Collections.Generic.KeyValuePair<DiscUtils.Ntfs.FileNameRecord, DiscUtils.Ntfs.FileRecordReference>;
 
 namespace DiscUtils.Ntfs
 {
     internal class Directory : File
     {
-        private IndexView<FileNameRecord, FileReference> _index;
+        private IndexView<FileNameRecord, FileRecordReference> _index;
 
 
         public Directory(INtfsContext context, FileRecord baseRecord)
@@ -170,13 +170,13 @@ namespace DiscUtils.Ntfs
             return base.ToString() + @"\";
         }
 
-        private IndexView<FileNameRecord, FileReference> Index
+        private IndexView<FileNameRecord, FileRecordReference> Index
         {
             get
             {
                 if (_index == null && StreamExists(AttributeType.IndexRoot, "$I30"))
                 {
-                    _index = new IndexView<FileNameRecord, FileReference>(GetIndex("$I30"));
+                    _index = new IndexView<FileNameRecord, FileRecordReference>(GetIndex("$I30"));
                 }
 
                 return _index;

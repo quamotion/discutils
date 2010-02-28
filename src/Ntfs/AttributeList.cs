@@ -42,7 +42,7 @@ namespace DiscUtils.Ntfs
             get { return _records; }
         }
 
-        public void ReadFrom(byte[] buffer, int offset)
+        public int ReadFrom(byte[] buffer, int offset)
         {
             _records.Clear();
 
@@ -53,6 +53,8 @@ namespace DiscUtils.Ntfs
                 pos += r.Read(buffer, pos);
                 _records.Add(r);
             }
+
+            return pos;
         }
 
         public void WriteTo(byte[] buffer, int offset)
@@ -141,7 +143,7 @@ namespace DiscUtils.Ntfs
         public byte NameOffset;
         public string Name;
         public ulong StartVcn;
-        public FileReference BaseFileReference;
+        public FileRecordReference BaseFileReference;
         public ushort AttributeId;
 
         public int Read(byte[] data, int offset)
@@ -151,7 +153,7 @@ namespace DiscUtils.Ntfs
             NameLength = data[offset + 0x06];
             NameOffset = data[offset + 0x07];
             StartVcn = Utilities.ToUInt64LittleEndian(data, offset + 0x08);
-            BaseFileReference = new FileReference(Utilities.ToUInt64LittleEndian(data, offset + 0x10));
+            BaseFileReference = new FileRecordReference(Utilities.ToUInt64LittleEndian(data, offset + 0x10));
             AttributeId = Utilities.ToUInt16LittleEndian(data, offset + 0x18);
 
             if (NameLength > 0)

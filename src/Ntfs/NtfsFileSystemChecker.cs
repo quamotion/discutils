@@ -255,7 +255,7 @@ namespace DiscUtils.Ntfs
                 {
                     if (stream.AttributeType == AttributeType.IndexRoot && stream.Name == "$I30")
                     {
-                        IndexView<FileNameRecord, FileReference> dir = new IndexView<FileNameRecord, FileReference>(f.GetIndex("$I30"));
+                        IndexView<FileNameRecord, FileRecordReference> dir = new IndexView<FileNameRecord, FileRecordReference>(f.GetIndex("$I30"));
                         foreach (var entry in dir.Entries)
                         {
                             FileRecord refFile = _context.Mft.GetRecord(entry.Value);

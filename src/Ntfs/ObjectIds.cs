@@ -38,7 +38,7 @@ namespace DiscUtils.Ntfs
             _index = new IndexView<IndexKey, ObjectIdRecord>(file.GetIndex("$O"));
         }
 
-        internal void Add(Guid objId, FileReference mftRef, Guid birthId, Guid birthVolumeId, Guid birthDomainId)
+        internal void Add(Guid objId, FileRecordReference mftRef, Guid birthId, Guid birthVolumeId, Guid birthDomainId)
         {
             IndexKey newKey = new IndexKey();
             newKey.Id = objId;
@@ -100,9 +100,10 @@ namespace DiscUtils.Ntfs
         {
             public Guid Id;
 
-            public void ReadFrom(byte[] buffer, int offset)
+            public int ReadFrom(byte[] buffer, int offset)
             {
                 Id = Utilities.ToGuidLittleEndian(buffer, offset + 0);
+                return 16;
             }
 
             public void WriteTo(byte[] buffer, int offset)

@@ -59,9 +59,9 @@ namespace DiscUtils.Ntfs
             get { return _baseRecord.AllocatedSize; }
         }
 
-        public FileReference MftReference
+        public FileRecordReference MftReference
         {
-            get { return new FileReference(_baseRecord.MasterFileTableIndex, _baseRecord.SequenceNumber); }
+            get { return new FileRecordReference(_baseRecord.MasterFileTableIndex, _baseRecord.SequenceNumber); }
         }
 
         public int MftRecordFreeSpace

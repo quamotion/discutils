@@ -24,16 +24,16 @@ using System;
 
 namespace DiscUtils.Ntfs
 {
-    internal struct FileReference : IByteArraySerializable, IComparable<FileReference>
+    internal struct FileRecordReference : IByteArraySerializable, IComparable<FileRecordReference>
     {
         private ulong _val;
 
-        public FileReference(ulong val)
+        public FileRecordReference(ulong val)
         {
             _val = val;
         }
 
-        public FileReference(long mftIndex, ushort sequenceNumber)
+        public FileRecordReference(long mftIndex, ushort sequenceNumber)
         {
             _val = (ulong)(mftIndex & 0x0000FFFFFFFFFFFFL) | ((ulong)((ulong)sequenceNumber << 48) & 0xFFFF000000000000L);
         }
@@ -60,9 +60,10 @@ namespace DiscUtils.Ntfs
 
         #region IByteArraySerializable Members
 
-        public void ReadFrom(byte[] buffer, int offset)
+        public int ReadFrom(byte[] buffer, int offset)
         {
             _val = Utilities.ToUInt64LittleEndian(buffer, offset);
+            return 8;
         }
 
         public void WriteTo(byte[] buffer, int offset)
@@ -79,12 +80,12 @@ namespace DiscUtils.Ntfs
 
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is FileReference))
+            if (obj == null || !(obj is FileRecordReference))
             {
                 return false;
             }
 
-            return _val == ((FileReference)obj)._val;
+            return _val == ((FileRecordReference)obj)._val;
         }
 
         public override int GetHashCode()
@@ -92,19 +93,19 @@ namespace DiscUtils.Ntfs
             return _val.GetHashCode();
         }
 
-        public static bool operator ==(FileReference a, FileReference b)
+        public static bool operator ==(FileRecordReference a, FileRecordReference b)
         {
             return a._val == b._val;
         }
 
-        public static bool operator !=(FileReference a, FileReference b)
+        public static bool operator !=(FileRecordReference a, FileRecordReference b)
         {
             return a._val != b._val;
         }
 
         #region IComparable<FileReference> Members
 
-        public int CompareTo(FileReference other)
+        public int CompareTo(FileRecordReference other)
         {
             if (_val < other._val)
             {

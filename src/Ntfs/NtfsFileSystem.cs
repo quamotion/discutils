@@ -1340,12 +1340,12 @@ namespace DiscUtils.Ntfs
             return (Directory)GetFile(index);
         }
 
-        internal Directory GetDirectory(FileReference fileReference)
+        internal Directory GetDirectory(FileRecordReference fileReference)
         {
             return (Directory)GetFile(fileReference);
         }
 
-        internal File GetFile(FileReference fileReference)
+        internal File GetFile(FileRecordReference fileReference)
         {
             FileRecord record = _context.Mft.GetRecord(fileReference);
             if (record == null)
