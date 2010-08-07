@@ -90,7 +90,7 @@ namespace DiscUtils
         /// <param name="inStream">The sparse stream to pump from.</param>
         /// <param name="outStream">The stream to pump to.</param>
         /// <remarks><paramref name="outStream"/> must support seeking.</remarks>
-        public static void Pump(SparseStream inStream, Stream outStream)
+        public static void Pump(Stream inStream, Stream outStream)
         {
             Pump(inStream, outStream, Sizes.Sector);
         }
@@ -98,11 +98,11 @@ namespace DiscUtils
         /// <summary>
         /// Efficiently pumps data from a sparse stream to another stream.
         /// </summary>
-        /// <param name="inStream">The sparse stream to pump from.</param>
+        /// <param name="inStream">The stream to pump from.</param>
         /// <param name="outStream">The stream to pump to.</param>
         /// <param name="chunkSize">The smallest sequence of zero bytes that will be skipped when writing to <paramref name="outStream"/></param>
         /// <remarks><paramref name="outStream"/> must support seeking.</remarks>
-        public static void Pump(SparseStream inStream, Stream outStream, int chunkSize)
+        public static void Pump(Stream inStream, Stream outStream, int chunkSize)
         {
             StreamPump pump = new StreamPump(inStream, outStream, chunkSize);
             pump.Run();

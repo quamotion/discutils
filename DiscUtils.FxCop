@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FxCopProject Version="1.36" Name="My FxCop Project">
+<FxCopProject Version="10.0" Name="My FxCop Project">
  <ProjectOptions>
   <SharedProject>True</SharedProject>
-  <Stylesheet Apply="False">c:\program files\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
+  <Stylesheet Apply="False">$(ProjectDir)/../../../../program files/microsoft fxcop 1.36/Xml/FxCopReport.xsl</Stylesheet>
   <SaveMessages>
    <Project Status="Excluded" NewOnly="False" />
    <Report Status="None" NewOnly="False" />
@@ -64,7 +64,7 @@
   <Groups />
   <Settings />
  </Rules>
- <FxCopReport Version="1.36">
+ <FxCopReport Version="10.0">
   <Namespaces>
    <Namespace Name="DiscUtils.BootConfig">
     <Messages>
@@ -1830,17 +1830,6 @@
                </User>
               </Notes>
              </Message>
-             <Message Id="Pci" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-10-04 18:13:37Z">
-              <Issue Name="Member">
-               <Item>Pci</Item>
-               <Item>'WellKnownElement.OsLoaderPciExpressPolicy'</Item>
-              </Issue>
-              <Notes>
-               <User Name="Kenneth">
-                <Note Id="57" />
-               </User>
-              </Notes>
-             </Message>
             </Messages>
            </Member>
            <Member Name="#OsLoaderPerformanceDataMemory">
@@ -2000,17 +1989,6 @@
                <Item>Os</Item>
                <Item>'WellKnownElement.OsLoaderUseFirmwarePciSettings'</Item>
                <Item>OS</Item>
-              </Issue>
-              <Notes>
-               <User Name="Kenneth">
-                <Note Id="57" />
-               </User>
-              </Notes>
-             </Message>
-             <Message Id="Pci" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2009-10-04 18:13:37Z">
-              <Issue Name="Member">
-               <Item>Pci</Item>
-               <Item>'WellKnownElement.OsLoaderUseFirmwarePciSettings'</Item>
               </Issue>
               <Notes>
                <User Name="Kenneth">
@@ -5284,6 +5262,21 @@
        </Namespace>
        <Namespace Name="DiscUtils.Partitions">
         <Types>
+         <Type Name="BiosPartitionedDiskBuilder">
+          <Messages>
+           <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Excluded" Created="2010-08-07 12:14:00Z" FixCategory="DependsOnFix">
+            <Issue Name="DependsOnFix">
+             <Item>'BiosPartitionedDiskBuilder'</Item>
+             <Item>'SparseMemoryStream'</Item>
+            </Issue>
+            <Notes>
+             <User Name="Kenneth">
+              <Note Id="120" />
+             </User>
+            </Notes>
+           </Message>
+          </Messages>
+         </Type>
          <Type Name="BiosPartitionTypes">
           <Members>
            <Member Name="#EfiSystem">
@@ -6145,24 +6138,6 @@
              <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Status="Excluded" Created="2010-06-05 14:17:36Z">
               <Issue>
                <Item>'ExtentDescriptor.Length'</Item>
-              </Issue>
-              <Notes>
-               <User Name="Kenneth">
-                <Note Id="113" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="File">
-          <Members>
-           <Member Name="#_context">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Status="Excluded" Created="2010-06-05 14:17:36Z">
-              <Issue>
-               <Item>'File._context'</Item>
               </Issue>
               <Notes>
                <User Name="Kenneth">
@@ -7799,35 +7774,6 @@
             </Notes>
            </Message>
           </Messages>
-          <Members>
-           <Member Name="#GetRealFileSystem`4()">
-            <Messages>
-             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Status="Excluded" Created="2010-06-05 14:17:36Z">
-              <Issue>
-               <Item>'VfsFileSystemFacade.GetRealFileSystem&lt;TDirEntry, TFile, TDirectory, TContext&gt;()'</Item>
-               <Item>'TContext'</Item>
-              </Issue>
-              <Issue>
-               <Item>'VfsFileSystemFacade.GetRealFileSystem&lt;TDirEntry, TFile, TDirectory, TContext&gt;()'</Item>
-               <Item>'TDirEntry'</Item>
-              </Issue>
-              <Issue>
-               <Item>'VfsFileSystemFacade.GetRealFileSystem&lt;TDirEntry, TFile, TDirectory, TContext&gt;()'</Item>
-               <Item>'TDirectory'</Item>
-              </Issue>
-              <Issue>
-               <Item>'VfsFileSystemFacade.GetRealFileSystem&lt;TDirEntry, TFile, TDirectory, TContext&gt;()'</Item>
-               <Item>'TFile'</Item>
-              </Issue>
-              <Notes>
-               <User Name="Kenneth">
-                <Note Id="106" />
-               </User>
-              </Notes>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
          </Type>
          <Type Name="VfsFileSystemFactory">
           <Messages>
@@ -8508,7 +8454,6 @@
     <Note Id="103" Modified="2010-05-29 06:27:27Z">Lun is standard term.</Note>
     <Note Id="104" Modified="2010-05-29 07:14:56Z">Derived from standard</Note>
     <Note Id="105" Modified="2010-05-30 15:18:55Z">Defined by standard</Note>
-    <Note Id="106" Modified="2010-06-05 14:22:39Z">Bogus warning</Note>
     <Note Id="107" Modified="2010-06-05 14:23:28Z">As designed</Note>
     <Note Id="108" Modified="2010-06-05 14:24:18Z">Extends VfsFileSystem</Note>
     <Note Id="109" Modified="2010-06-05 14:25:41Z">DiscUtils is the project name</Note>
@@ -8522,6 +8467,7 @@
     <Note Id="117" Modified="2010-06-06 16:23:32Z">Vfs is the namespace.</Note>
     <Note Id="118" Modified="2010-06-06 16:23:45Z">Follows project guidelines</Note>
     <Note Id="119" Modified="2010-06-06 16:23:55Z">Utils is part of project name.</Note>
+    <Note Id="120" Modified="2010-08-07 12:16:37Z">SparseMemoryStream holds no native resources</Note>
    </User>
   </Notes>
   <Rules>
@@ -8562,9 +8508,6 @@
    <Rule TypeName="EnumStorageShouldBeInt32" Category="Microsoft.Design" CheckId="CA1028">
     <Resolution Name="NotInt32">If possible, make the underlying type of {0} System.Int32 instead of {1}.</Resolution>
    </Rule>
-   <Rule TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004">
-    <Resolution Name="Default">Consider a design where {0} doesn't require explicit type parameter {1} in any call to it.</Resolution>
-   </Rule>
    <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
     <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
    </Rule>
@@ -8595,6 +8538,7 @@
     <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
    </Rule>
    <Rule TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001">
+    <Resolution Name="DependsOnFix">Implement IDisposable on {0} because it creates members of the following IDisposable types: {1}. If {0} has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Resolution>
     <Resolution Name="NonBreaking">Implement IDisposable on {0} because it creates members of the following IDisposable types: {1}.</Resolution>
    </Rule>
    <Rule TypeName="UsePreferredTerms" Category="Microsoft.Naming" CheckId="CA1726">

@@ -58,7 +58,7 @@ namespace DiscUtils.Partitions
 
             _bootSectors = new SparseMemoryStream();
             _bootSectors.SetLength(capacity);
-            _partitionTable = BiosPartitionTable.Initialize(_bootSectors, biosGeometry);
+            _partitionTable = BiosPartitionTable.Initialize(_bootSectors, _biosGeometry);
 
             _partitionContents = new Dictionary<int, BuilderExtent>();
         }
