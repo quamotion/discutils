@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.IO;
-using System.Runtime.Serialization;
-
 namespace DiscUtils.Nfs
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// Exception thrown when some invalid file system data is found, indicating probably corruption.
     /// </summary>
@@ -97,6 +97,7 @@ namespace DiscUtils.Nfs
                         {
                             return "RPC program version mismatch, server supports versions " + reply.AcceptReply.MismatchInfo.Low + " through " + reply.AcceptReply.MismatchInfo.High;
                         }
+
                     case RpcAcceptStatus.ProcedureUnavailable:
                         return "RPC procedure unavailable";
                     case RpcAcceptStatus.GarbageArguments:

@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-
 namespace DiscUtils
 {
+    using System.Collections.Generic;
+
     internal abstract class BuilderExtent
     {
         private long _start;
@@ -62,6 +62,5 @@ namespace DiscUtils
         internal abstract int Read(long diskOffset, byte[] block, int offset, int count);
 
         internal abstract void DisposeReadState();
-
     }
 }

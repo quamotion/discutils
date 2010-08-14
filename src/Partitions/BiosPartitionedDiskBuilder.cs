@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Partitions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// Builds a stream with the contents of a BIOS partitioned disk.
     /// </summary>
@@ -58,7 +58,7 @@ namespace DiscUtils.Partitions
 
             _bootSectors = new SparseMemoryStream();
             _bootSectors.SetLength(capacity);
-            _partitionTable = BiosPartitionTable.Initialize(_bootSectors, biosGeometry);
+            _partitionTable = BiosPartitionTable.Initialize(_bootSectors, _biosGeometry);
 
             _partitionContents = new Dictionary<int, BuilderExtent>();
         }

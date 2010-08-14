@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+
     internal class BiosParameterBlock
     {
         public string OemId;
@@ -176,6 +176,7 @@ namespace DiscUtils.Ntfs
                     size = (size >> 1) & 0x7FFFFFFF;
                     val++;
                 }
+
                 return (byte)-val;
             }
         }

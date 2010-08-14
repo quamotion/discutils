@@ -20,13 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
 namespace DiscUtils.Vmdk
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     internal abstract class CommonSparseExtentStream : SparseStream
     {
         /// <summary>
@@ -104,12 +103,14 @@ namespace DiscUtils.Vmdk
                     {
                         _fileStream.Dispose();
                     }
+
                     _fileStream = null;
 
                     if (_ownsParentDiskStream == Ownership.Dispose && _parentDiskStream != null)
                     {
                         _parentDiskStream.Dispose();
                     }
+
                     _parentDiskStream = null;
                 }
             }
@@ -167,6 +168,7 @@ namespace DiscUtils.Vmdk
                 CheckDisposed();
                 return _position;
             }
+
             set
             {
                 CheckDisposed();
@@ -197,7 +199,6 @@ namespace DiscUtils.Vmdk
                     return 0;
                 }
             }
-
 
             int maxToRead = (int)Math.Min(count, Length - _position);
             int totalRead = 0;
@@ -238,7 +239,8 @@ namespace DiscUtils.Vmdk
 
                 _position += numRead;
                 totalRead += numRead;
-            } while (numRead != 0 && totalRead < maxToRead);
+            }
+            while (numRead != 0 && totalRead < maxToRead);
 
             return totalRead;
         }
@@ -352,6 +354,7 @@ namespace DiscUtils.Vmdk
                     }
                 }
             }
+
             return Math.Min(pos, maxPos);
         }
 
@@ -384,6 +387,7 @@ namespace DiscUtils.Vmdk
                     }
                 }
             }
+
             return Math.Min(pos, maxPos);
         }
 

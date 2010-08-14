@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Text;
-
 namespace DiscUtils.Partitions
 {
+    using System;
+    using System.Text;
+
     internal class GptEntry : IComparable<GptEntry>
     {
         public Guid PartitionType;
@@ -48,7 +48,7 @@ namespace DiscUtils.Partitions
             FirstUsedLogicalBlock = Utilities.ToInt64LittleEndian(buffer, offset + 32);
             LastUsedLogicalBlock = Utilities.ToInt64LittleEndian(buffer, offset + 40);
             Attributes = Utilities.ToUInt64LittleEndian(buffer, offset + 48);
-            Name = Encoding.Unicode.GetString(buffer, offset + 56, 72).TrimEnd(new char[]{'\0'});
+            Name = Encoding.Unicode.GetString(buffer, offset + 56, 72).TrimEnd(new char[] { '\0' });
         }
 
         public void WriteTo(byte[] buffer, int offset)

@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System.Globalization;
+    using System.IO;
+
     internal class ReparsePoints
     {
         private IndexView<Key, Data> _index;
@@ -88,7 +88,7 @@ namespace DiscUtils.Ntfs
             {
                 Utilities.WriteBytesLittleEndian(Tag, buffer, offset);
                 Utilities.WriteBytesLittleEndian(File.Value, buffer, offset + 4);
-                //Utilities.WriteBytesLittleEndian((uint)0, buffer, offset + 12);
+                ////Utilities.WriteBytesLittleEndian((uint)0, buffer, offset + 12);
             }
 
             public int Size

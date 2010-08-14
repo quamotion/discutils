@@ -20,14 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Text;
-
 namespace DiscUtils.Vmdk
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+
     internal class DescriptorFile
     {
         private List<DescriptorFileEntry> _header;
@@ -116,8 +116,10 @@ namespace DiscUtils.Vmdk
                         int.Parse(headsStr, CultureInfo.InvariantCulture),
                         int.Parse(sectorsStr, CultureInfo.InvariantCulture));
                 }
+
                 return null;
             }
+
             set
             {
                 SetDiskDatabase(DiskDbCylinders, value.Cylinders.ToString(CultureInfo.InvariantCulture));
@@ -140,8 +142,10 @@ namespace DiscUtils.Vmdk
                         int.Parse(headsStr, CultureInfo.InvariantCulture),
                         int.Parse(sectorsStr, CultureInfo.InvariantCulture));
                 }
+
                 return null;
             }
+
             set
             {
                 SetDiskDatabase(DiskDbBiosCylinders, value.Cylinders.ToString(CultureInfo.InvariantCulture));
@@ -167,7 +171,6 @@ namespace DiscUtils.Vmdk
             get { return GetDiskDatabase(DiskDbHardwareVersion); }
             set { SetDiskDatabase(DiskDbHardwareVersion, value); }
         }
-
 
         private static DiskAdapterType ParseAdapterType(string value)
         {
@@ -305,6 +308,7 @@ namespace DiscUtils.Vmdk
                     return entry.Value;
                 }
             }
+
             return null;
         }
 
@@ -318,6 +322,7 @@ namespace DiscUtils.Vmdk
                     return;
                 }
             }
+
             _header.Add(new DescriptorFileEntry(key, newValue, type));
         }
 
@@ -330,6 +335,7 @@ namespace DiscUtils.Vmdk
                     return entry.Value;
                 }
             }
+
             return null;
         }
 
@@ -343,6 +349,7 @@ namespace DiscUtils.Vmdk
                     return;
                 }
             }
+
             _diskDataBase.Add(new DescriptorFileEntry(key, value, DescriptorFileEntryType.Quoted));
         }
 

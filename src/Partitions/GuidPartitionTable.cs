@@ -20,14 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Partitions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Globalization;
+    using System.IO;
+
     /// <summary>
     /// Represents a GUID Partition Table.
     /// </summary>
@@ -105,7 +105,6 @@ namespace DiscUtils.Partitions
             // Create the protective MBR partition record.
             BiosPartitionTable pt = BiosPartitionTable.Initialize(disk, diskGeometry);
             pt.CreatePrimaryByCylinder(0, diskGeometry.Cylinders - 1, BiosPartitionTypes.GptProtective, false);
-
 
             // Create the GPT headers, and blank-out the entry areas
             const int EntryCount = 128;
@@ -294,12 +293,10 @@ namespace DiscUtils.Partitions
             }
         }
 
-
         internal SparseStream Open(GptEntry entry)
         {
             return new SubStream(_diskData, entry.FirstUsedLogicalBlock * _diskGeometry.BytesPerSector, entry.LastUsedLogicalBlock * _diskGeometry.BytesPerSector);
         }
-
 
         private void Init(Stream disk, Geometry diskGeometry)
         {
@@ -308,7 +305,7 @@ namespace DiscUtils.Partitions
             {
                 bpt = new BiosPartitionTable(disk, diskGeometry);
             }
-            catch(IOException ioe)
+            catch (IOException ioe)
             {
                 throw new IOException("Invalid GPT disk, protective MBR table not present or invalid", ioe);
             }
@@ -360,7 +357,7 @@ namespace DiscUtils.Partitions
                     _secondaryHeader = new GptHeader(_primaryHeader);
                     _secondaryHeader.HeaderLba = _secondaryHeader.AlternateHeaderLba;
                     _secondaryHeader.AlternateHeaderLba = _secondaryHeader.HeaderLba;
-                    _secondaryHeader.PartitionEntriesLba = _secondaryHeader.HeaderLba - (((_secondaryHeader.PartitionEntryCount * _secondaryHeader.PartitionEntrySize) + diskGeometry.BytesPerSector - 1)) / diskGeometry.BytesPerSector;
+                    _secondaryHeader.PartitionEntriesLba = _secondaryHeader.HeaderLba - Utilities.RoundUp(_secondaryHeader.PartitionEntryCount * _secondaryHeader.PartitionEntrySize, diskGeometry.BytesPerSector);
 
                     // If the disk is writeable, fix up the secondary partition table based on the
                     // (valid) primary table.
@@ -370,7 +367,6 @@ namespace DiscUtils.Partitions
                     }
                 }
             }
-
         }
 
         private long FindGap(long numSectors)
@@ -467,6 +463,7 @@ namespace DiscUtils.Partitions
             {
                 return false;
             }
+
             return true;
         }
 
@@ -510,8 +507,10 @@ namespace DiscUtils.Partitions
                         found = true;
                         break;
                     }
+
                     entriesSoFar++;
                 }
+
                 position++;
             }
 
@@ -577,6 +576,5 @@ namespace DiscUtils.Partitions
 
             return count;
         }
-
     }
 }

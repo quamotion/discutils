@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+
     internal class TextRequest
     {
         private Connection _connection;
@@ -64,6 +64,5 @@ namespace DiscUtils.Iscsi
             Array.Copy(data, offset, buffer, 48, count);
             return buffer;
         }
-
     }
 }

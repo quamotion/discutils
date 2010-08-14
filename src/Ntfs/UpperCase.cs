@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     internal sealed class UpperCase : IComparer<string>
     {
         private char[] _table;
@@ -83,8 +83,8 @@ namespace DiscUtils.Ntfs
             int compLen = Math.Min(xLength, yLength) / 2;
             for (int i = 0; i < compLen; ++i)
             {
-                char xCh = (char)(x[xOffset + (i * 2)] | (x[xOffset + (i * 2 + 1)] << 8));
-                char yCh = (char)(y[yOffset + (i * 2)] | (y[yOffset + (i * 2 + 1)] << 8));
+                char xCh = (char)(x[xOffset + (i * 2)] | (x[xOffset + ((i * 2) + 1)] << 8));
+                char yCh = (char)(y[yOffset + (i * 2)] | (y[yOffset + ((i * 2) + 1)] << 8));
 
                 int result = _table[xCh] - _table[yCh];
                 if (result != 0)
@@ -97,6 +97,5 @@ namespace DiscUtils.Ntfs
             // determining factor.
             return xLength - yLength;
         }
-
     }
 }

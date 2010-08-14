@@ -20,35 +20,35 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
     internal struct PathTableRecord
     {
-        //public byte ExtendedAttributeRecordLength;
+        ////public byte ExtendedAttributeRecordLength;
         public uint LocationOfExtent;
         public ushort ParentDirectoryNumber;
         public string DirectoryIdentifier;
 
-        //public static int ReadFrom(byte[] src, int offset, bool byteSwap, Encoding enc, out PathTableRecord record)
-        //{
-        //    byte directoryIdentifierLength = src[offset + 0];
-        //    record.ExtendedAttributeRecordLength = src[offset + 1];
-        //    record.LocationOfExtent = Utilities.ToUInt32LittleEndian(src, offset + 2);
-        //    record.ParentDirectoryNumber = Utilities.ToUInt16LittleEndian(src, offset + 6);
-        //    record.DirectoryIdentifier = IsoUtilities.ReadChars(src, offset + 8, directoryIdentifierLength, enc);
-
-        //    if (byteSwap)
-        //    {
-        //        record.LocationOfExtent = Utilities.BitSwap(record.LocationOfExtent);
-        //        record.ParentDirectoryNumber = Utilities.BitSwap(record.ParentDirectoryNumber);
-        //    }
-
-        //    return directoryIdentifierLength + 8 + (((directoryIdentifierLength & 1) == 1) ? 1 : 0);
-        //}
+        ////public static int ReadFrom(byte[] src, int offset, bool byteSwap, Encoding enc, out PathTableRecord record)
+        ////{
+        ////    byte directoryIdentifierLength = src[offset + 0];
+        ////    record.ExtendedAttributeRecordLength = src[offset + 1];
+        ////    record.LocationOfExtent = Utilities.ToUInt32LittleEndian(src, offset + 2);
+        ////    record.ParentDirectoryNumber = Utilities.ToUInt16LittleEndian(src, offset + 6);
+        ////    record.DirectoryIdentifier = IsoUtilities.ReadChars(src, offset + 8, directoryIdentifierLength, enc);
+        ////
+        ////    if (byteSwap)
+        ////    {
+        ////        record.LocationOfExtent = Utilities.BitSwap(record.LocationOfExtent);
+        ////        record.ParentDirectoryNumber = Utilities.BitSwap(record.ParentDirectoryNumber);
+        ////    }
+        ////
+        ////    return directoryIdentifierLength + 8 + (((directoryIdentifierLength & 1) == 1) ? 1 : 0);
+        ////}
 
         internal int Write(bool byteSwap, Encoding enc, byte[] buffer, int offset)
         {
@@ -67,5 +67,4 @@ namespace DiscUtils.Iso9660
             return (int)(8 + nameBytes + (((nameBytes & 0x1) == 1) ? 1 : 0));
         }
     }
-
 }

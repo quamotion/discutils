@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Wim
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Class to read data compressed using LZX algorithm.
     /// </summary>
@@ -65,14 +65,13 @@ namespace DiscUtils.Wim
         private byte[] _buffer;
         private int _bufferCount;
 
-
         private long _position;
 
         // Block state
-        HuffmanTree _mainTree = null;
-        HuffmanTree _lengthTree = null;
-        HuffmanTree _alignedOffsetTree = null;
-        uint[] _repeatedOffsets = new uint[] { 1, 1, 1 };
+        private HuffmanTree _mainTree = null;
+        private HuffmanTree _lengthTree = null;
+        private HuffmanTree _alignedOffsetTree = null;
+        private uint[] _repeatedOffsets = new uint[] { 1, 1, 1 };
 
         public LzxStream(Stream stream, int windowBits, int fileSize)
         {
@@ -115,6 +114,7 @@ namespace DiscUtils.Wim
             {
                 return _position;
             }
+
             set
             {
                 _position = value;
@@ -208,6 +208,7 @@ namespace DiscUtils.Wim
                         {
                             offsetValue = absoluteValue + _fileSize;
                         }
+
                         Utilities.WriteBytesLittleEndian(offsetValue, _buffer, i + 1);
                     }
 
@@ -239,6 +240,7 @@ namespace DiscUtils.Wim
             {
                 _alignedOffsetTree = ReadFixedHuffmanTree(8, 3);
             }
+
             ReadMainTree();
             ReadLengthTree();
             
@@ -330,7 +332,7 @@ namespace DiscUtils.Wim
 
             if (_mainTree == null)
             {
-                lengths = new uint[256 + 8 * _numPositionSlots];
+                lengths = new uint[256 + (8 * _numPositionSlots)];
             }
             else
             {
@@ -368,7 +370,7 @@ namespace DiscUtils.Wim
 
             if (oldTree == null)
             {
-                lengths = new uint[256 + 8 * _numPositionSlots];
+                lengths = new uint[256 + (8 * _numPositionSlots)];
             }
             else
             {
@@ -439,6 +441,5 @@ namespace DiscUtils.Wim
             AlignedOffset = 2,
             Uncompressed = 3
         }
-
     }
 }

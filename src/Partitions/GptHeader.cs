@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Partitions
 {
+    using System;
+
     internal class GptHeader
     {
         public const string GptSignature = "EFI PART";
@@ -72,7 +72,6 @@ namespace DiscUtils.Partitions
             Array.Copy(toCopy.Buffer, Buffer, Buffer.Length);
         }
 
-
         public bool ReadFrom(byte[] buffer, int offset)
         {
             Signature = Utilities.BytesToString(buffer, offset + 0, 8);
@@ -100,7 +99,7 @@ namespace DiscUtils.Partitions
                 return false;
             }
 
-            return (Crc == CalcCrc(buffer, offset, HeaderSize));
+            return Crc == CalcCrc(buffer, offset, HeaderSize);
         }
 
         public void WriteTo(byte[] buffer, int offset)

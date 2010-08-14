@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Nfs
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+
     [VirtualDiskTransport("nfs")]
     internal sealed class DiskTransport : VirtualDiskTransport
     {
@@ -80,6 +80,7 @@ namespace DiscUtils.Nfs
                     _fileSystem = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -103,5 +104,4 @@ namespace DiscUtils.Nfs
             return Utilities.GetFileFromPath(_path);
         }
     }
-
 }

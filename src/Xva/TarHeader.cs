@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Xva
 {
+    using System;
+
     internal class TarHeader
     {
         public const int Length = 512;
@@ -59,6 +59,7 @@ namespace DiscUtils.Xva
             {
                 checkSum += buffer[offset + i];
             }
+
             Utilities.StringToBytes(LongToOctal(checkSum, 7), buffer, offset + 148, 7);
             buffer[155] = 0;
         }
@@ -84,7 +85,7 @@ namespace DiscUtils.Xva
         {
             string result = "";
 
-            while(value > 0)
+            while (value > 0)
             {
                 result = ((char)('0' + (value % 8))) + result;
                 value = value / 8;

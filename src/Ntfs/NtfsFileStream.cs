@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     internal sealed class NtfsFileStream : SparseStream
     {
         private DirectoryEntry _entry;
@@ -90,6 +90,7 @@ namespace DiscUtils.Ntfs
             {
                 return _baseStream.Position;
             }
+
             set
             {
                 using (new NtfsTransaction())
@@ -165,6 +166,5 @@ namespace DiscUtils.Ntfs
                 _isDirty = false;
             }
         }
-
     }
 }

@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     internal sealed class VirtualDiskFactoryAttribute : Attribute
     {
@@ -35,7 +35,7 @@ namespace DiscUtils
         public VirtualDiskFactoryAttribute(string type, string fileExtensions)
         {
             _type = type;
-            _fileExtensions = fileExtensions.Replace(".","").Split(',');
+            _fileExtensions = fileExtensions.Replace(".", "").Split(',');
         }
 
         public string Type
@@ -58,6 +58,7 @@ namespace DiscUtils
         public abstract VirtualDisk CreateDisk(FileLocator locator, string variant, string path, long capacity, Geometry geometry, Dictionary<string, string> parameters);
 
         public abstract VirtualDisk OpenDisk(string path, FileAccess access);
+
         public abstract VirtualDisk OpenDisk(FileLocator locator, string path, FileAccess access);
 
         public VirtualDisk OpenDisk(DiscFileSystem fileSystem, string path, FileAccess access)

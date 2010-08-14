@@ -20,15 +20,15 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Security.AccessControl;
-using System.Text.RegularExpressions;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Security.AccessControl;
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// Class for accessing NTFS file systems.
     /// </summary>
@@ -40,7 +40,6 @@ namespace DiscUtils.Ntfs
         private VolumeInformation _volumeInfo;
 
         // Top-level file system structures
-
 
         // Working state
         private ObjectCache<long, File> _fileCache;
@@ -68,7 +67,6 @@ namespace DiscUtils.Ntfs
 
             stream.Position = 0;
             byte[] bytes = Utilities.ReadFully(stream, 512);
-
 
             _context.BiosParameterBlock = BiosParameterBlock.FromBytes(bytes, 0);
 
@@ -298,7 +296,6 @@ namespace DiscUtils.Ntfs
                     }
                 }
 
-
                 File newFile = File.CreateNew(_context);
                 foreach (var origStream in origFile.AllStreams)
                 {
@@ -322,8 +319,10 @@ namespace DiscUtils.Ntfs
                                 {
                                     numRead = s.Read(buffer, 0, buffer.Length);
                                     d.Write(buffer, 0, numRead);
-                                } while (numRead != 0);
+                                }
+                                while (numRead != 0);
                             }
+
                             break;
 
                         case AttributeType.StandardInformation:
@@ -408,6 +407,7 @@ namespace DiscUtils.Ntfs
                 {
                     throw new DirectoryNotFoundException("No such directory: " + path);
                 }
+
                 Directory parentDir = GetDirectory(parentDirEntry.Reference);
 
                 DirectoryEntry dirEntry = parentDir.GetEntryByName(Path.GetFileName(path));
@@ -443,6 +443,7 @@ namespace DiscUtils.Ntfs
                 {
                     throw new FileNotFoundException("No such file", path);
                 }
+
                 Directory parentDir = GetDirectory(parentDirEntry.Reference);
 
                 DirectoryEntry dirEntry = parentDir.GetEntryByName(Path.GetFileName(path));
@@ -462,10 +463,12 @@ namespace DiscUtils.Ntfs
                 {
                     aliasNamespace = FileNameNamespace.Win32;
                 }
+
                 if (dirEntry.Details.FileNameNamespace == FileNameNamespace.Win32)
                 {
                     aliasNamespace = FileNameNamespace.Dos;
                 }
+
                 if (aliasNamespace.HasValue)
                 {
                     string alias = file.GetFirstName(parentDir.MftReference, aliasNamespace.Value);
@@ -503,7 +506,7 @@ namespace DiscUtils.Ntfs
                 else
                 {
                     DirectoryEntry dirEntry = GetDirectoryEntry(path);
-                    return (dirEntry != null && (dirEntry.Details.FileAttributes & FileAttributes.Directory) != 0);
+                    return dirEntry != null && (dirEntry.Details.FileAttributes & FileAttributes.Directory) != 0;
                 }
             }
         }
@@ -518,7 +521,7 @@ namespace DiscUtils.Ntfs
             using (new NtfsTransaction())
             {
                 DirectoryEntry dirEntry = GetDirectoryEntry(path);
-                return (dirEntry != null && (dirEntry.Details.FileAttributes & FileAttributes.Directory) == 0);
+                return dirEntry != null && (dirEntry.Details.FileAttributes & FileAttributes.Directory) == 0;
             }
         }
 
@@ -614,6 +617,7 @@ namespace DiscUtils.Ntfs
                         result.Add(Path.Combine(path, dirEntry.Details.FileName));
                     }
                 }
+
                 return result.ToArray();
             }
         }
@@ -742,23 +746,23 @@ namespace DiscUtils.Ntfs
                 string attributeName = null;
                 AttributeType attributeType = AttributeType.Data;
 
-                string[] fileNameElements = fileName.Split(new char[]{':'}, 3);
+                string[] fileNameElements = fileName.Split(new char[] { ':' }, 3);
                 fileName = fileNameElements[0];
 
-                if(fileNameElements.Length > 1)
+                if (fileNameElements.Length > 1)
                 {
                     attributeName = fileNameElements[1];
-                    if(string.IsNullOrEmpty(attributeName))
+                    if (string.IsNullOrEmpty(attributeName))
                     {
                         attributeName = null;
                     }
                 }
 
-                if(fileNameElements.Length > 2)
+                if (fileNameElements.Length > 2)
                 {
                     string typeName = fileNameElements[2];
                     AttributeDefinitionRecord typeDefn = _context.AttributeDefinitions.Lookup(typeName);
-                    if(typeDefn == null)
+                    if (typeDefn == null)
                     {
                         throw new FileNotFoundException(string.Format(CultureInfo.InvariantCulture, "No such attribute type '{0}'", typeName), path);
                     }
@@ -821,7 +825,6 @@ namespace DiscUtils.Ntfs
                 {
                     throw new IOException("File already exists");
                 }
-
 
                 if ((entry.Details.FileAttributes & FileAttributes.Directory) != 0 && attributeType == AttributeType.Data)
                 {
@@ -1040,6 +1043,7 @@ namespace DiscUtils.Ntfs
                 {
                     throw new FileNotFoundException("File not found", path);
                 }
+
                 return (long)dirEntry.Details.RealSize;
             }
         }
@@ -1095,7 +1099,6 @@ namespace DiscUtils.Ntfs
             string attributeName;
             SplitPath(path, out plainPath, out attributeName);
 
-
             DirectoryEntry dirEntry = GetDirectoryEntry(plainPath);
             if (dirEntry == null || dirEntry.IsDirectory)
             {
@@ -1128,7 +1131,6 @@ namespace DiscUtils.Ntfs
             string plainPath;
             string attributeName;
             SplitPath(path, out plainPath, out attributeName);
-
 
             DirectoryEntry dirEntry = GetDirectoryEntry(plainPath);
             if (dirEntry == null || dirEntry.IsDirectory)
@@ -1344,7 +1346,6 @@ namespace DiscUtils.Ntfs
                         contentStream.SetLength(contentBuffer.Length);
                     }
 
-
                     // Update the standard information attribute - so it reflects the actual file state
                     NtfsStream stdInfoStream = file.GetStream(AttributeType.StandardInformation, null);
                     StandardInformation si = stdInfoStream.GetContent<StandardInformation>();
@@ -1499,7 +1500,6 @@ namespace DiscUtils.Ntfs
                         {
                             return fnr.FileName;
                         }
-
                     }
                 }
 
@@ -1567,6 +1567,7 @@ namespace DiscUtils.Ntfs
                         dir.RemoveEntry(oldEntry);
                     }
                 }
+
                 dir.AddEntry(file, shortName, FileNameNamespace.Dos);
 
                 parentEntry.UpdateFrom(dir);
@@ -1610,7 +1611,7 @@ namespace DiscUtils.Ntfs
         public string[] GetAlternateDataStreams(string path)
         {
             DirectoryEntry dirEntry = GetDirectoryEntry(path);
-            if(dirEntry == null)
+            if (dirEntry == null)
             {
                     throw new FileNotFoundException("File not found", path);
             }
@@ -1687,6 +1688,7 @@ namespace DiscUtils.Ntfs
                 {
                     file = new File(_context, record);
                 }
+
                 _fileCache[fileReference.MftIndex] = file;
             }
 
@@ -1725,6 +1727,7 @@ namespace DiscUtils.Ntfs
                 {
                     file = new File(_context, record);
                 }
+
                 _fileCache[index] = file;
             }
 
@@ -1742,6 +1745,7 @@ namespace DiscUtils.Ntfs
             {
                 result = new File(_context, _context.Mft.AllocateRecord(flags));
             }
+
             _fileCache[result.MftReference.MftIndex] = result;
             return result;
         }
@@ -1789,7 +1793,7 @@ namespace DiscUtils.Ntfs
             writer.WriteLine(linePrefix + "NTFS File System Dump");
             writer.WriteLine(linePrefix + "=====================");
 
-            //_context.Mft.Dump(writer, linePrefix);
+            ////_context.Mft.Dump(writer, linePrefix);
 
             writer.WriteLine(linePrefix);
             _context.SecurityDescriptors.Dump(writer, linePrefix);
@@ -1857,7 +1861,7 @@ namespace DiscUtils.Ntfs
 
             foreach (DirectoryEntry de in parentDir.GetAllEntries(true))
             {
-                bool isDir = ((de.Details.FileAttributes & FileAttributes.Directory) != 0);
+                bool isDir = (de.Details.FileAttributes & FileAttributes.Directory) != 0;
 
                 if ((isDir && dirs) || (!isDir && files))
                 {
@@ -2029,7 +2033,6 @@ namespace DiscUtils.Ntfs
             plainPath = path;
             string fileName = Utilities.GetFileFromPath(path);
             attributeName = null;
-
 
             int streamSepPos = fileName.IndexOf(':');
             if (streamSepPos >= 0)

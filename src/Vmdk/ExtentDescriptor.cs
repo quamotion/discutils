@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Vmdk
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+
     internal enum ExtentAccess
     {
         None = 0,
@@ -251,8 +251,6 @@ namespace DiscUtils.Vmdk
             return result.ToArray();
         }
 
-
-
         public override string ToString()
         {
             string basic = FormatAccess(_access) + " " + _sizeInSectors + " " + FormatExtentType(_type) + " \"" + _fileName + "\"";
@@ -260,6 +258,7 @@ namespace DiscUtils.Vmdk
             {
                 return basic + " " + _offset;
             }
+
             return basic;
         }
     }

@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.Text;
-
 namespace DiscUtils.Registry
 {
+    using System;
+    using System.Globalization;
+    using System.Text;
+
     /// <summary>
     /// A registry value.
     /// </summary>
@@ -72,6 +72,7 @@ namespace DiscUtils.Registry
                 Array.Copy(buffer, result, len);
                 return result;
             }
+
             return _hive.RawCellData(_cell.DataIndex, _cell.DataLength);
         }
 
@@ -227,6 +228,7 @@ namespace DiscUtils.Registry
                     {
                         result += string.Format(CultureInfo.InvariantCulture, "{0:X2} ", (int)data[i]);
                     }
+
                     return result + string.Format(CultureInfo.InvariantCulture, " ({0} bytes)", data.Length);
             }
         }
@@ -271,7 +273,7 @@ namespace DiscUtils.Registry
                 case RegistryValueType.String:
                 case RegistryValueType.ExpandString:
                     string strValue = value.ToString();
-                    data = new byte[strValue.Length * 2 + 2];
+                    data = new byte[(strValue.Length * 2) + 2];
                     Encoding.Unicode.GetBytes(strValue, 0, strValue.Length, data, 0);
                     break;
 
@@ -287,7 +289,7 @@ namespace DiscUtils.Registry
 
                 case RegistryValueType.MultiString:
                     string multiStrValue = string.Join("\0", (string[])value) + "\0";
-                    data = new byte[multiStrValue.Length * 2 + 2];
+                    data = new byte[(multiStrValue.Length * 2) + 2];
                     Encoding.Unicode.GetBytes(multiStrValue, 0, multiStrValue.Length, data, 0);
                     break;
 
@@ -295,8 +297,8 @@ namespace DiscUtils.Registry
                     data = (byte[])value;
                     break;
             }
+
             return data;
         }
-
     }
 }

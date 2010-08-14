@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-
 namespace DiscUtils.Nfs
 {
+    using System;
+    using System.Collections.Generic;
+
     internal sealed class RpcClient : IDisposable
     {
         private string _serverAddress;
@@ -48,6 +48,7 @@ namespace DiscUtils.Nfs
                 {
                     transport.Dispose();
                 }
+
                 _transports = null;
             }
         }
@@ -72,8 +73,8 @@ namespace DiscUtils.Nfs
                 transport = new RpcTcpTransport(_serverAddress, port);
                 _transports[program] = transport;
             }
+
             return transport;
         }
-
     }
 }

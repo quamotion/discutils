@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Vfs
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Base class for read-only file system implementations.
     /// </summary>
@@ -166,5 +166,4 @@ namespace DiscUtils.Vfs
             throw new NotSupportedException();
         }
     }
-
 }

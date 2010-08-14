@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     internal class PathTable : BuilderExtent
     {
         private bool _byteSwap;
@@ -89,8 +89,8 @@ namespace DiscUtils.Iso9660
             {
                 length += di.GetPathTableEntrySize(enc);
             }
+
             return length;
         }
-
     }
 }

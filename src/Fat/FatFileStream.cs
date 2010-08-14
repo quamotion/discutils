@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Fat
 {
+    using System;
+    using System.IO;
+
     internal class FatFileStream : Stream
     {
         private Directory _dir;
@@ -58,6 +58,7 @@ namespace DiscUtils.Fat
                         dirEntry.FileSize = (int)_stream.Length;
                         dirEntry.LastWriteTime = now;
                     }
+
                     _dir.UpdateEntry(_dirId, dirEntry);
                 }
                 finally

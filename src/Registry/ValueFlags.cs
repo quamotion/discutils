@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Registry
 {
+    using System;
+
     [Flags]
     internal enum ValueFlags : ushort
     {
@@ -44,5 +44,4 @@ namespace DiscUtils.Registry
         Unknown4000 = 0x4000,
         Unknown8000 = 0x8000
     }
-
 }

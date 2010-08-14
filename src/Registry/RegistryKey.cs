@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Security.AccessControl;
-using System.Text;
-
 namespace DiscUtils.Registry
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Security.AccessControl;
+    using System.Text;
+
     /// <summary>
     /// A key within a registry hive.
     /// </summary>
@@ -52,6 +52,7 @@ namespace DiscUtils.Registry
                 SecurityCell secCell = _hive.GetCell<SecurityCell>(_cell.SecurityIndex);
                 return secCell.SecurityDescriptor;
             }
+
             return null;
         }
 
@@ -221,6 +222,7 @@ namespace DiscUtils.Registry
                     return regVal.Value;
                 }
             }
+
             return defaultValue;
         }
 
@@ -326,6 +328,7 @@ namespace DiscUtils.Registry
             {
                 return regVal.DataType;
             }
+
             return RegistryValueType.None;
         }
 
@@ -340,6 +343,7 @@ namespace DiscUtils.Registry
             {
                 names.Add(value.Name);
             }
+
             return names.ToArray();
         }
 
@@ -424,6 +428,7 @@ namespace DiscUtils.Registry
                 {
                     return Encoding.Unicode.GetString(_hive.RawCellData(_cell.ClassNameIndex, _cell.ClassNameLength));
                 }
+
                 return null;
             }
         }
@@ -529,6 +534,7 @@ namespace DiscUtils.Registry
             {
                 subKeyObj.DeleteSubKeyTree(child);
             }
+
             DeleteSubKey(subkey);
         }
 
@@ -682,7 +688,7 @@ namespace DiscUtils.Registry
             }
 
             int insertIdx = 0;
-            while(insertIdx < _cell.NumValues)
+            while (insertIdx < _cell.NumValues)
             {
                 int valueCellIndex = Utilities.ToInt32LittleEndian(valueList, insertIdx * 4);
                 ValueCell cell = _hive.GetCell<ValueCell>(valueCellIndex);
@@ -699,10 +705,10 @@ namespace DiscUtils.Registry
             _hive.UpdateCell(valueCell, true);
 
             // Update the value list, re-allocating if necessary
-            byte[] newValueList = new byte[_cell.NumValues * 4 + 4];
+            byte[] newValueList = new byte[(_cell.NumValues * 4) + 4];
             Array.Copy(valueList, 0, newValueList, 0, insertIdx * 4);
             Utilities.WriteBytesLittleEndian(valueCell.Index, newValueList, insertIdx * 4);
-            Array.Copy(valueList, insertIdx * 4, newValueList, insertIdx * 4 + 4, (_cell.NumValues - insertIdx) * 4);
+            Array.Copy(valueList, insertIdx * 4, newValueList, (insertIdx * 4) + 4, (_cell.NumValues - insertIdx) * 4);
             if (_cell.ValueListIndex == -1 || !_hive.WriteRawCellData(_cell.ValueListIndex, newValueList, 0, newValueList.Length))
             {
                 int newListCellIndex = _hive.AllocateRawCell(Utilities.RoundUp(newValueList.Length, 8));
@@ -756,6 +762,7 @@ namespace DiscUtils.Registry
                 _cell.SubKeysIndex = list.LinkSubKey(name, cellIndex);
                 _cell.NumSubKeys++;
             }
+
             _hive.UpdateCell(_cell, false);
         }
 
@@ -832,7 +839,7 @@ namespace DiscUtils.Registry
             SubKeyIndirectListCell indirectList = list as SubKeyIndirectListCell;
             if (indirectList != null)
             {
-                //foreach (int listIndex in indirectList.CellIndexes)
+                ////foreach (int listIndex in indirectList.CellIndexes)
                 for (int i = 0; i < indirectList.CellIndexes.Count; ++i)
                 {
                     int listIndex = indirectList.CellIndexes[i];
@@ -842,6 +849,5 @@ namespace DiscUtils.Registry
 
             _hive.FreeCell(list.Index);
         }
-
     }
 }

@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Text;
+
     internal enum VolumeDescriptorType : byte
     {
         Boot = 0,
@@ -62,5 +62,4 @@ namespace DiscUtils.Iso9660
             buffer[offset + 6] = VolumeDescriptorVersion;
         }
     }
-
 }

@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Vmdk
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// Represents a VMDK-backed disk.
     /// </summary>
@@ -42,7 +42,6 @@ namespace DiscUtils.Vmdk
         private SparseStream _content;
 
         private string _path;
-
 
         /// <summary>
         /// Creates a new instance from a file on disk.
@@ -298,8 +297,10 @@ namespace DiscUtils.Vmdk
                     {
                         stream = _files[i].First.OpenContent(stream, Ownership.Dispose);
                     }
+
                     _content = stream;
                 }
+
                 return _content;
             }
         }
@@ -313,7 +314,7 @@ namespace DiscUtils.Vmdk
             {
                 foreach (var file in _files)
                 {
-                    yield return (file.First as VirtualDiskLayer);
+                    yield return file.First as VirtualDiskLayer;
                 }
             }
         }

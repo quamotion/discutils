@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.IO;
-
 namespace DiscUtils
 {
+    using System.IO;
+
     /// <summary>
     /// Provides information about a file on a disc.
     /// </summary>
@@ -107,7 +107,8 @@ namespace DiscUtils
         /// <summary>
         /// Gets a string representing the directory's full path.
         /// </summary>
-        public string DirectoryName {
+        public string DirectoryName
+        {
             get { return Directory.FullName; }
         }
 
@@ -121,7 +122,8 @@ namespace DiscUtils
                 return (Attributes & FileAttributes.ReadOnly) != 0;
             }
 
-            set {
+            set
+            {
                 if (value)
                 {
                     Attributes = Attributes | FileAttributes.ReadOnly;

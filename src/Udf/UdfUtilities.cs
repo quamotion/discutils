@@ -20,16 +20,16 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
 namespace DiscUtils.Udf
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
     internal static class UdfUtilities
     {
-        private static readonly ushort[] CrcTable = new ushort[] { 
+        private static readonly ushort[] CrcTable = new ushort[]
+        {
             0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
             0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
             0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6,
@@ -93,7 +93,6 @@ namespace DiscUtils.Udf
                 return DateTime.MinValue;
             }
 
-
             ushort typeAndZone = Utilities.ToUInt16LittleEndian(buffer, offset);
 
             int type = (typeAndZone >> 12) & 0x0F;
@@ -103,7 +102,6 @@ namespace DiscUtils.Udf
             {
                 minutesWest = (-1 & ~0xFFF) | minutesWest;
             }
-
 
             int year = ForceRange(1, 9999, Utilities.ToInt16LittleEndian(buffer, offset + 2));
             int month = ForceRange(1, 12, buffer[offset + 4]);
@@ -188,6 +186,7 @@ namespace DiscUtils.Udf
             {
                 return max;
             }
+
             return val;
         }
 
@@ -201,8 +200,8 @@ namespace DiscUtils.Udf
             {
                 return max;
             }
+
             return val;
         }
-
     }
 }

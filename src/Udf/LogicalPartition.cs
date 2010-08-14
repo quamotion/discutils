@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Udf
 {
+    using System;
+    using System.IO;
+
     internal abstract class LogicalPartition : Partition
     {
         protected UdfContext _context;
@@ -52,7 +52,7 @@ namespace DiscUtils.Udf
             }
 
             MetadataPartitionMap asMetadata = map as MetadataPartitionMap;
-            if(asMetadata != null)
+            if (asMetadata != null)
             {
                 return new MetadataPartition(context, volumeDescriptor, asMetadata);
             }
@@ -93,7 +93,7 @@ namespace DiscUtils.Udf
             long fileEntryPos = partitionMap.MetadataFileLocation * (long)volumeDescriptor.LogicalBlockSize;
 
             byte[] entryData = Utilities.ReadFully(physical.Content, fileEntryPos, _context.PhysicalSectorSize);
-            if(!DescriptorTag.IsValid(entryData, 0))
+            if (!DescriptorTag.IsValid(entryData, 0))
             {
                 throw new IOException("Invalid descriptor tag looking for Metadata file entry");
             }

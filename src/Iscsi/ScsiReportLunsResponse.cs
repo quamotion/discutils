@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-
 namespace DiscUtils.Iscsi
 {
+    using System.Collections.Generic;
+
     internal class ScsiReportLunsResponse : ScsiResponse
     {
         private uint _availableLuns;
@@ -48,7 +48,6 @@ namespace DiscUtils.Iscsi
                 throw new InvalidProtocolException("Data truncated too far");
             }
 
-
             _availableLuns = Utilities.ToUInt32BigEndian(buffer, offset) / 8;
             int pos = 8;
             while (pos <= count - 8 && _luns.Count < _availableLuns)
@@ -65,7 +64,7 @@ namespace DiscUtils.Iscsi
 
         public override uint NeededDataLength
         {
-            get { return _availableLuns * 8 + 8; }
+            get { return (_availableLuns * 8) + 8; }
         }
     }
 }

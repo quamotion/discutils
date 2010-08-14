@@ -20,36 +20,42 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.Reflection;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+    using System.Globalization;
+    using System.Reflection;
+
     [Flags]
     internal enum KeyUsagePhase
     {
         SecurityNegotiation = 0x01,
+
         OperationalNegotiation = 0x02,
+
         FullyFeatured = 0x04,
+
         All = 0x07,
-    };
+    }
 
     [Flags]
     internal enum KeySender
     {
         Initiator = 0x01,
+
         Target = 0x02,
+
         Both = 0x03
     }
 
     internal enum KeyType
     {
         Declarative,
+
         Negotiated
     }
 
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple=false, Inherited=false)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     internal sealed class ProtocolKeyValueAttribute : Attribute
     {
         private string _name;
@@ -141,6 +147,7 @@ namespace DiscUtils.Iscsi
                         }
                     }
                 }
+
                 throw new NotImplementedException();
             }
             else
@@ -177,6 +184,7 @@ namespace DiscUtils.Iscsi
                         }
                     }
                 }
+
                 throw new NotImplementedException();
             }
             else
@@ -188,11 +196,11 @@ namespace DiscUtils.Iscsi
         internal bool ShouldTransmit(object currentValue, Type valueType, KeyUsagePhase phase, bool discoverySession)
         {
             return
-                ((Phase & phase) != 0
+                (Phase & phase) != 0
                 && (discoverySession ? (UsedForDiscovery == true) : true)
                 && currentValue != null
                 && GetValueAsString(currentValue, valueType) != DefaultValue
-                && (Sender & KeySender.Initiator) != 0);
+                && (Sender & KeySender.Initiator) != 0;
         }
     }
 }

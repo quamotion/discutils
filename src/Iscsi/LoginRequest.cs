@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+
     internal enum LoginStages
     {
         SecurityNegotiation = 0x0,
@@ -69,6 +69,7 @@ namespace DiscUtils.Iscsi
             {
                 _nextStage = _connection.NextLoginStage;
             }
+
             _connectionId = _connection.Id;
             _commandSequenceNumber = _connection.Session.CommandSequenceNumber;
             _expectedStatusSequenceNumber = _connection.ExpectedStatusSequenceNumber;
@@ -96,10 +97,12 @@ namespace DiscUtils.Iscsi
             {
                 val |= 0x80;
             }
+
             if (_continue)
             {
                 val |= 0x40;
             }
+
             val |= (byte)(((int)_currentStage) << 2);
             val |= (byte)_nextStage;
 

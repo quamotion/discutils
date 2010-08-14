@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Xva
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// Minimal tar file format implementation needed for XVA file support.
     /// </summary>
@@ -63,6 +63,7 @@ namespace DiscUtils.Xva
                 stream = new SubStream(_fileStream, file.Start, file.Length);
                 return true;
             }
+
             stream = null;
             return false;
         }
@@ -74,6 +75,7 @@ namespace DiscUtils.Xva
                 FileRecord file = _files[path];
                 return new SubStream(_fileStream, file.Start, file.Length);
             }
+
             throw new FileNotFoundException("File is not in archive", path);
         }
 
@@ -86,7 +88,7 @@ namespace DiscUtils.Xva
         {
             string searchStr = path;
             searchStr = searchStr.Replace(@"\", "/");
-            searchStr = (searchStr.EndsWith(@"/", StringComparison.Ordinal) ? searchStr : searchStr + @"/");
+            searchStr = searchStr.EndsWith(@"/", StringComparison.Ordinal) ? searchStr : searchStr + @"/";
 
             foreach (string filePath in _files.Keys)
             {

@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Fat
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     internal delegate void FirstClusterChangedDelegate(uint cluster);
 
     internal class ClusterStream : Stream
@@ -102,6 +102,7 @@ namespace DiscUtils.Fat
             {
                 return _position;
             }
+
             set
             {
                 if (value >= 0)
@@ -141,7 +142,7 @@ namespace DiscUtils.Fat
 
             if (!TryLoadCurrentCluster())
             {
-                if (_position == _length || _position == DetectLength() && !_atEOF)
+                if ((_position == _length || _position == DetectLength()) && !_atEOF)
                 {
                     _atEOF = true;
                     return 0;
@@ -191,6 +192,7 @@ namespace DiscUtils.Fat
             {
                 newPos += Length;
             }
+
             _position = newPos;
             _atEOF = false;
             return newPos;
@@ -217,6 +219,7 @@ namespace DiscUtils.Fat
                 {
                     _knownClusters.RemoveAt(_knownClusters.Count - 1);
                 }
+
                 _knownClusters.Add(FatBuffer.EndOfChain);
 
                 if (desiredNumClusters == 0)
@@ -264,7 +267,6 @@ namespace DiscUtils.Fat
             }
 
             // TODO: Free space check...
-
             try
             {
                 while (bytesRemaining > 0)
@@ -360,6 +362,7 @@ namespace DiscUtils.Fat
             {
                 _fat.SetNext(_knownClusters[_knownClusters.Count - 2], cluster);
             }
+
             _knownClusters[_knownClusters.Count - 1] = cluster;
             _knownClusters.Add(_fat.GetNext(cluster));
 
@@ -466,8 +469,7 @@ namespace DiscUtils.Fat
                 }
             }
 
-            return (uint)((long)(_knownClusters.Count - 1) * (long)(_reader.ClusterSize));
+            return (uint)((long)(_knownClusters.Count - 1) * (long)_reader.ClusterSize);
         }
-
     }
 }

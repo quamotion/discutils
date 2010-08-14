@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Caches objects.
     /// </summary>
@@ -77,6 +77,7 @@ namespace DiscUtils
 
                 return default(V);
             }
+
             set
             {
                 _entries[key] = new WeakReference(value);

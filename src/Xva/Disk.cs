@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-
 namespace DiscUtils.Xva
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Class representing a disk containing withing an XVA file.
     /// </summary>
@@ -63,6 +63,7 @@ namespace DiscUtils.Xva
                     _content = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -111,6 +112,7 @@ namespace DiscUtils.Xva
                 {
                     _content = new DiskStream(_vm.Archive, _capacity, _location);
                 }
+
                 return _content;
             }
         }

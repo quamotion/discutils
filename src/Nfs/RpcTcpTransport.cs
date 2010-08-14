@@ -20,15 +20,15 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-
 namespace DiscUtils.Nfs
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Threading;
+
     internal sealed class RpcTcpTransport : IDisposable
     {
         private string _address;
@@ -40,7 +40,7 @@ namespace DiscUtils.Nfs
         private const int RetryLimit = 20;
 
         public RpcTcpTransport(string address, int port)
-            :this(address, port, 0)
+            : this(address, port, 0)
         {
         }
 
@@ -58,6 +58,7 @@ namespace DiscUtils.Nfs
                 _tcpStream.Dispose();
                 _tcpStream = null;
             }
+
             if (_socket != null)
             {
                 _socket.Close();
@@ -71,7 +72,7 @@ namespace DiscUtils.Nfs
             int retryLimit = RetryLimit;
             Exception lastException = null;
 
-            bool isNewConnection = (_socket == null);
+            bool isNewConnection = _socket == null;
             if (isNewConnection)
             {
                 retryLimit = 1;
@@ -89,6 +90,7 @@ namespace DiscUtils.Nfs
                             _tcpStream.Close();
                             _tcpStream = null;
                         }
+
                         if (_socket != null)
                         {
                             _socket.Close();
@@ -172,10 +174,10 @@ namespace DiscUtils.Nfs
                 byte[] header = Utilities.ReadFully(_tcpStream, 4);
                 uint headerVal = Utilities.ToUInt32BigEndian(header, 0);
 
-                lastFragFound = ((headerVal & 0x80000000) != 0);
+                lastFragFound = (headerVal & 0x80000000) != 0;
                 byte[] frag = Utilities.ReadFully(_tcpStream, (int)(headerVal & 0x7FFFFFFF));
 
-                if(ms != null)
+                if (ms != null)
                 {
                     ms.Write(frag, 0, frag.Length);
                 }

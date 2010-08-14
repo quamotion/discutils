@@ -20,14 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using DiscUtils.Vfs;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using DiscUtils.Vfs;
+
     internal class ReaderDirectory : File, IVfsDirectory<DirectoryRecord, File>
     {
         private List<DirectoryRecord> _records;
@@ -50,6 +50,7 @@ namespace DiscUtils.Iso9660
                 {
                     throw new IOException("Failed to read whole directory");
                 }
+
                 totalRead += (uint)bytesRead;
 
                 uint pos = 0;
@@ -58,7 +59,7 @@ namespace DiscUtils.Iso9660
                     DirectoryRecord dr;
                     uint length = (uint)DirectoryRecord.ReadFrom(buffer, (int)pos, context.VolumeDescriptor.CharacterEncoding, out dr);
 
-                    if(!IsoUtilities.IsSpecialDirectory(dr))
+                    if (!IsoUtilities.IsSpecialDirectory(dr))
                     {
                         _records.Add(dr);
                     }
@@ -75,7 +76,7 @@ namespace DiscUtils.Iso9660
 
         public DirectoryRecord GetEntryByName(string name)
         {
-            bool anyVerMatch = (name.IndexOf(';') < 0);
+            bool anyVerMatch = name.IndexOf(';') < 0;
             string normName = IsoUtilities.NormalizeFileName(name).ToUpper(CultureInfo.InvariantCulture);
             if (anyVerMatch)
             {
@@ -102,6 +103,5 @@ namespace DiscUtils.Iso9660
         {
             throw new NotSupportedException();
         }
-
     }
 }

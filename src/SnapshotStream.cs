@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// A wrapper stream that enables you to take a snapshot, pushing changes into a side buffer.
     /// </summary>
@@ -61,7 +61,6 @@ namespace DiscUtils
 
         private long _position;
 
-
         /// <summary>
         /// Creates a new instance, wrapping an existing stream.
         /// </summary>
@@ -86,14 +85,17 @@ namespace DiscUtils
                 {
                     _baseStream.Dispose();
                 }
+
                 _baseStream = null;
 
                 if (_diffStream != null)
                 {
                     _diffStream.Dispose();
                 }
+
                 _diffStream = null;
             }
+
             base.Dispose(disposing);
         }
 
@@ -152,8 +154,6 @@ namespace DiscUtils
         /// </summary>
         public void ForgetSnapshot()
         {
-            // This is actually merge... :)
-
             if (_diffStream == null)
             {
                 throw new InvalidOperationException("No snapshot");
@@ -167,7 +167,7 @@ namespace DiscUtils
                 _baseStream.Position = extent.Start;
 
                 int totalRead = 0;
-                while(totalRead < extent.Length)
+                while (totalRead < extent.Length)
                 {
                     int toRead = (int)Math.Min(extent.Length - totalRead, buffer.Length);
 
@@ -246,6 +246,7 @@ namespace DiscUtils
             {
                 return _position;
             }
+
             set
             {
                 _position = value;
@@ -274,11 +275,12 @@ namespace DiscUtils
                 {
                     throw new IOException("Attempt to read beyond end of file");
                 }
+
                 int toRead = (int)Math.Min(count, _diffStream.Length - _position);
 
                 // If the read is within the base stream's range, then touch it first to get the
                 // (potentially) stale data.
-                if(_position < _baseStream.Length)
+                if (_position < _baseStream.Length)
                 {
                     int baseToRead = (int)Math.Min(toRead, _baseStream.Length - _position);
                     _baseStream.Position = _position;

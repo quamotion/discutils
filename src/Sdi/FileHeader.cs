@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Sdi
 {
+    using System;
+    using System.IO;
+
     internal class FileHeader
     {
         public string Tag;
@@ -35,10 +35,10 @@ namespace DiscUtils.Sdi
         public ulong DeviceId;
         public Guid DeviceModel;
         public ulong DeviceRole;
-        //Reserved ulong
+        ////Reserved ulong
         public Guid RuntimeGuid;
         public ulong RuntimeOEMRev;
-        //Reserved ulong
+        ////Reserved ulong
         public long PageAlignment;
         public ulong Checksum;
 

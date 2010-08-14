@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.Security.Cryptography;
-using System.Text;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+    using System.Globalization;
+    using System.Security.Cryptography;
+    using System.Text;
+
     internal class ChapAuthenticator : Authenticator
     {
         private State _state;
@@ -37,7 +37,6 @@ namespace DiscUtils.Iscsi
         private int _algorithm;
         private byte _identifier;
         private byte[] _challenge;
-
 
         public ChapAuthenticator(string name, string password)
         {
@@ -120,12 +119,11 @@ namespace DiscUtils.Iscsi
             byte[] data = new byte[(p.Length - 2) / 2];
             for (int i = 0; i < data.Length; ++i)
             {
-                data[i] = byte.Parse(p.Substring(2 + i * 2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                data[i] = byte.Parse(p.Substring(2 + (i * 2), 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
             }
 
             return data;
         }
-
 
         private enum State
         {

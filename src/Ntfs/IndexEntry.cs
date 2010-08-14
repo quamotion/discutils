@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+
     [Flags]
     internal enum IndexEntryFlags : ushort
     {
@@ -164,9 +164,9 @@ namespace DiscUtils.Ntfs
             }
             else
             {
-                Utilities.WriteBytesLittleEndian((ushort)0, buffer, offset + 0x00); //dataOffset
-                Utilities.WriteBytesLittleEndian((ushort)0, buffer, offset + 0x02); //dataLength
-                Utilities.WriteBytesLittleEndian((ushort)0, buffer, offset + 0x0A); //keyLength
+                Utilities.WriteBytesLittleEndian((ushort)0, buffer, offset + 0x00); // dataOffset
+                Utilities.WriteBytesLittleEndian((ushort)0, buffer, offset + 0x02); // dataLength
+                Utilities.WriteBytesLittleEndian((ushort)0, buffer, offset + 0x0A); // keyLength
             }
 
             Utilities.WriteBytesLittleEndian(length, buffer, offset + 0x08);

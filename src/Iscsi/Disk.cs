@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// Represents a disk accessed via iSCSI.
     /// </summary>
@@ -77,6 +77,7 @@ namespace DiscUtils.Iscsi
                 {
                     _capacity = _session.GetCapacity(_lun);
                 }
+
                 return _capacity.BlockSize * _capacity.LogicalBlockCount;
             }
         }
@@ -92,6 +93,7 @@ namespace DiscUtils.Iscsi
                 {
                     _capacity = _session.GetCapacity(_lun);
                 }
+
                 return _capacity.BlockSize;
             }
         }
@@ -107,6 +109,7 @@ namespace DiscUtils.Iscsi
                 {
                     _stream = new DiskStream(_session, _lun, _access);
                 }
+
                 return _stream;
             }
         }

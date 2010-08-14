@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Vmdk
 {
+    using System;
+    using System.IO;
+
     internal sealed class ServerSparseExtentStream : CommonSparseExtentStream
     {
         private ServerSparseExtentHeader _serverHeader;
@@ -88,13 +88,14 @@ namespace DiscUtils.Vmdk
                     numGrains = 1;
                 }
 
-                int numToWrite = Math.Min(count - totalWritten, grainSize * numGrains - startGrainOffset);
+                int numToWrite = Math.Min(count - totalWritten, (grainSize * numGrains) - startGrainOffset);
                 _fileStream.Position = (((long)GetGrainTableEntry(startGrain)) * Sizes.Sector) + startGrainOffset;
                 _fileStream.Write(buffer, offset + totalWritten, numToWrite);
 
                 _position += numToWrite;
                 totalWritten += numToWrite;
             }
+
             _atEof = _position == Length;
         }
 
@@ -118,8 +119,9 @@ namespace DiscUtils.Vmdk
             LoadGrainTable(grainTable);
             for (int i = 0; i < count; ++i)
             {
-                SetGrainTableEntry(grain + i, (uint)((grainStartPos / Sizes.Sector) + _header.GrainSize * i));
+                SetGrainTableEntry(grain + i, (uint)((grainStartPos / Sizes.Sector) + (_header.GrainSize * i)));
             }
+
             WriteGrainTable();
         }
 
@@ -153,6 +155,7 @@ namespace DiscUtils.Vmdk
             {
                 Utilities.WriteBytesLittleEndian(_globalDirectory[i], buffer, i * 4);
             }
+
             _fileStream.Position = ((long)_serverHeader.GdOffset) * Sizes.Sector;
             _fileStream.Write(buffer, 0, buffer.Length);
         }

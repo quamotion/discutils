@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+
     /// <summary>
     /// Class representing the $MFT file on disk, including mirror.
     /// </summary>
@@ -155,7 +155,6 @@ namespace DiscUtils.Ntfs
 
             NtfsStream recordsStream = _self.GetStream(AttributeType.Data, null);
             _recordStream = recordsStream.Open(FileAccess.ReadWrite);
-
         }
 
         public File InitializeNew(INtfsContext context, long firstBitmapCluster, ulong numBitmapClusters, long firstRecordsCluster, ulong numRecordsClusters)
@@ -324,6 +323,7 @@ namespace DiscUtils.Ntfs
                 _recordCache[index] = result;
                 return result;
             }
+
             return null;
         }
 
@@ -344,13 +344,14 @@ namespace DiscUtils.Ntfs
 
             // We may have modified our own meta-data by extending the data stream, so
             // make sure our records are up-to-date.
-            if(_self.MftRecordIsDirty)
+            if (_self.MftRecordIsDirty)
             {
                 DirectoryEntry dirEntry = _self.DirectoryEntry;
                 if (dirEntry != null)
                 {
                     dirEntry.UpdateFrom(_self);
                 }
+
                 _self.UpdateRecordInMft();
             }
 

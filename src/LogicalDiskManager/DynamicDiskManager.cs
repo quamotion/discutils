@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.IO;
-using DiscUtils.Partitions;
-
 namespace DiscUtils.LogicalDiskManager
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using DiscUtils.Partitions;
+
     /// <summary>
     /// A class that understands Windows LDM structures, mapping physical volumes to logical volumes.
     /// </summary>
@@ -104,6 +104,7 @@ namespace DiscUtils.LogicalDiskManager
             {
                 return IsLdmPartition(pi);
             }
+
             return false;
         }
 
@@ -152,6 +153,5 @@ namespace DiscUtils.LogicalDiskManager
         }
 
         #endregion
-
     }
 }

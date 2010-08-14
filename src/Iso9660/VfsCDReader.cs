@@ -20,14 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using DiscUtils.Vfs;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using DiscUtils.Vfs;
+
     internal class VfsCDReader : VfsReadOnlyFileSystem<DirectoryRecord, File, ReaderDirectory, IsoContext>
     {
         private Stream _data;
@@ -62,27 +62,26 @@ namespace DiscUtils.Iso9660
                     break;
                 }
 
-
                 bvd = new BaseVolumeDescriptor(buffer, 0);
                 switch (bvd.VolumeDescriptorType)
                 {
                     case VolumeDescriptorType.Boot:
                         break;
-                    case VolumeDescriptorType.Primary: //Primary Vol Descriptor
+                    case VolumeDescriptorType.Primary: // Primary Vol Descriptor
                         pvdPos = vdpos;
                         break;
-                    case VolumeDescriptorType.Supplementary: //Supplementary Vol Descriptor
+                    case VolumeDescriptorType.Supplementary: // Supplementary Vol Descriptor
                         svdPos = vdpos;
                         break;
-                    case VolumeDescriptorType.Partition: //Volume Partition Descriptor
+                    case VolumeDescriptorType.Partition: // Volume Partition Descriptor
                         break;
-                    case VolumeDescriptorType.SetTerminator: //Volume Descriptor Set Terminator
+                    case VolumeDescriptorType.SetTerminator: // Volume Descriptor Set Terminator
                         break;
                 }
 
                 vdpos += IsoUtilities.SectorSize;
-            } while (bvd.VolumeDescriptorType != VolumeDescriptorType.SetTerminator);
-
+            }
+            while (bvd.VolumeDescriptorType != VolumeDescriptorType.SetTerminator);
 
             CommonVolumeDescriptor volDesc;
             if (joliet && svdPos != 0)
@@ -143,6 +142,5 @@ namespace DiscUtils.Iso9660
 
             return name;
         }
-
     }
 }

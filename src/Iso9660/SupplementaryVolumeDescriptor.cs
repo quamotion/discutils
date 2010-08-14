@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Text;
+
     internal class SupplementaryVolumeDescriptor : CommonVolumeDescriptor
     {
         public SupplementaryVolumeDescriptor(byte[] src, int offset)
@@ -41,7 +41,7 @@ namespace DiscUtils.Iso9660
             uint rootDirDataLength,
             DateTime buildTime,
             Encoding enc)
-            : base( VolumeDescriptorType.Supplementary, 1, volumeSpaceSize, pathTableSize, typeLPathTableLocation, typeMPathTableLocation, rootDirExtentLocation, rootDirDataLength, buildTime, enc )
+            : base(VolumeDescriptorType.Supplementary, 1, volumeSpaceSize, pathTableSize, typeLPathTableLocation, typeMPathTableLocation, rootDirExtentLocation, rootDirDataLength, buildTime, enc)
         {
         }
 

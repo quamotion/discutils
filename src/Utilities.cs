@@ -20,15 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
     internal delegate TResult Func<T, TResult>(T arg);
     
     internal static class Utilities
@@ -46,7 +45,7 @@ namespace DiscUtils
         /// <returns>The rounded-up value</returns>
         public static long RoundUp(long value, long unit)
         {
-            return (((value + (unit - 1)) / unit) * unit);
+            return ((value + (unit - 1)) / unit) * unit;
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace DiscUtils
         /// <returns>The rounded-up value</returns>
         public static int RoundUp(int value, int unit)
         {
-            return (((value + (unit - 1)) / unit) * unit);
+            return ((value + (unit - 1)) / unit) * unit;
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ namespace DiscUtils
         /// <returns>The rounded-down value</returns>
         public static long RoundDown(long value, long unit)
         {
-            return ((value / unit) * unit);
+            return (value / unit) * unit;
         }
 
         /// <summary>
@@ -152,6 +151,7 @@ namespace DiscUtils
                     result.Add(val);
                 }
             }
+
             return result;
         }
 
@@ -170,7 +170,7 @@ namespace DiscUtils
         }
 
         #region Bit Twiddling
-        public static  bool IsAllZeros(byte[] buffer, int offset, int count)
+        public static bool IsAllZeros(byte[] buffer, int offset, int count)
         {
             int end = offset + count;
             for (int i = offset; i < end; ++i)
@@ -229,7 +229,7 @@ namespace DiscUtils
 
         public static ulong BitSwap(ulong value)
         {
-            return ((ulong)(BitSwap((uint)(value & 0xFFFFFFFF))) << 32) | BitSwap((uint)(value >> 32));
+            return (((ulong)BitSwap((uint)(value & 0xFFFFFFFF))) << 32) | BitSwap((uint)(value >> 32));
         }
 
         public static short BitSwap(short value)
@@ -427,8 +427,7 @@ namespace DiscUtils
                 buffer[offset + 12],
                 buffer[offset + 13],
                 buffer[offset + 14],
-                buffer[offset + 15]
-                );
+                buffer[offset + 15]);
         }
 
         public static byte[] ToByteArray(byte[] buffer, int offset, int length)
@@ -465,6 +464,7 @@ namespace DiscUtils
                 dest[i + offset] = (byte)chars[i];
                 ++i;
             }
+
             while (i < count)
             {
                 dest[i + offset] = 0;
@@ -586,6 +586,7 @@ namespace DiscUtils
             {
                 merged += @"\";
             }
+
             if (basePath.StartsWith(@"\\", StringComparison.Ordinal))
             {
                 merged = @"\\" + merged;
@@ -616,6 +617,7 @@ namespace DiscUtils
                 {
                     break;
                 }
+
                 ++i;
             }
 
@@ -639,6 +641,7 @@ namespace DiscUtils
                 result.Append(pathElements[j]);
                 result.Append(@"\");
             }
+
             result.Append(pathElements[pathElements.Count - 1]);
 
             // If the target was a directory, put the terminator back
@@ -814,6 +817,7 @@ namespace DiscUtils
                 {
                     return false;
                 }
+
                 foreach (char ch in split[1])
                 {
                     if (!Is8Dot3Char(ch))
@@ -846,10 +850,10 @@ namespace DiscUtils
             {
                 pattern += ".";
             }
+
             string query = "^" + Regex.Escape(pattern).Replace(@"\*", ".*").Replace(@"\?", "[^.]") + "$";
             return new Regex(query, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }
         #endregion
-
     }
 }

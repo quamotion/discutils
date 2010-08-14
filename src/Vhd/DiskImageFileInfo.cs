@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
 namespace DiscUtils.Vhd
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
     /// <summary>
     /// Provides read access to detailed information about a VHD file.
     /// </summary>
@@ -155,7 +155,6 @@ namespace DiscUtils.Vhd
             get { return _footer.SavedState; }
         }
 
-
         /// <summary>
         /// Gets the cookie indicating a dynamic disk header (should be "cxsparse").
         /// </summary>
@@ -242,6 +241,5 @@ namespace DiscUtils.Vhd
                 return vals;
             }
         }
-
     }
 }

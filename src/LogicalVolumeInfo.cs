@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils
 {
+    using System;
+
     /// <summary>
     /// Enumeration of the health status of a logical volume.
     /// </summary>
@@ -129,7 +129,6 @@ namespace DiscUtils
         {
             get { return (_physicalVol == null) ? Geometry.Null : _physicalVol.PhysicalGeometry; }
         }
-
 
         /// <summary>
         /// Gets the disk geometry of the underlying storage medium (as used in BIOS calls), may be null.

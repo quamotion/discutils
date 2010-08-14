@@ -20,17 +20,16 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.IO;
-using DiscUtils.Vfs;
-
 namespace DiscUtils.Iso9660
 {
+    using System.IO;
+    using DiscUtils.Vfs;
+
     /// <summary>
     /// Class for reading existing ISO images.
     /// </summary>
     public class CDReader : VfsFileSystemFacade
     {
-
         /// <summary>
         /// Creates a new instance.
         /// </summary>

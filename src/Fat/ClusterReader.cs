@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Fat
 {
+    using System;
+    using System.IO;
+
     internal sealed class ClusterReader
     {
         private Stream _stream;
@@ -54,7 +54,7 @@ namespace DiscUtils.Fat
 
         public void ReadCluster(uint cluster, byte[] buffer, int offset)
         {
-            if(offset + ClusterSize > buffer.Length)
+            if (offset + ClusterSize > buffer.Length)
             {
                 throw new ArgumentOutOfRangeException("offset", "buffer is too small - cluster would overflow buffer");
             }

@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+
     internal abstract class VolumeDescriptorDiskRegion : BuilderExtent
     {
-        byte[] _readCache;
+        private byte[] _readCache;
 
         public VolumeDescriptorDiskRegion(long start)
             : base(start, IsoUtilities.SectorSize)

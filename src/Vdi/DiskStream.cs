@@ -20,16 +20,16 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Vdi
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     internal class DiskStream : SparseStream
     {
-        private const uint BlockFree = unchecked((uint)(int)~0);
-        private const uint BlockZero = unchecked((uint)(int)~1);
+        private const uint BlockFree = unchecked((uint)(int)(~0));
+        private const uint BlockZero = unchecked((uint)(int)(~1));
 
         private Stream _fileStream;
         private Ownership _ownsStream;
@@ -120,6 +120,7 @@ namespace DiscUtils.Vdi
                 CheckDisposed();
                 return _position;
             }
+
             set
             {
                 CheckDisposed();
@@ -322,6 +323,7 @@ namespace DiscUtils.Vdi
                     {
                         ++i;
                     }
+
                     int start = i;
 
                     // Find next absent block
@@ -367,7 +369,7 @@ namespace DiscUtils.Vdi
             byte[] buffer = new byte[4];
             Utilities.WriteBytesLittleEndian(_blockTable[block], buffer, 0);
 
-            _fileStream.Position = _fileHeader.BlocksOffset + block * 4;
+            _fileStream.Position = _fileHeader.BlocksOffset + (block * 4);
             _fileStream.Write(buffer, 0, 4);
         }
 

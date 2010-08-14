@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Wim
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Provides access to a (compressed) resource within the WIM file.
     /// </summary>
@@ -68,6 +68,7 @@ namespace DiscUtils.Wim
                 _chunkOffsets[i] = Utilities.ToUInt32LittleEndian(Utilities.ReadFully(_baseStream, 4), 0);
                 _chunkLength[i - 1] = _chunkOffsets[i] - _chunkOffsets[i - 1];
             }
+
             _chunkLength[numChunks - 1] = (_baseStream.Length - _baseStream.Position) - _chunkOffsets[numChunks - 1];
             _offsetDelta = _baseStream.Position;
 
@@ -104,6 +105,7 @@ namespace DiscUtils.Wim
             {
                 return _position;
             }
+
             set
             {
                 _position = value;
@@ -157,7 +159,7 @@ namespace DiscUtils.Wim
             Stream rawChunkStream = new SubStream(_baseStream, _offsetDelta + _chunkOffsets[chunk], _chunkLength[chunk]);
             if ((_header.Flags & ResourceFlags.Compressed) != 0 && _chunkLength[chunk] != targetUncompressed)
             {
-                if(_lzxCompression)
+                if (_lzxCompression)
                 {
                     return new LzxStream(rawChunkStream, 15, E8DecodeFileSize);
                 }

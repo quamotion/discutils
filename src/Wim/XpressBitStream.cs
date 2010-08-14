@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Wim
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Converts a byte stream into a bit stream.
     /// </summary>
@@ -39,7 +39,7 @@ namespace DiscUtils.Wim
         private uint _buffer;
         private int _bufferAvailable;
 
-        byte[] _readBuffer = new byte[2];
+        private byte[] _readBuffer = new byte[2];
 
         public XpressBitStream(Stream byteStream)
         {
@@ -90,6 +90,5 @@ namespace DiscUtils.Wim
                 _bufferAvailable += 16;
             }
         }
-
     }
 }

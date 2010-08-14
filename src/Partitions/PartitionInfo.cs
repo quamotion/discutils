@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Partitions
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+
     /// <summary>
     /// Base class representing a disk partition.
     /// </summary>
@@ -53,7 +53,8 @@ namespace DiscUtils.Partitions
         /// <summary>
         /// Gets the length of the partition in sectors.
         /// </summary>
-        public virtual long SectorCount {
+        public virtual long SectorCount
+        {
             get { return 1 + LastSector - FirstSector; }
         }
 

@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Globalization;
-
 namespace DiscUtils.Vmdk
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+
     /// <summary>
     /// Represents a single VMDK file.
     /// </summary>
@@ -334,7 +334,6 @@ namespace DiscUtils.Vmdk
                 biosGeometry = Geometry.MakeBiosSafe(geometry, parameters.Capacity);
             }
 
-
             DiskAdapterType adapterType = (parameters.AdapterType == DiskAdapterType.None) ? DiskAdapterType.LsiLogicScsi : parameters.AdapterType;
             DiskCreateType createType = (parameters.CreateType == DiskCreateType.None) ? DiskCreateType.MonolithicSparse : parameters.CreateType;
 
@@ -453,6 +452,7 @@ namespace DiscUtils.Vmdk
                 {
                     result += extent.SizeInSectors * Sizes.Sector;
                 }
+
                 return result;
             }
         }
@@ -503,6 +503,7 @@ namespace DiscUtils.Vmdk
                 {
                     parent.Dispose();
                 }
+
                 parent = null;
             }
 
@@ -537,6 +538,7 @@ namespace DiscUtils.Vmdk
                     streams[i] = OpenExtent(_descriptor.Extents[i], extentStart, parent, (i == streams.Length - 1) ? ownsParent : Ownership.None);
                     extentStart += _descriptor.Extents[i].SizeInSectors * Sizes.Sector;
                 }
+
                 return new ConcatStream(Ownership.Dispose, streams);
             }
         }
@@ -565,14 +567,14 @@ namespace DiscUtils.Vmdk
                 if (type == DiskCreateType.MonolithicFlat || type == DiskCreateType.VmfsSparse || type == DiskCreateType.Vmfs)
                 {
                     string adornment = "flat";
-                    if(type == DiskCreateType.VmfsSparse)
+                    if (type == DiskCreateType.VmfsSparse)
                     {
                         adornment = string.IsNullOrEmpty(baseDescriptor.ParentFileNameHint) ? "sparse" : "delta";
                     }
 
                     string fileName = AdornFileName(file, adornment);
 
-                    using(Stream fs = fileLocator.Open(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+                    using (Stream fs = fileLocator.Open(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
                     {
                         CreateExtent(fs, capacity, extentType);
                         extents.Add(new ExtentDescriptor(ExtentAccess.ReadWrite, capacity / Sizes.Sector, extentType, fileName, 0));
@@ -598,7 +600,7 @@ namespace DiscUtils.Vmdk
 
                         using (Stream fs = fileLocator.Open(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
                         {
-                            long extentSize = Math.Min(2 * Sizes.OneGiB - Sizes.OneMiB, capacity - totalSize);
+                            long extentSize = Math.Min((2 * Sizes.OneGiB) - Sizes.OneMiB, capacity - totalSize);
                             CreateExtent(fs, extentSize, extentType);
                             extents.Add(new ExtentDescriptor(ExtentAccess.ReadWrite, extentSize / Sizes.Sector, extentType, fileName, 0));
                             totalSize += extentSize;
@@ -626,7 +628,7 @@ namespace DiscUtils.Vmdk
         {
             FileAccess access = FileAccess.Read;
             FileShare share = FileShare.Read;
-            if(extent.Access == ExtentAccess.ReadWrite && _access != FileAccess.Read)
+            if (extent.Access == ExtentAccess.ReadWrite && _access != FileAccess.Read)
             {
                 access = FileAccess.ReadWrite;
                 share = FileShare.None;
@@ -692,7 +694,7 @@ namespace DiscUtils.Vmdk
                 CreateSparseExtent(extentStream, size, descriptorLength, out descriptorStart);
                 return;
             }
-            else if(type == ExtentType.VmfsSparse)
+            else if (type == ExtentType.VmfsSparse)
             {
                 ServerSparseExtentHeader header = CreateServerSparseExtentHeader(size);
 
@@ -769,7 +771,6 @@ namespace DiscUtils.Vmdk
             extentStream.Position = 0;
             extentStream.Write(header.GetBytes(), 0, Sizes.Sector);
 
-
             // Zero-out the descriptor space
             if (descriptorLength > 0)
             {
@@ -778,16 +779,15 @@ namespace DiscUtils.Vmdk
                 extentStream.Write(descriptor, 0, descriptor.Length);
             }
 
-
             // Generate the redundant grain dir, and write it
             byte[] grainDir = new byte[numGrainTables * 4];
             for (int i = 0; i < numGrainTables; ++i)
             {
                 Utilities.WriteBytesLittleEndian((uint)(redundantGrainTablesStart + (i * Utilities.Ceil(gtesPerGt * 4, Sizes.Sector))), grainDir, i * 4);
             }
+
             extentStream.Position = redundantGrainDirStart * Sizes.Sector;
             extentStream.Write(grainDir, 0, grainDir.Length);
-
 
             // Write out the blank grain tables
             byte[] grainTable = new byte[gtesPerGt * 4];
@@ -797,15 +797,14 @@ namespace DiscUtils.Vmdk
                 extentStream.Write(grainTable, 0, grainTable.Length);
             }
 
-
             // Generate the main grain dir, and write it
             for (int i = 0; i < numGrainTables; ++i)
             {
                 Utilities.WriteBytesLittleEndian((uint)(grainTablesStart + (i * Utilities.Ceil(gtesPerGt * 4, Sizes.Sector))), grainDir, i * 4);
             }
+
             extentStream.Position = grainDirStart * Sizes.Sector;
             extentStream.Write(grainDir, 0, grainDir.Length);
-
 
             // Write out the blank grain tables
             for (int i = 0; i < numGrainTables; ++i)
@@ -948,6 +947,5 @@ namespace DiscUtils.Vmdk
             baseDescriptor.CreateType = type;
             return baseDescriptor;
         }
-
     }
 }

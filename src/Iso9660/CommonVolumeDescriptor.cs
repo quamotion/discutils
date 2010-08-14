@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Text;
+
     internal class CommonVolumeDescriptor : BaseVolumeDescriptor
     {
         public Encoding CharacterEncoding;
@@ -108,9 +108,9 @@ namespace DiscUtils.Iso9660
             LogicalBlockSize = IsoUtilities.SectorSize;
             PathTableSize = pathTableSize;
             TypeLPathTableLocation = typeLPathTableLocation;
-            //OptionalTypeLPathTableLocation = 0;
+            ////OptionalTypeLPathTableLocation = 0;
             TypeMPathTableLocation = typeMPathTableLocation;
-            //OptionalTypeMPathTableLocation = 0;
+            ////OptionalTypeMPathTableLocation = 0;
             RootDirectory = new DirectoryRecord();
             RootDirectory.ExtendedAttributeRecordLength = 0;
             RootDirectory.LocationOfExtent = rootDirExtentLocation;

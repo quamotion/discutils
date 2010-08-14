@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+    using System.IO;
+
     [VirtualDiskTransport("iscsi")]
     internal sealed class DiskTransport : VirtualDiskTransport
     {
@@ -48,6 +48,7 @@ namespace DiscUtils.Iscsi
                 {
                     _session.Dispose();
                 }
+
                 _session = null;
             }
 

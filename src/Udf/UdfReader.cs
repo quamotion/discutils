@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.IO;
-using DiscUtils.Iso9660;
-using DiscUtils.Vfs;
-
 namespace DiscUtils.Udf
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using DiscUtils.Iso9660;
+    using DiscUtils.Vfs;
+
     /// <summary>
     /// Class for accessing OSTA Universal Disk Format file systems.
     /// </summary>
@@ -47,7 +47,7 @@ namespace DiscUtils.Udf
         /// <param name="data">The stream containing the UDF file system</param>
         /// <param name="sectorSize">The sector size of the physical media</param>
         public UdfReader(Stream data, int sectorSize)
-            :base (new VfsUdfReader(data, sectorSize))
+            : base(new VfsUdfReader(data, sectorSize))
         {
         }
 
@@ -80,7 +80,6 @@ namespace DiscUtils.Udf
                     break;
                 }
 
-
                 bvd = new BaseVolumeDescriptor(buffer, 0);
                 switch (bvd.StandardIdentifier)
                 {
@@ -106,7 +105,6 @@ namespace DiscUtils.Udf
 
             return foundUdfMarker;
         }
-
     }
 
     internal sealed class VfsUdfReader : VfsReadOnlyFileSystem<FileIdentifier, File, Directory, UdfContext>
@@ -178,7 +176,6 @@ namespace DiscUtils.Udf
 
             AnchorVolumeDescriptorPointer avdp = AnchorVolumeDescriptorPointer.FromStream(_data, 256, _sectorSize);
 
-
             uint sector = avdp.MainDescriptorSequence.Location;
             bool terminatorFound = false;
             while (!terminatorFound)
@@ -207,6 +204,7 @@ namespace DiscUtils.Udf
                         {
                             throw new IOException("Duplicate partition number reading UDF Partition Descriptor");
                         }
+
                         Context.PhysicalPartitions[pd.PartitionNumber] = new PhysicalPartition(pd, dataBuffer, _sectorSize);
                         break;
 
@@ -235,9 +233,8 @@ namespace DiscUtils.Udf
                 Context.LogicalPartitions.Add(LogicalPartition.FromDescriptor(Context, _lvd, i));
             }
 
-
             byte[] fsdBuffer = UdfUtilities.ReadExtent(Context, _lvd.FileSetDescriptorLocation);
-            if(DescriptorTag.IsValid(fsdBuffer, 0))
+            if (DescriptorTag.IsValid(fsdBuffer, 0))
             {
                 FileSetDescriptor fsd = Utilities.ToStruct<FileSetDescriptor>(fsdBuffer, 0);
                 RootDirectory = (Directory)File.FromDescriptor(Context, fsd.RootDirectoryIcb);
@@ -277,6 +274,5 @@ namespace DiscUtils.Udf
             return dt.TagIdentifier == TagIdentifier.AnchorVolumeDescriptorPointer
                 && dt.TagLocation == 256;
         }
-
     }
 }

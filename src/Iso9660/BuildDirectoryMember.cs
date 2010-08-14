@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     /// <summary>
     /// Provides the base class for <see cref="BuildFileInfo"/> and
     /// <see cref="BuildDirectoryInfo"/> objects that will be built into an
@@ -96,7 +96,6 @@ namespace DiscUtils.Iso9660
                 return (enc == Encoding.ASCII) ? ShortName : Name;
             }
         }
-
 
         internal abstract long GetDataSize(Encoding enc);
 
@@ -173,5 +172,4 @@ namespace DiscUtils.Iso9660
 
         internal static readonly Comparer<BuildDirectoryMember> SortedComparison = new DirectorySortedComparison();
     }
-
 }

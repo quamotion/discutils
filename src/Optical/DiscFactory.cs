@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Optical
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     [VirtualDiskFactory("Optical", ".iso,.bin")]
     internal sealed class DiscFactory : VirtualDiskFactory
     {
@@ -52,7 +52,7 @@ namespace DiscUtils.Optical
         public override VirtualDisk OpenDisk(FileLocator locator, string path, FileAccess access)
         {
             OpticalFormat format = path.EndsWith(".bin", StringComparison.OrdinalIgnoreCase) ? OpticalFormat.Mode2 : OpticalFormat.Mode1;
-            FileShare share = (access == FileAccess.Read ? FileShare.Read : FileShare.None);
+            FileShare share = access == FileAccess.Read ? FileShare.Read : FileShare.None;
             return new Disc(locator.Open(path, FileMode.Open, access, share), Ownership.Dispose, format);
         }
     }

@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Udf
 {
+    using System;
+    using System.IO;
+
     internal abstract class PartitionMap : IByteArraySerializable
     {
         public byte Type;
@@ -41,6 +41,7 @@ namespace DiscUtils.Udf
         }
 
         protected abstract int Parse(byte[] buffer, int offset);
+
         public abstract int Size { get; }
 
         public static PartitionMap CreateFrom(byte[] buffer, int offset)
@@ -52,7 +53,7 @@ namespace DiscUtils.Udf
             {
                 result = new Type1PartitionMap();
             }
-            else if(type == 2)
+            else if (type == 2)
             {
                 EntityIdentifier id = Utilities.ToStruct<UdfEntityIdentifier>(buffer, offset + 4);
                 switch (id.Identifier)
@@ -70,7 +71,6 @@ namespace DiscUtils.Udf
                         throw new InvalidDataException("Unrecognized partition map entity id: " + id);
                 }
             }
-
 
             if (result != null)
             {
@@ -136,7 +136,7 @@ namespace DiscUtils.Udf
             LocationsOfSparingTables = new uint[NumSparingTables];
             for (int i = 0; i < NumSparingTables; ++i)
             {
-                LocationsOfSparingTables[i] = Utilities.ToUInt32LittleEndian(buffer, offset + 48 + 4 * i);
+                LocationsOfSparingTables[i] = Utilities.ToUInt32LittleEndian(buffer, offset + 48 + (4 * i));
             }
 
             return 64;

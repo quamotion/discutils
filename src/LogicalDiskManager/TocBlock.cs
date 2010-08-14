@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.LogicalDiskManager
 {
+    using System;
+
     internal class TocBlock
     {
         public string Signature; // TOCBLOCK
@@ -61,11 +61,11 @@ namespace DiscUtils.LogicalDiskManager
             Unknown6 = Utilities.ToUInt32BigEndian(buffer, offset + 0x64);
         }
 
-        //private static int CalcChecksum()
-        //{
-        //    // Zero checksum bytes (0x08, 4)
-        //    // Add all byte values for ?? bytes
-        //    throw new NotImplementedException();
-        //}
+        ////private static int CalcChecksum()
+        ////{
+        ////    // Zero checksum bytes (0x08, 4)
+        ////    // Add all byte values for ?? bytes
+        ////    throw new NotImplementedException();
+        ////}
     }
 }

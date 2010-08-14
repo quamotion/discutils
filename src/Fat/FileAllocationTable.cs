@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Fat
 {
+    using System;
+    using System.IO;
+
     internal class FileAllocationTable
     {
         private Stream _stream;
@@ -82,8 +82,9 @@ namespace DiscUtils.Fat
         {
             for (int i = 0; i < _numFats; ++i)
             {
-                _buffer.WriteDirtyRegions(_stream, _firstFatSector * Utilities.SectorSize + _buffer.Size * i);
+                _buffer.WriteDirtyRegions(_stream, (_firstFatSector * Utilities.SectorSize) + (_buffer.Size * i));
             }
+
             _buffer.ClearDirtyRegions();
         }
 
