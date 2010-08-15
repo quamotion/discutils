@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     internal class DiskStream : SparseStream
     {
         private Session _session;
@@ -46,8 +46,8 @@ namespace DiscUtils.Iscsi
             LunCapacity capacity = session.GetCapacity(lun);
             _blockSize = capacity.BlockSize;
             _length = capacity.LogicalBlockCount * capacity.BlockSize;
-            _canWrite = (access != FileAccess.Read);
-            _canRead = (access != FileAccess.Write);
+            _canWrite = access != FileAccess.Read;
+            _canRead = access != FileAccess.Write;
         }
         
         public override bool CanRead
@@ -80,6 +80,7 @@ namespace DiscUtils.Iscsi
             {
                 return _position;
             }
+
             set
             {
                 _position = value;

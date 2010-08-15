@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System.Collections.Generic;
+    using System.IO;
+
     internal class ClusterBitmap
     {
         private File _file;
@@ -69,6 +69,7 @@ namespace DiscUtils.Ntfs
                 {
                     numFound += FindClusters(count - numFound, result, 0, totalClusters, isMft, true, 0);
                 }
+
                 if (numFound < count)
                 {
                     numFound += FindClusters(count - numFound, result, 0, totalClusters, isMft, false, 0);
@@ -92,14 +93,17 @@ namespace DiscUtils.Ntfs
                 {
                     numFound += FindClusters(count - numFound, result, totalClusters / 8, totalClusters, isMft, false, total / 4);
                 }
+
                 if (numFound < count)
                 {
                     numFound = FindClusters(count - numFound, result, totalClusters / 16, totalClusters / 8, isMft, false, total / 4);
                 }
+
                 if (numFound < count)
                 {
                     numFound = FindClusters(count - numFound, result, totalClusters / 32, totalClusters / 16, isMft, false, total / 4);
                 }
+
                 if (numFound < count)
                 {
                     numFound = FindClusters(count - numFound, result, 0, totalClusters / 32, isMft, false, total / 4);
@@ -189,6 +193,7 @@ namespace DiscUtils.Ntfs
                 {
                     _nextDataCluster = start;
                 }
+
                 focusCluster = _nextDataCluster;
             }
 
@@ -212,7 +217,7 @@ namespace DiscUtils.Ntfs
                         _bitmap.MarkPresentRange(runStart, focusCluster - runStart);
 
                         result.Add(new Tuple<long, long>(runStart, focusCluster - runStart));
-                        numFound += (focusCluster - runStart);
+                        numFound += focusCluster - runStart;
                     }
                 }
 

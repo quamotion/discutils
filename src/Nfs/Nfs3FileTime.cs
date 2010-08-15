@@ -20,15 +20,15 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Nfs
 {
+    using System;
+
     internal class Nfs3FileTime
     {
         private readonly DateTime NfsEpoch = new DateTime(1970, 1, 1);
-        private const long TicksPerSec = 10 * 1000 * 1000;  //10 million ticks per sec
-        private const long TicksPerNanoSec = 100; //1 tick = 100 ns
+        private const long TicksPerSec = 10 * 1000 * 1000;  // 10 million ticks per sec
+        private const long TicksPerNanoSec = 100; // 1 tick = 100 ns
 
         private uint _seconds;
         private uint _nseconds;
@@ -46,22 +46,22 @@ namespace DiscUtils.Nfs
             _nseconds = (uint)((ticks % TicksPerSec) * TicksPerNanoSec);
         }
 
-        //public Nfs3FileTime(TimeSpan timeSpan)
-        //{
-        //    long ticks = timeSpan.Ticks;
-        //    _seconds = (uint)(ticks / TicksPerSec);
-        //    _nseconds = (uint)((ticks % TicksPerSec) * TicksPerNanoSec);
-        //}
+        ////public Nfs3FileTime(TimeSpan timeSpan)
+        ////{
+        ////    long ticks = timeSpan.Ticks;
+        ////    _seconds = (uint)(ticks / TicksPerSec);
+        ////    _nseconds = (uint)((ticks % TicksPerSec) * TicksPerNanoSec);
+        ////}
 
         public DateTime ToDateTime()
         {
-            return new DateTime((_seconds * TicksPerSec + (_nseconds / TicksPerNanoSec)) + NfsEpoch.Ticks);
+            return new DateTime(((_seconds * TicksPerSec) + (_nseconds / TicksPerNanoSec)) + NfsEpoch.Ticks);
         }
 
-        //public TimeSpan ToTimeSpan()
-        //{
-        //    return new TimeSpan(_seconds * TicksPerSec + (_nseconds / TicksPerNanoSec));
-        //}
+        ////public TimeSpan ToTimeSpan()
+        ////{
+        ////    return new TimeSpan(_seconds * TicksPerSec + (_nseconds / TicksPerNanoSec));
+        ////}
 
         public void Write(XdrDataWriter writer)
         {

@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     /// <summary>
     /// Represents a range of values.
     /// </summary>
@@ -83,7 +83,7 @@ namespace DiscUtils
         /// <returns><c>true</c> if the ranges are equivalent, else <c>false</c>.</returns>
         public bool Equals(Range<TOffset, TCount> other)
         {
-            if(other == null)
+            if (other == null)
             {
                 return false;
             }

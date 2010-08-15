@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Vdi
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+
     [VirtualDiskFactory("VDI", ".vdi")]
     internal sealed class DiskFactory : VirtualDiskFactory
     {
@@ -49,7 +49,7 @@ namespace DiscUtils.Vdi
                 case "dynamic":
                     return Disk.InitializeDynamic(locator.Open(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None), Ownership.Dispose, capacity);
                 default:
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Unknown VDI disk variant '{0}'",variant), "variant");
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Unknown VDI disk variant '{0}'", variant), "variant");
             }
         }
 
@@ -60,7 +60,7 @@ namespace DiscUtils.Vdi
 
         public override VirtualDisk OpenDisk(FileLocator locator, string path, FileAccess access)
         {
-            FileShare share = (access == FileAccess.Read ? FileShare.Read : FileShare.None);
+            FileShare share = access == FileAccess.Read ? FileShare.Read : FileShare.None;
             return new Disk(locator.Open(path, FileMode.Open, access, share), Ownership.Dispose);
         }
     }

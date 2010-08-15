@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System.IO;
+
     internal class StructuredNtfsAttribute<T> : NtfsAttribute
         where T : IByteArraySerializable, IDiagnosticTraceable, new()
     {
@@ -44,6 +44,7 @@ namespace DiscUtils.Ntfs
                 Initialize();
                 return _structure;
             }
+
             set
             {
                 _structure = value;
@@ -94,8 +95,9 @@ namespace DiscUtils.Ntfs
                 {
                         byte[] buffer = Utilities.ReadFully(s, (int)Length);
                         _structure.ReadFrom(buffer, 0);
-                        _hasContent = (s.Length != 0);
+                        _hasContent = s.Length != 0;
                 }
+
                 _initialized = true;
             }
         }

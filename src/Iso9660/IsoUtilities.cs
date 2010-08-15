@@ -20,19 +20,21 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.IO;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+
     internal class IsoUtilities
     {
         /// <summary>
         /// Prevent instatiation.
         /// </summary>
-        private IsoUtilities() { }
+        private IsoUtilities()
+        {
+        }
 
         public const int SectorSize = 2048;
 
@@ -76,7 +78,7 @@ namespace DiscUtils.Iso9660
                 throw new IOException("Attempt to write string with invalid a-characters");
             }
 
-            //WriteASCII(buffer, offset, numBytes, true, str);
+            ////WriteASCII(buffer, offset, numBytes, true, str);
             WriteString(buffer, offset, numBytes, true, str, Encoding.ASCII);
         }
 
@@ -88,7 +90,7 @@ namespace DiscUtils.Iso9660
                 throw new IOException("Attempt to write string with invalid d-characters");
             }
 
-            //WriteASCII(buffer, offset, numBytes, true, str);
+            ////WriteASCII(buffer, offset, numBytes, true, str);
             WriteString(buffer, offset, numBytes, true, str, Encoding.ASCII);
         }
 
@@ -289,6 +291,7 @@ namespace DiscUtils.Iso9660
             {
                 ver = 1;
             }
+
             parts[2] = String.Format(CultureInfo.InvariantCulture, "{0}", ver);
 
             return parts;
@@ -379,7 +382,7 @@ namespace DiscUtils.Iso9660
                 DateTime time = new DateTime(year, month, day, hour, min, sec, hundredths * 10, DateTimeKind.Utc);
                 return time - TimeSpan.FromMinutes(15 * (sbyte)data[offset + 16]);
             }
-            catch(ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException)
             {
                 return DateTime.MinValue;
             }
@@ -393,6 +396,7 @@ namespace DiscUtils.Iso9660
                 {
                     buffer[i] = (byte)'0';
                 }
+
                 buffer[offset + 16] = 0;
                 return;
             }
@@ -425,7 +429,7 @@ namespace DiscUtils.Iso9660
         {
             Encoding enc = Encoding.ASCII;
             if (data[offset + 0] == 0x25 && data[offset + 1] == 0x2F
-                && (data[offset + 2] == 0x40 || data[offset + 2] == 0x43 || data[offset+2] == 0x45))
+                && (data[offset + 2] == 0x40 || data[offset + 2] == 0x43 || data[offset + 2] == 0x45))
             {
                 // I.e. this is a joliet disc!
                 enc = Encoding.BigEndianUnicode;
@@ -467,6 +471,5 @@ namespace DiscUtils.Iso9660
                 return val;
             }
         }
-
     }
 }

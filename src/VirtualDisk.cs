@@ -20,14 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using DiscUtils.Partitions;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using DiscUtils.Partitions;
+
     /// <summary>
     /// Base class representing virtual hard disks.
     /// </summary>
@@ -70,6 +70,7 @@ namespace DiscUtils
                 {
                     _transport.Dispose();
                 }
+
                 _transport = null;
             }
         }
@@ -406,7 +407,6 @@ namespace DiscUtils
                     transport.Dispose();
                 }
             }
-
         }
 
         /// <summary>

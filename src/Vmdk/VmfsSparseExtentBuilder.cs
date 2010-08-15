@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Vmdk
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     internal sealed class VmfsSparseExtentBuilder : StreamBuilder
     {
         private SparseStream _content;
@@ -38,7 +38,6 @@ namespace DiscUtils.Vmdk
         internal override List<BuilderExtent> FixExtents(out long totalLength)
         {
             List<BuilderExtent> extents = new List<BuilderExtent>();
-
 
             ServerSparseExtentHeader header = DiskImageFile.CreateServerSparseExtentHeader(_content.Length);
             GlobalDirectoryExtent gdExtent = new GlobalDirectoryExtent(header);
@@ -71,7 +70,6 @@ namespace DiscUtils.Vmdk
 
             return extents;
         }
-
 
         private class GlobalDirectoryExtent : BuilderExtent
         {
@@ -155,13 +153,13 @@ namespace DiscUtils.Vmdk
                 }
                 else
                 {
-                    long grainSize = (_header.GrainSize * Sizes.Sector);
+                    long grainSize = _header.GrainSize * Sizes.Sector;
                     int grainIdx = (int)((relOffset - _grainTableStream.Length) / grainSize);
                     long grainOffset = (relOffset - _grainTableStream.Length) - (grainIdx * grainSize);
 
-                    int maxToRead = (int)Math.Min(count, grainSize * _grainContiguousRangeMapping[grainIdx] - grainOffset);
+                    int maxToRead = (int)Math.Min(count, (grainSize * _grainContiguousRangeMapping[grainIdx]) - grainOffset);
 
-                    _content.Position = _grainMapping[grainIdx] * grainSize + grainOffset;
+                    _content.Position = (_grainMapping[grainIdx] * grainSize) + grainOffset;
                     return _content.Read(block, offset, maxToRead);
                 }
             }
@@ -180,7 +178,6 @@ namespace DiscUtils.Vmdk
 
                 return (grainTableSectors + (numDataGrains * header.GrainSize)) * Sizes.Sector;
             }
-
         }
     }
 }

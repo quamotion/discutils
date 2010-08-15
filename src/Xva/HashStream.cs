@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Security.Cryptography;
-
 namespace DiscUtils.Xva
 {
+    using System;
+    using System.IO;
+    using System.Security.Cryptography;
+
     internal class HashStream : Stream
     {
         private Stream _wrapped;
@@ -34,7 +34,6 @@ namespace DiscUtils.Xva
         private HashAlgorithm _hashAlg;
 
         private long _hashPos;
-
 
         public HashStream(Stream wrapped, Ownership ownsWrapped, HashAlgorithm hashAlg)
         {
@@ -90,6 +89,7 @@ namespace DiscUtils.Xva
             {
                 return _wrapped.Position;
             }
+
             set
             {
                 _wrapped.Position = value;

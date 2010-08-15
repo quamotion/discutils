@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Vdi
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// Represents a disk stored in VirtualBox (Sun xVM) format.
     /// </summary>
@@ -156,6 +156,7 @@ namespace DiscUtils.Vdi
                 {
                     _content = _diskImage.OpenContent(null, Ownership.None);
                 }
+
                 return _content;
             }
         }

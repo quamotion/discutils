@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Nfs
 {
+    using System;
+    using System.IO;
+
     internal sealed class Nfs3FileStream : Stream
     {
         private Nfs3Client _client;
@@ -102,6 +102,7 @@ namespace DiscUtils.Nfs
             {
                 newPos += Length;
             }
+
             _position = newPos;
             return newPos;
         }
@@ -123,7 +124,7 @@ namespace DiscUtils.Nfs
         {
             int totalWritten = 0;
 
-            while(totalWritten < count)
+            while (totalWritten < count)
             {
                 int numToWrite = (int)Math.Min(_client.FileSystemInfo.WriteMaxBytes, (uint)(count - totalWritten));
 

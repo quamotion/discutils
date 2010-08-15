@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Wim
 {
+    using System;
+
     internal class ResourceInfo
     {
         public const int Size = ShortResourceHeader.Size + 26;
@@ -32,7 +32,6 @@ namespace DiscUtils.Wim
         public ushort PartNumber;
         public uint RefCount;
         public byte[] Hash;
-
 
         public void Read(byte[] buffer, int offset)
         {

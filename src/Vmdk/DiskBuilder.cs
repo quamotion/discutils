@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Vmdk
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// Creates new VMDK disks by wrapping existing streams.
     /// </summary>
@@ -53,7 +53,7 @@ namespace DiscUtils.Vmdk
         public DiskCreateType DiskType
         {
             get { return _diskType; }
-            set { _diskType = value;}
+            set { _diskType = value; }
         }
 
         /// <summary>

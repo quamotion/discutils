@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Nfs
 {
+    using System;
+
     internal sealed class Nfs3FileHandle : IEquatable<Nfs3FileHandle>, IComparable<Nfs3FileHandle>
     {
         public byte[] Value { get; set; }
@@ -118,6 +118,7 @@ namespace DiscUtils.Nfs
                     value = (value << 1) ^ Value[i];
                 }
             }
+
             return value;
         }
     }

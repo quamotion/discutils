@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.IO;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+
     /// <summary>
     /// Represents a file that will be built into the ISO image.
     /// </summary>
@@ -133,7 +133,6 @@ namespace DiscUtils.Iso9660
             string candidate = parts[0] + '.' + parts[1] + ';' + parts[2];
 
             // TODO: Make unique
-
             return candidate;
         }
     }

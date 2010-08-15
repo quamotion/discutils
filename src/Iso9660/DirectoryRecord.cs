@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Text;
-using DiscUtils.Vfs;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.IO;
+    using System.Text;
+    using DiscUtils.Vfs;
+
     [Flags()]
     internal enum FileFlags : byte
     {
@@ -70,7 +70,6 @@ namespace DiscUtils.Iso9660
             return length;
         }
 
-
         internal int WriteTo(byte[] buffer, int offset, Encoding enc)
         {
             uint length = CalcLength(FileIdentifier, enc);
@@ -84,7 +83,6 @@ namespace DiscUtils.Iso9660
             buffer[offset + 27] = InterleaveGapSize;
             IsoUtilities.ToBothFromUInt16(buffer, offset + 28, VolumeSequenceNumber);
             byte lengthOfFileIdentifier;
-
 
             if (FileIdentifier.Length == 1 && FileIdentifier[0] <= 1)
             {
@@ -175,5 +173,4 @@ namespace DiscUtils.Iso9660
             get { return (((long)LocationOfExtent) << 32) | DataLength; }
         }
     }
-
 }

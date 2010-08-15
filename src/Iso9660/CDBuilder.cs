@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
     /// <summary>
     /// Class that creates ISO images.
     /// </summary>
@@ -72,8 +72,13 @@ namespace DiscUtils.Iso9660
         /// </remarks>
         public string VolumeIdentifier
         {
-            get { return _buildParams.VolumeIdentifier; }
-            set {
+            get
+            {
+                return _buildParams.VolumeIdentifier;
+            }
+
+            set
+            {
                 if (value.Length > 32)
                 {
                     throw new ArgumentException("Not a valid volume identifier");
@@ -160,7 +165,7 @@ namespace DiscUtils.Iso9660
         /// </remarks>
         public BuildFileInfo AddFile(string name, string sourcePath)
         {
-            string[] nameElements = name.Split(new char[]{'\\'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] nameElements = name.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
             BuildDirectoryInfo dir = GetDirectory(nameElements, nameElements.Length - 1, true);
 
             BuildDirectoryMember existing;
@@ -226,7 +231,7 @@ namespace DiscUtils.Iso9660
             Dictionary<BuildDirectoryMember, uint> primaryLocationTable = new Dictionary<BuildDirectoryMember, uint>();
             Dictionary<BuildDirectoryMember, uint> supplementaryLocationTable = new Dictionary<BuildDirectoryMember, uint>();
 
-            long focus = DiskStart + 3 * IsoUtilities.SectorSize; // Primary, Supplementary, End (fixed at end...)
+            long focus = DiskStart + (3 * IsoUtilities.SectorSize); // Primary, Supplementary, End (fixed at end...)
 
             // ####################################################################
             // # 1. Fix file locations
@@ -247,7 +252,6 @@ namespace DiscUtils.Iso9660
 
                 focus += Utilities.RoundUp(extent.Length, IsoUtilities.SectorSize);
             }
-
 
             // ####################################################################
             // # 2. Fix directory locations
@@ -313,34 +317,30 @@ namespace DiscUtils.Iso9660
             // Find the end of the disk
             totalLength = focus;
 
-
             // ####################################################################
             // # 4. Prepare volume descriptors now other structures are fixed
             // ####################################################################
-
             PrimaryVolumeDescriptor pvDesc = new PrimaryVolumeDescriptor(
                 (uint)(totalLength / IsoUtilities.SectorSize),             // VolumeSpaceSize
-                (uint)(primaryPathTableLength),                            // PathTableSize
+                (uint)primaryPathTableLength,                              // PathTableSize
                 (uint)(startOfFirstPathTable / IsoUtilities.SectorSize),   // TypeLPathTableLocation
                 (uint)(startOfSecondPathTable / IsoUtilities.SectorSize),  // TypeMPathTableLocation
                 (uint)(startOfFirstDirData / IsoUtilities.SectorSize),     // RootDirectory.LocationOfExtent
                 (uint)_rootDirectory.GetDataSize(Encoding.ASCII),          // RootDirectory.DataLength
-                buildTime
-                );
+                buildTime);
             pvDesc.VolumeIdentifier = _buildParams.VolumeIdentifier;
             PrimaryVolumeDescriptorRegion pvdr = new PrimaryVolumeDescriptorRegion(pvDesc, DiskStart);
             fixedRegions.Insert(0, pvdr);
 
             SupplementaryVolumeDescriptor svDesc = new SupplementaryVolumeDescriptor(
                 (uint)(totalLength / IsoUtilities.SectorSize),             // VolumeSpaceSize
-                (uint)(supplementaryPathTableLength),                      // PathTableSize
+                (uint)supplementaryPathTableLength,                        // PathTableSize
                 (uint)(startOfThirdPathTable / IsoUtilities.SectorSize),   // TypeLPathTableLocation
                 (uint)(startOfFourthPathTable / IsoUtilities.SectorSize),  // TypeMPathTableLocation
                 (uint)(startOfSecondDirData / IsoUtilities.SectorSize),    // RootDirectory.LocationOfExtent
                 (uint)_rootDirectory.GetDataSize(suppEncoding),            // RootDirectory.DataLength
                 buildTime,
-                suppEncoding
-                );
+                suppEncoding);
             svDesc.VolumeIdentifier = _buildParams.VolumeIdentifier;
             SupplementaryVolumeDescriptorRegion svdr = new SupplementaryVolumeDescriptorRegion(svDesc, DiskStart + IsoUtilities.SectorSize);
             fixedRegions.Insert(1, svdr);
@@ -402,9 +402,5 @@ namespace DiscUtils.Iso9660
 
             return focus;
         }
-
-
     }
-
-
 }

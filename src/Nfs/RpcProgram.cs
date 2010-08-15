@@ -20,16 +20,18 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.IO;
-
 namespace DiscUtils.Nfs
 {
+    using System.IO;
+
     internal abstract class RpcProgram
     {
         protected RpcClient _client;
 
         public const uint RpcVersion = 2;
+
         public abstract int Identifier { get; }
+
         public abstract int Version { get; }
 
         protected RpcProgram(RpcClient client)

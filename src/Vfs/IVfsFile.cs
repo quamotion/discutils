@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Vfs
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Interface implemented by a class representing a file.
     /// </summary>
@@ -58,7 +58,7 @@ namespace DiscUtils.Vfs
         /// <summary>
         /// Gets the length of the file.
         /// </summary>
-        long FileLength { get;}
+        long FileLength { get; }
 
         /// <summary>
         /// Gets a buffer to access the file's contents.
@@ -87,5 +87,4 @@ namespace DiscUtils.Vfs
         /// exist.</remarks>
         Stream OpenExistingStream(string name);
     }
-
 }

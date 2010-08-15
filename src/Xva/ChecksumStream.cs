@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Security.Cryptography;
-
 namespace DiscUtils.Xva
 {
+    using System;
+    using System.IO;
+    using System.Security.Cryptography;
+
     internal class ChecksumStream : Stream
     {
         private HashAlgorithm _hashGenerator;
@@ -73,6 +73,7 @@ namespace DiscUtils.Xva
             {
                 return _position;
             }
+
             set
             {
                 _position = value;
@@ -90,8 +91,9 @@ namespace DiscUtils.Xva
                 for (int i = 0; i < hash.Length; ++i)
                 {
                     result[i * 2] = (byte)"0123456789abcdef"[(hash[i] >> 4) & 0x0F];
-                    result[i * 2 + 1] = (byte)"0123456789abcdef"[hash[i] & 0x0F];
+                    result[(i * 2) + 1] = (byte)"0123456789abcdef"[hash[i] & 0x0F];
                 }
+
                 _data = result;
             }
 

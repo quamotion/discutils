@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+
     internal class ScsiInquiryCommand : ScsiCommand
     {
         public const int InitialResponseDataLength = 36;
@@ -38,13 +38,13 @@ namespace DiscUtils.Iscsi
             _expected = expected;
         }
 
-        //public ScsiInquiryCommand(ulong targetLun, byte pageCode, uint expected)
-        //    : base(targetLun)
-        //{
-        //    _askForPage = true;
-        //    _pageCode = pageCode;
-        //    _expected = expected;
-        //}
+        ////public ScsiInquiryCommand(ulong targetLun, byte pageCode, uint expected)
+        ////    : base(targetLun)
+        ////{
+        ////    _askForPage = true;
+        ////    _pageCode = pageCode;
+        ////    _expected = expected;
+        ////}
 
         public override TaskAttributes TaskAttributes
         {

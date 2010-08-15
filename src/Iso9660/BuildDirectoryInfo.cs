@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-
 namespace DiscUtils.Iso9660
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text;
+
     /// <summary>
     /// Represents a directory that will be built into the ISO image.
     /// </summary>
@@ -79,7 +79,7 @@ namespace DiscUtils.Iso9660
         {
             List<BuildDirectoryMember> sorted = GetSortedMembers();
 
-            long total = (34 * 2); // Two pseudo entries (self & parent)
+            long total = 34 * 2; // Two pseudo entries (self & parent)
 
             foreach (BuildDirectoryMember m in sorted)
             {
@@ -135,7 +135,6 @@ namespace DiscUtils.Iso9660
 
         private static int WriteMember(BuildDirectoryMember m, string nameOverride, Encoding nameEnc, byte[] buffer, int offset, Dictionary<BuildDirectoryMember, uint> locationTable, Encoding dataEnc)
         {
-
             DirectoryRecord dr = new DirectoryRecord();
             dr.FileIdentifier = m.PickName(nameOverride, nameEnc);
             dr.LocationOfExtent = locationTable[m];
@@ -172,6 +171,7 @@ namespace DiscUtils.Iso9660
                 sorted.Sort(BuildDirectoryMember.SortedComparison);
                 _sortedMembers = sorted;
             }
+
             return _sortedMembers;
         }
 
@@ -212,5 +212,4 @@ namespace DiscUtils.Iso9660
 
         internal static readonly Comparer<BuildDirectoryInfo> PathTableSortComparison = new PathTableComparison();
     }
-
 }

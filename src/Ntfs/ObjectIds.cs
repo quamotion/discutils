@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+
     internal sealed class ObjectIds
     {
         private IndexView<IndexKey, ObjectIdRecord> _index;
@@ -70,7 +70,7 @@ namespace DiscUtils.Ntfs
             return _index.TryGetValue(key, out value);
         }
 
-        internal IEnumerable<KeyValuePair<Guid,ObjectIdRecord>> All
+        internal IEnumerable<KeyValuePair<Guid, ObjectIdRecord>> All
         {
             get
             {

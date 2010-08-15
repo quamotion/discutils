@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.Text;
-
 namespace DiscUtils.Fat
 {
+    using System;
+    using System.Globalization;
+    using System.Text;
+
     internal class FatUtilities
     {
         private const string SpecialPrivateChars = "$%'-_@~`!(){}^#&";
@@ -33,7 +33,9 @@ namespace DiscUtils.Fat
         /// <summary>
         /// Prevent instantiation.
         /// </summary>
-        private FatUtilities() { }
+        private FatUtilities()
+        {
+        }
 
         public static string NormalizedFileNameFromPath(string path)
         {
@@ -46,14 +48,18 @@ namespace DiscUtils.Fat
             // Put it through a conversion round-trip, to catch invalid characters
             string roundTripped = Encoding.Default.GetString(Encoding.Default.GetBytes(name));
 
-            // Divide the name from extension
+            /*
+             * Divide the name from extension
+             */
+
             string[] parts = roundTripped.Split('.');
             if (parts.Length < 1 || parts.Length > 2)
             {
                 throw new ArgumentException("Invalid file name", "name");
             }
+
             string namePart = parts[0];
-            string extPart = (parts.Length == 2 ? parts[1] : "");
+            string extPart = parts.Length == 2 ? parts[1] : "";
 
             // Check lengths
             if (namePart.Length > 8 || extPart.Length > 3)

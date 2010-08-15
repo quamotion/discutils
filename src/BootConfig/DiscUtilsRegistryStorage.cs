@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using DiscUtils.Registry;
-
 namespace DiscUtils.BootConfig
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using DiscUtils.Registry;
+
     internal class DiscUtilsRegistryStorage : BaseStorage
     {
         private RegistryKey _rootKey;
@@ -158,6 +158,5 @@ namespace DiscUtils.BootConfig
             RegistryKey key = _rootKey.OpenSubKey(path);
             key.SetValue("Element", value);
         }
-
     }
 }

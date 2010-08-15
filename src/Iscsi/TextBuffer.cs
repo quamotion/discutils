@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.Text;
-
 namespace DiscUtils.Iscsi
 {
+    using System.Collections.Generic;
+    using System.Text;
+
     internal class TextBuffer
     {
         private List<KeyValuePair<string, string>> _records;
@@ -50,12 +50,13 @@ namespace DiscUtils.Iscsi
                         return entry.Value;
                     }
                 }
+
                 return null;
             }
 
             set
             {
-                for (int i = 0; i < _records.Count; ++i )
+                for (int i = 0; i < _records.Count; ++i)
                 {
                     if (_records[i].Key == key)
                     {
@@ -63,6 +64,7 @@ namespace DiscUtils.Iscsi
                         return;
                     }
                 }
+
                 _records.Add(new KeyValuePair<string, string>(key, value));
             }
         }
@@ -134,7 +136,7 @@ namespace DiscUtils.Iscsi
         {
             int i = offset;
 
-            foreach(var entry in _records)
+            foreach (var entry in _records)
             {
                 i += Encoding.ASCII.GetBytes(entry.Key, 0, entry.Key.Length, buffer, i);
                 buffer[i++] = (byte)'=';

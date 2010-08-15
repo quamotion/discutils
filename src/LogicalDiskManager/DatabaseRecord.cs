@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.LogicalDiskManager
 {
+    using System;
+
     internal abstract class DatabaseRecord
     {
         public string Signature; // VBLK
@@ -93,7 +93,6 @@ namespace DiscUtils.LogicalDiskManager
         protected static ulong ReadVarULong(byte[] buffer, ref int offset)
         {
             int length = buffer[offset];
-
 
             ulong result = 0;
             for (int i = 0; i < length; ++i)

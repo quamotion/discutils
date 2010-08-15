@@ -20,31 +20,31 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Text;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
     [Flags]
     internal enum FileAttributeFlags : uint
     {
-        None =         0x00000000,
-        ReadOnly =     0x00000001,
-        Hidden =       0x00000002,
-        System =       0x00000004,
-        Archive =      0x00000020,
-        Device =       0x00000040,
-        Normal =       0x00000080,
-        Temporary =    0x00000100,
-        Sparse    =    0x00000200,
+        None = 0x00000000,
+        ReadOnly = 0x00000001,
+        Hidden = 0x00000002,
+        System = 0x00000004,
+        Archive = 0x00000020,
+        Device = 0x00000040,
+        Normal = 0x00000080,
+        Temporary = 0x00000100,
+        Sparse = 0x00000200,
         ReparsePoint = 0x00000400,
-        Compressed =   0x00000800,
-        Offline =      0x00001000,
-        NotIndexed =   0x00002000,
-        Encrypted =    0x00004000,
-        Directory =    0x10000000,
-        IndexView =    0x20000000
+        Compressed = 0x00000800,
+        Offline = 0x00001000,
+        NotIndexed = 0x00002000,
+        Encrypted = 0x00004000,
+        Directory = 0x10000000,
+        IndexView = 0x20000000
     }
 
     internal enum FileNameNamespace : byte
@@ -109,6 +109,7 @@ namespace DiscUtils.Ntfs
             writer.WriteLine(indent + "     Allocated Size: " + AllocatedSize);
             writer.WriteLine(indent + "          Real Size: " + RealSize);
             writer.WriteLine(indent + "              Flags: " + Flags);
+
             if ((Flags & FileAttributeFlags.ReparsePoint) != 0)
             {
                 writer.WriteLine(indent + "  Reparse Point Tag: " + EASizeOrReparsePointTag);
@@ -117,6 +118,7 @@ namespace DiscUtils.Ntfs
             {
                 writer.WriteLine(indent + "      Ext Attr Size: " + (EASizeOrReparsePointTag & 0xFFFF));
             }
+
             writer.WriteLine(indent + "          Namespace: " + FileNameNamespace);
             writer.WriteLine(indent + "          File Name: " + FileName);
         }
@@ -138,7 +140,7 @@ namespace DiscUtils.Ntfs
             FileNameNamespace = (FileNameNamespace)buffer[offset + 0x41];
             FileName = Encoding.Unicode.GetString(buffer, offset + 0x42, fnLen * 2);
 
-            return 0x42 + fnLen * 2;
+            return 0x42 + (fnLen * 2);
         }
 
         public void WriteTo(byte[] buffer, int offset)
@@ -161,7 +163,7 @@ namespace DiscUtils.Ntfs
         {
             get
             {
-                return 0x42 + FileName.Length * 2;
+                return 0x42 + (FileName.Length * 2);
             }
         }
 
@@ -182,10 +184,12 @@ namespace DiscUtils.Ntfs
         internal static FileAttributes ConvertFlags(FileAttributeFlags flags)
         {
             FileAttributes result = (FileAttributes)(((uint)flags) & 0xFFFF);
+
             if ((flags & FileAttributeFlags.Directory) != 0)
             {
                 result |= FileAttributes.Directory;
             }
+
             return result;
         }
 
@@ -199,7 +203,7 @@ namespace DiscUtils.Ntfs
 
         public bool Equals(FileNameRecord other)
         {
-            if(other == null)
+            if (other == null)
             {
                 return false;
             }

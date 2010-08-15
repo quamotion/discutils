@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Registry
 {
+    using System;
+
     /// <summary>
     /// The per-key flags present on registry keys.
     /// </summary>
@@ -110,5 +110,4 @@ namespace DiscUtils.Registry
         /// </summary>
         Unknown8000 = 0x8000
     }
-
 }

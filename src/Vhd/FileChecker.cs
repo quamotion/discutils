@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Runtime.Serialization;
-
 namespace DiscUtils.Vhd
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// VHD file format verifier, that identifies corrupt VHD files.
     /// </summary>
@@ -116,7 +116,7 @@ namespace DiscUtils.Vhd
 
             _fileStream.Position = _dynamicHeader.TableOffset;
             byte[] batData = Utilities.ReadFully(_fileStream, batSize);
-            uint[] bat = new uint[batSize/4];
+            uint[] bat = new uint[batSize / 4];
             for (int i = 0; i < bat.Length; ++i)
             {
                 bat[i] = Utilities.ToUInt32BigEndian(batData, i * 4);
@@ -170,10 +170,10 @@ namespace DiscUtils.Vhd
                     {
                         ReportError("BAT: multiple blocks occupying same file space");
                     }
+
                     seenBlocks[streamBlockIdx] = true;
                 }
             }
-
         }
 
         private void CheckDynamicHeader()
@@ -182,7 +182,7 @@ namespace DiscUtils.Vhd
             long pos = _footer.DataOffset;
             while (pos != -1)
             {
-                if((pos % 512) != 0)
+                if ((pos % 512) != 0)
                 {
                     ReportError("DynHeader: Unaligned header @{0}", pos);
                 }
@@ -228,6 +228,7 @@ namespace DiscUtils.Vhd
             {
                 ReportError("DynHeader: BAT offset is before last header");
             }
+
             if ((_dynamicHeader.TableOffset % 512) != 0)
             {
                 ReportError("DynHeader: BAT offset is not sector aligned");
@@ -247,6 +248,7 @@ namespace DiscUtils.Vhd
             {
                 ReportWarning("DynHeader: Using non-standard block size '" + _dynamicHeader.BlockSize + "'");
             }
+
             if (!Utilities.IsPowerOfTwo(_dynamicHeader.BlockSize))
             {
                 ReportError("DynHeader: Block size is not a power of 2");
@@ -343,7 +345,6 @@ namespace DiscUtils.Vhd
         {
             long length = _fileStream.Length;
 
-
             _fileStream.Position = _fileStream.Length - Utilities.SectorSize;
             byte[] sector = Utilities.ReadFully(_fileStream, Utilities.SectorSize);
 
@@ -380,7 +381,6 @@ namespace DiscUtils.Vhd
                 _footer = header;
             }
         }
-
 
         private static void Abort()
         {

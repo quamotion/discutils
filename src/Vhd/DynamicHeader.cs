@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Text;
-
 namespace DiscUtils.Vhd
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
     internal class DynamicHeader
     {
         public const string HeaderCookie = "cxsparse";
@@ -44,7 +44,9 @@ namespace DiscUtils.Vhd
         public string ParentUnicodeName;
         public ParentLocator[] ParentLocators;
 
-        public DynamicHeader() { }
+        public DynamicHeader()
+        {
+        }
 
         public DynamicHeader(long dataOffset, long tableOffset, uint blockSize, long diskSize)
         {
@@ -57,7 +59,7 @@ namespace DiscUtils.Vhd
             ParentTimestamp = Footer.EpochUtc;
             ParentUnicodeName = "";
             ParentLocators = new ParentLocator[8];
-            for(int i = 0; i < 8; ++i)
+            for (int i = 0; i < 8; ++i)
             {
                 ParentLocators[i] = new ParentLocator();
             }
@@ -104,7 +106,7 @@ namespace DiscUtils.Vhd
             result.ParentLocators = new ParentLocator[8];
             for (int i = 0; i < 8; ++i)
             {
-                result.ParentLocators[i] = ParentLocator.FromBytes(data, offset + 576 + i * 24);
+                result.ParentLocators[i] = ParentLocator.FromBytes(data, offset + 576 + (i * 24));
             }
 
             return result;
@@ -127,7 +129,7 @@ namespace DiscUtils.Vhd
 
             for (int i = 0; i < 8; ++i)
             {
-                ParentLocators[i].ToBytes(data, offset + 576 + i * 24);
+                ParentLocators[i].ToBytes(data, offset + 576 + (i * 24));
             }
 
             Array.Clear(data, offset + 1024 - 256, 256);
@@ -163,6 +165,7 @@ namespace DiscUtils.Vhd
             {
                 Checksum += value;
             }
+
             Checksum = ~Checksum;
 
             return Checksum;

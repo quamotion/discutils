@@ -20,15 +20,15 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Event arguments indicating progress on pumping a stream.
     /// </summary>
-    public class PumpProgressEventArgs
+    public class PumpProgressEventArgs : EventArgs
     {
         /// <summary>
         /// The number of bytes read from <c>InputStream</c>.
@@ -38,7 +38,7 @@ namespace DiscUtils
         /// <summary>
         /// The number of bytes written to <c>OutputStream</c>.
         /// </summary>
-        public long BytesWritten { get; set;}
+        public long BytesWritten { get; set; }
 
         /// <summary>
         /// The absolute position in <c>InputStream</c>.
@@ -94,7 +94,7 @@ namespace DiscUtils
         /// <summary>
         /// The number of bytes read from <c>InputStream</c>.
         /// </summary>
-        public long BytesRead { get; private set;}
+        public long BytesRead { get; private set; }
 
         /// <summary>
         /// The number of bytes written to <c>OutputStream</c>.
@@ -102,20 +102,13 @@ namespace DiscUtils
         public long BytesWritten { get; private set; }
 
         /// <summary>
-        /// Delegate for monitoring progress.
-        /// </summary>
-        /// <param name="sender">The StreamPump instance firing the event</param>
-        /// <param name="e">Information about progress</param>
-        public delegate void PumpProgressEventHandler(object sender, PumpProgressEventArgs e);
-
-        /// <summary>
         /// Event raised periodically through the pump operation.
         /// </summary>
         /// <remarks>
-        /// This method is called synchronously, so to avoid slowing the pumping activity
+        /// This event is signalled synchronously, so to avoid slowing the pumping activity
         /// implementations should return quickly.
         /// </remarks>
-        public event PumpProgressEventHandler ProgressEvent;
+        public event EventHandler<PumpProgressEventArgs> ProgressEvent;
 
         /// <summary>
         /// Creates a new instance, with no streams specified.
@@ -238,6 +231,7 @@ namespace DiscUtils
                                 OutputStream.Write(copyBuffer, copyBufferOffset, i - copyBufferOffset);
                                 BytesWritten += i - copyBufferOffset;
                             }
+
                             copyBufferOffset = i + SparseChunkSize;
                         }
                     }
@@ -298,6 +292,5 @@ namespace DiscUtils
 
             return true;
         }
-
     }
 }

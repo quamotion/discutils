@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Xva
 {
+    using System.Collections.Generic;
+    using System.IO;
+
     internal class TarFileBuilder : StreamBuilder
     {
         private List<BuildFileRecord> _files;
@@ -46,7 +46,7 @@ namespace DiscUtils.Xva
 
         internal override List<BuilderExtent> FixExtents(out long totalLength)
         {
-            List<BuilderExtent> result = new List<BuilderExtent>(_files.Count * 2 + 2);
+            List<BuilderExtent> result = new List<BuilderExtent>((_files.Count * 2) + 2);
             long pos = 0;
 
             foreach (BuildFileRecord file in _files)

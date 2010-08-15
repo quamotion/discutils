@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Vhd
 {
+    using System;
+
     internal class Footer
     {
         public const string FileCookie = "conectix";
@@ -78,7 +78,7 @@ namespace DiscUtils.Vhd
             Geometry = geometry;
             DiskType = type;
             UniqueId = Guid.NewGuid();
-            //SavedState = 0;
+            ////SavedState = 0;
         }
 
         public Footer(Footer toCopy)
@@ -150,7 +150,7 @@ namespace DiscUtils.Vhd
         {
             return (Cookie == FileCookie)
                 && IsChecksumValid()
-                //&& ((Features & FeatureReservedMustBeSet) != 0)
+                ////&& ((Features & FeatureReservedMustBeSet) != 0)
                 && FileFormatVersion == Version1;
         }
 
@@ -177,6 +177,7 @@ namespace DiscUtils.Vhd
             {
                 Checksum += value;
             }
+
             Checksum = ~Checksum;
 
             return Checksum;

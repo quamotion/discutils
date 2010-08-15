@@ -20,15 +20,15 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-
 namespace DiscUtils.Fat
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// Converts a time to/from UTC.
     /// </summary>
@@ -50,7 +50,6 @@ namespace DiscUtils.Fat
         private ClusterReader _clusterReader;
         private Directory _rootDir;
         private Dictionary<uint, Directory> _dirCache;
-
 
         private FatType _type;
         private string _bpbOEMName;
@@ -322,7 +321,7 @@ namespace DiscUtils.Fat
         /// </summary>
         public bool MirrorFat
         {
-            get { return ((_bpbExtFlags & 0x08) == 0); }
+            get { return (_bpbExtFlags & 0x08) == 0; }
         }
 
         /// <summary>
@@ -381,7 +380,7 @@ namespace DiscUtils.Fat
             {
                 entryId = GetDirectoryEntry(_rootDir, path, out parent);
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 throw new IOException("Invalid path: " + path);
             }
@@ -428,6 +427,7 @@ namespace DiscUtils.Fat
             {
                 throw new FileNotFoundException("No such file", path);
             }
+
             // Luckily, FAT and .NET FileAttributes match, bit-for-bit
             return (FileAttributes)dirEntry.Attributes;
         }
@@ -441,10 +441,11 @@ namespace DiscUtils.Fat
         {
             if (IsRootPath(path))
             {
-                if(newValue != FileAttributes.Directory)
+                if (newValue != FileAttributes.Directory)
                 {
                     throw new NotSupportedException("The attributes of the root directory cannot be modified");
                 }
+
                 return;
             }
 
@@ -500,6 +501,7 @@ namespace DiscUtils.Fat
                 {
                     throw new NotSupportedException("The creation time of the root directory cannot be modified");
                 }
+
                 return;
             }
 
@@ -534,6 +536,7 @@ namespace DiscUtils.Fat
                 {
                     throw new NotSupportedException("The last write time of the root directory cannot be modified");
                 }
+
                 return;
             }
 
@@ -568,6 +571,7 @@ namespace DiscUtils.Fat
                 {
                     throw new NotSupportedException("The last access time of the root directory cannot be modified");
                 }
+
                 return;
             }
 
@@ -602,6 +606,7 @@ namespace DiscUtils.Fat
                 {
                     throw new NotSupportedException("The last write time of the root directory cannot be modified");
                 }
+
                 return;
             }
 
@@ -636,6 +641,7 @@ namespace DiscUtils.Fat
                 {
                     throw new NotSupportedException("The last write time of the root directory cannot be modified");
                 }
+
                 return;
             }
 
@@ -670,6 +676,7 @@ namespace DiscUtils.Fat
                 {
                     throw new NotSupportedException("The last write time of the root directory cannot be modified");
                 }
+
                 return;
             }
 
@@ -709,11 +716,9 @@ namespace DiscUtils.Fat
                 throw new IOException("The source file is a directory");
             }
 
-
             DirectoryEntry newEntry = new DirectoryEntry(sourceEntry);
             newEntry.NormalizedName = FatUtilities.NormalizedFileNameFromPath(destinationFile);
             newEntry.FirstCluster = 0;
-
 
             Directory destDir;
             long destEntryId = GetDirectoryEntry(destinationFile, out destDir);
@@ -772,7 +777,7 @@ namespace DiscUtils.Fat
         /// <param name="path">The directory to create.</param>
         public override void CreateDirectory(string path)
         {
-            string[] pathElements = path.Split(new char[]{'\\'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] pathElements = path.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
 
             Directory focusDir = _rootDir;
 
@@ -793,6 +798,7 @@ namespace DiscUtils.Fat
                 {
                     child = focusDir.CreateChildDirectory(normalizedName);
                 }
+
                 focusDir = child;
             }
         }
@@ -869,7 +875,7 @@ namespace DiscUtils.Fat
             else
             {
                 DirectoryEntry dirEntry = GetDirectoryEntry(path);
-                return (dirEntry != null && (dirEntry.Attributes & FatAttributes.Directory) != 0);
+                return dirEntry != null && (dirEntry.Attributes & FatAttributes.Directory) != 0;
             }
         }
 
@@ -888,7 +894,7 @@ namespace DiscUtils.Fat
             else
             {
                 DirectoryEntry dirEntry = GetDirectoryEntry(path);
-                return (dirEntry != null && (dirEntry.Attributes & FatAttributes.Directory) == 0);
+                return dirEntry != null && (dirEntry.Attributes & FatAttributes.Directory) == 0;
             }
         }
 
@@ -929,6 +935,7 @@ namespace DiscUtils.Fat
             {
                 dirs.Add(Path.Combine(path, dirEntry.Name));
             }
+
             return dirs.ToArray();
         }
 
@@ -1000,6 +1007,7 @@ namespace DiscUtils.Fat
             {
                 result.Add(Path.Combine(path, dirEntry.Name));
             }
+
             return result.ToArray();
         }
 
@@ -1025,6 +1033,7 @@ namespace DiscUtils.Fat
                     result.Add(Path.Combine(path, dirEntry.Name));
                 }
             }
+
             return result.ToArray();
         }
 
@@ -1092,10 +1101,8 @@ namespace DiscUtils.Fat
                 throw new IOException("The source file is a directory");
             }
 
-
             DirectoryEntry newEntry = new DirectoryEntry(sourceEntry);
             newEntry.NormalizedName = FatUtilities.NormalizedFileNameFromPath(destinationName);
-
 
             Directory destDir;
             long destEntryId = GetDirectoryEntry(destinationName, out destDir);
@@ -1179,6 +1186,7 @@ namespace DiscUtils.Fat
             {
                 throw new ArgumentException("Unrecognised Floppy Disk type", "type");
             }
+
             stream.Write(bpb, 0, bpb.Length);
 
             // Write both FAT copies
@@ -1253,7 +1261,10 @@ namespace DiscUtils.Fat
             FatType fatType;
             ushort maxRootEntries;
 
-            // Write the BIOS Parameter Block (BPB) - a single sector
+            /*
+             * Write the BIOS Parameter Block (BPB) - a single sector
+             */
+
             byte[] bpb = new byte[512];
             if (sectorCount <= 8400)
             {
@@ -1315,13 +1326,20 @@ namespace DiscUtils.Fat
                     reservedSectors = 32;
                 }
             }
+
             WriteBPB(bpb, (uint)sectorCount, fatType, maxRootEntries, (uint)firstSector, (ushort)reservedSectors, sectorsPerCluster, diskGeometry, false, volId, label);
             stream.Write(bpb, 0, bpb.Length);
 
-            // Skip the reserved sectors
+            /*
+             * Skip the reserved sectors
+             */
+
             stream.Position = pos + (((ushort)reservedSectors) * Utilities.SectorSize);
 
-            // Write both FAT copies
+            /*
+             * Write both FAT copies
+             */
+
             byte[] fat = new byte[CalcFatSize((uint)sectorCount, fatType, sectorsPerCluster) * Utilities.SectorSize];
             FatBuffer fatBuffer = new FatBuffer(fatType, fat);
             fatBuffer.SetNext(0, 0xFFFFFFF8);
@@ -1332,10 +1350,14 @@ namespace DiscUtils.Fat
                 // is a single cluster in length)
                 fatBuffer.SetEndOfChain(2);
             }
+
             stream.Write(fat, 0, fat.Length);
             stream.Write(fat, 0, fat.Length);
 
-            // Write the (empty) root directory
+            /*
+             * Write the (empty) root directory
+             */
+
             uint rootDirSectors;
             if (fatType < FatType.Fat32)
             {
@@ -1345,16 +1367,23 @@ namespace DiscUtils.Fat
             {
                 rootDirSectors = sectorsPerCluster;
             }
+
             byte[] rootDir = new byte[rootDirSectors * Utilities.SectorSize];
             stream.Write(rootDir, 0, rootDir.Length);
 
-            // Make sure the stream is at least as large as the partition requires.
-            if (stream.Length < pos + sectorCount * Utilities.SectorSize)
+            /*
+             * Make sure the stream is at least as large as the partition requires.
+             */
+
+            if (stream.Length < pos + (sectorCount * Utilities.SectorSize))
             {
-                stream.SetLength(pos + sectorCount * Utilities.SectorSize);
+                stream.SetLength(pos + (sectorCount * Utilities.SectorSize));
             }
 
-            // Give the caller access to the new file system
+            /*
+             * Give the caller access to the new file system
+             */
+
             stream.Position = pos;
             return new FatFileSystem(stream);
         }
@@ -1395,7 +1424,7 @@ namespace DiscUtils.Fat
             }
 
             uint totalSectors = bpbTotSec16 + bpbTotSec32;
-            return (totalSectors * (long)bpbBytesPerSec <= stream.Length);
+            return totalSectors * (long)bpbBytesPerSec <= stream.Length;
         }
 
         internal FileAllocationTable Fat
@@ -1443,6 +1472,7 @@ namespace DiscUtils.Fat
             {
                 fatStream = new ClusterStream(this, FileAccess.ReadWrite, _bpbRootClus, uint.MaxValue);
             }
+
             _rootDir = new Directory(this, fatStream);
         }
 
@@ -1457,6 +1487,7 @@ namespace DiscUtils.Fat
             {
                 fatStart = _bpbRsvdSecCnt * BytesPerSector;
             }
+
             _fat = new FileAllocationTable(_type, _data, _bpbRsvdSecCnt, (uint)FatSize, (byte)FatCount, ActiveFat);
         }
 
@@ -1605,7 +1636,7 @@ namespace DiscUtils.Fat
         {
             uint numClusters = (uint)(sectors / sectorsPerCluster);
             uint fatBytes = (numClusters * (ushort)fatType) / 8;
-            return ((fatBytes + Utilities.SectorSize - 1) / Utilities.SectorSize);
+            return (fatBytes + Utilities.SectorSize - 1) / Utilities.SectorSize;
         }
 
         private void ReadBS(int offset)
@@ -1837,7 +1868,7 @@ namespace DiscUtils.Fat
 
             foreach (DirectoryEntry de in entries)
             {
-                bool isDir = ((de.Attributes & FatAttributes.Directory) != 0);
+                bool isDir = (de.Attributes & FatAttributes.Directory) != 0;
 
                 if ((isDir && dirs) || (!isDir && files))
                 {

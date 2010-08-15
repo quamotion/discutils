@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
-    internal class NtfsAttributeBuffer : Buffer
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
+    internal class NtfsAttributeBuffer : DiscUtils.Buffer
     {
         private File _file;
         private NtfsAttribute _attribute;
@@ -184,7 +184,6 @@ namespace DiscUtils.Ntfs
                 return;
             }
 
-
             if (!record.IsNonResident)
             {
                 record.GetDataBuffer(_file).Write(pos, buffer, offset, count);
@@ -214,7 +213,7 @@ namespace DiscUtils.Ntfs
                     byte[] wipeBuffer = new byte[bytesPerCluster * 4];
 
                     long wipePos = record.InitializedDataLength;
-                    while(wipePos < pos)
+                    while (wipePos < pos)
                     {
                         long extentStartPos;
                         IBuffer extentBuffer = GetExtentBuffer(wipePos, out extentStartPos);

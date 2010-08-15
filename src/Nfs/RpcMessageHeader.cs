@@ -20,11 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
-using System;
-
 namespace DiscUtils.Nfs
 {
+    using System;
+
     internal enum RpcMessageType
     {
         Call = 0,
@@ -34,6 +33,7 @@ namespace DiscUtils.Nfs
     internal class RpcMessageHeader
     {
         public uint TransactionId { get; set; }
+
         public RpcReplyHeader ReplyHeader { get; set; }
 
         public RpcMessageHeader(XdrDataReader reader)

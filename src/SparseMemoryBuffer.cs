@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// A sparse in-memory buffer.
     /// </summary>
@@ -82,6 +82,7 @@ namespace DiscUtils
                     return 0;
                 }
             }
+
             set
             {
                 byte[] buffer = new byte[1];

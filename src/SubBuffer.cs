@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Class representing a portion of an existing buffer.
     /// </summary>
@@ -113,6 +113,7 @@ namespace DiscUtils
             {
                 throw new ArgumentOutOfRangeException("count", "Attempt to write negative bytes");
             }
+
             if (pos + count > _length)
             {
                 throw new ArgumentOutOfRangeException("count", "Attempt to write beyond end of substream");

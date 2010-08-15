@@ -20,12 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
-using System;
-using System.Globalization;
-
 namespace DiscUtils.Iscsi
 {
+    using System;
+    using System.Globalization;
+
     /// <summary>
     /// Information about an iSCSI Target.
     /// </summary>
@@ -131,10 +130,12 @@ namespace DiscUtils.Iscsi
             {
                 result += ":" + _networkPort;
             }
+
             if (!string.IsNullOrEmpty(_targetGroupTag))
             {
                 result += "," + _targetGroupTag;
             }
+
             return result;
         }
 

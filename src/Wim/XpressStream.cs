@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Wim
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Implements the XPRESS decompression algorithm.
     /// </summary>
@@ -77,6 +77,7 @@ namespace DiscUtils.Wim
             {
                 return _position;
             }
+
             set
             {
                 _position = value;
@@ -113,7 +114,7 @@ namespace DiscUtils.Wim
 
         private HuffmanTree ReadHuffmanTree()
         {
-            uint[] lengths = new uint[256 + 16 * 16];
+            uint[] lengths = new uint[256 + (16 * 16)];
 
             for (int i = 0; i < lengths.Length; i += 2)
             {
@@ -196,6 +197,7 @@ namespace DiscUtils.Wim
             {
                 throw new InvalidDataException("Truncated stream");
             }
+
             return b;
         }
 

@@ -20,13 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections.Generic;
-
 namespace DiscUtils.Nfs
 {
+    using System.Collections.Generic;
+
     internal sealed class Nfs3Export
     {
         public string DirPath { get; set; }
+
         public List<string> Groups { get; set; }
 
         internal Nfs3Export(XdrDataReader reader)
@@ -38,6 +39,7 @@ namespace DiscUtils.Nfs
             {
                 groups.Add(reader.ReadString(Nfs3Mount.MaxNameLength));
             }
+
             Groups = groups;
         }
     }

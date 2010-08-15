@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace DiscUtils.Raw
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// Represents a raw disk image.
     /// </summary>
@@ -33,7 +33,6 @@ namespace DiscUtils.Raw
     public sealed class Disk : VirtualDisk
     {
         private DiskImageFile _file;
-
 
         /// <summary>
         /// Creates a new instance from an existing stream.
@@ -96,6 +95,7 @@ namespace DiscUtils.Raw
                     {
                         _file.Dispose();
                     }
+
                     _file = null;
                 }
             }

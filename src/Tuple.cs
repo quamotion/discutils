@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
-using System;
 namespace DiscUtils
 {
+    using System;
+
     internal abstract class BaseTuple
     {
         public abstract object this[int i]
@@ -59,8 +59,15 @@ namespace DiscUtils
             _b = b;
         }
 
-        public A First { get { return _a; } }
-        public B Second { get { return _b; } }
+        public A First
+        {
+            get { return _a; }
+        }
+
+        public B Second
+        {
+            get { return _b; }
+        }
 
         public override object this[int i]
         {
@@ -105,9 +112,20 @@ namespace DiscUtils
             _c = c;
         }
 
-        public A First { get { return _a; } }
-        public B Second { get { return _b; } }
-        public C Third { get { return _c; } }
+        public A First
+        {
+            get { return _a; }
+        }
+
+        public B Second
+        {
+            get { return _b; }
+        }
+
+        public C Third
+        {
+            get { return _c; }
+        }
 
         public override object this[int i]
         {

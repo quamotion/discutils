@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.IO;
+
     internal abstract class FixupRecordBase
     {
         private int _sectorSize;
@@ -99,6 +99,7 @@ namespace DiscUtils.Ntfs
                 {
                     return;
                 }
+
                 if (diskMagic != _magic)
                 {
                     throw new IOException("Corrupt record");
@@ -112,7 +113,7 @@ namespace DiscUtils.Ntfs
             _updateSequenceArray = new ushort[_updateSequenceCount - 1];
             for (int i = 0; i < _updateSequenceArray.Length; ++i)
             {
-                _updateSequenceArray[i] = Utilities.ToUInt16LittleEndian(buffer, offset + _updateSequenceOffset + 2 * (i + 1));
+                _updateSequenceArray[i] = Utilities.ToUInt16LittleEndian(buffer, offset + _updateSequenceOffset + (2 * (i + 1)));
             }
 
             UnprotectBuffer(buffer, offset);
@@ -141,12 +142,14 @@ namespace DiscUtils.Ntfs
             Utilities.WriteBytesLittleEndian(_updateSequenceNumber, buffer, offset + _updateSequenceOffset);
             for (int i = 0; i < _updateSequenceArray.Length; ++i)
             {
-                Utilities.WriteBytesLittleEndian(_updateSequenceArray[i], buffer, offset + _updateSequenceOffset + 2 * (i + 1));
+                Utilities.WriteBytesLittleEndian(_updateSequenceArray[i], buffer, offset + _updateSequenceOffset + (2 * (i + 1)));
             }
         }
 
         protected abstract void Read(byte[] buffer, int offset);
+
         protected abstract ushort Write(byte[] buffer, int offset);
+
         protected abstract int CalcSize();
 
         private void UnprotectBuffer(byte[] buffer, int offset)

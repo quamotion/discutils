@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.IO;
+
     internal sealed class Bitmap
     {
         private Stream _stream;
@@ -134,13 +134,12 @@ namespace DiscUtils.Ntfs
                 buffer[buffer.Length - 1] = GetByte(lastByte);
             }
 
-
             for (long i = index; i < index + count; ++i)
             {
-                long byteIdx = i / 8 - firstByte;
+                long byteIdx = (i / 8) - firstByte;
                 byte mask = (byte)(1 << (byte)(i % 8));
 
-                buffer[byteIdx] &= (byte)~mask;
+                buffer[byteIdx] &= (byte)(~mask);
             }
 
             SetBytes(firstByte, buffer);
@@ -211,6 +210,5 @@ namespace DiscUtils.Ntfs
             _bitmap.Write(buffer, 0, buffer.Length);
             _bitmap.Flush();
         }
-
     }
 }

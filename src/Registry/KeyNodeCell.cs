@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Registry
 {
+    using System;
+
     internal sealed class KeyNodeCell : Cell
     {
         public RegistryKeyFlags Flags;
@@ -123,5 +123,4 @@ namespace DiscUtils.Registry
             return "Key:" + Name + "[" + Flags + "] <" + Timestamp + ">";
         }
     }
-
 }

@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Caches objects.
     /// </summary>
@@ -35,7 +35,7 @@ namespace DiscUtils
     /// Can be use for two purposes - to ensure there is only one instance of a given object,
     /// and to prevent the need to recreate objects that are expensive to create.
     /// </remarks>
-    internal class ObjectCache<K,V>
+    internal class ObjectCache<K, V>
     {
         private const int MostRecentListSize = 20;
         private const int PruneGap = 500;
@@ -54,7 +54,7 @@ namespace DiscUtils
         {
             get
             {
-                for(int i = 0; i < _recent.Count; ++i)
+                for (int i = 0; i < _recent.Count; ++i)
                 {
                     KeyValuePair<K, V> recentEntry = _recent[i];
                     if (recentEntry.Key.Equals(key))
@@ -72,11 +72,13 @@ namespace DiscUtils
                     {
                         MakeMostRecent(key, val);
                     }
+
                     return val;
                 }
 
                 return default(V);
             }
+
             set
             {
                 _entries[key] = new WeakReference(value);
@@ -100,7 +102,6 @@ namespace DiscUtils
 
         private void PruneEntries()
         {
-
             _nextPruneCount++;
 
             if (_nextPruneCount > PruneGap)
@@ -144,6 +145,5 @@ namespace DiscUtils
 
             _recent.Insert(0, new KeyValuePair<K, V>(key, val));
         }
-
     }
 }

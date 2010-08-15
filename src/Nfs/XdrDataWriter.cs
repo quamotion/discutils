@@ -20,12 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
-using System.IO;
-using System.Text;
-
 namespace DiscUtils.Nfs
 {
+    using System.IO;
+    using System.Text;
+
     internal sealed class XdrDataWriter : BigEndianDataWriter
     {
         public XdrDataWriter(Stream stream)
@@ -70,6 +69,5 @@ namespace DiscUtils.Nfs
         {
             WriteBuffer(Encoding.ASCII.GetBytes(value));
         }
-
     }
 }

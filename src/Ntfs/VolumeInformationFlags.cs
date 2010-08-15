@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+
     [Flags]
-    enum VolumeInformationFlags : ushort
+    internal enum VolumeInformationFlags : ushort
     {
         None = 0x00,
         Dirty = 0x01,

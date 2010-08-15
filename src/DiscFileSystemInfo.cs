@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-
 namespace DiscUtils
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Provides the base class for both <see cref="DiscFileInfo"/> and <see cref="DiscDirectoryInfo"/> objects.
     /// </summary>
@@ -39,6 +39,7 @@ namespace DiscUtils
             {
                 throw new ArgumentNullException("path");
             }
+
             _fileSystem = fileSystem;
             _path = path.Trim('\\');
         }
@@ -88,6 +89,7 @@ namespace DiscUtils
                 {
                     return name.Substring(sepIdx + 1);
                 }
+
                 return "";
             }
         }
@@ -112,6 +114,7 @@ namespace DiscUtils
                 {
                     return null;
                 }
+
                 return new DiscDirectoryInfo(FileSystem, Utilities.GetDirectoryFromPath(_path));
             }
         }

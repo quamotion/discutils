@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace DiscUtils.Udf
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     internal sealed class UnallocatedSpaceDescriptor : BaseTaggedDescriptor<UnallocatedSpaceDescriptor>
     {
         public uint VolumeDescriptorSequenceNumber;
@@ -45,10 +45,10 @@ namespace DiscUtils.Udf
 
             for (int i = 0; i < numDescriptors; ++i)
             {
-                Extents[i] = Utilities.ToStruct<ExtentAllocationDescriptor>(buffer, offset + 24 + i * 8);
+                Extents[i] = Utilities.ToStruct<ExtentAllocationDescriptor>(buffer, offset + 24 + (i * 8));
             }
 
-            return (int)(24 + numDescriptors * 8);
+            return (int)(24 + (numDescriptors * 8));
         }
     }
 }

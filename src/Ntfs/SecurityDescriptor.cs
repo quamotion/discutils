@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Security.AccessControl;
-using System.Security.Principal;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.IO;
+    using System.Security.AccessControl;
+    using System.Security.Principal;
+
     internal sealed class SecurityDescriptor : IByteArraySerializable, IDiagnosticTraceable
     {
         private RawSecurityDescriptor _securityDescriptor;
@@ -55,6 +55,7 @@ namespace DiscUtils.Ntfs
             {
                 hash = Utilities.ToUInt32LittleEndian(buffer, i * 4) + ((hash << 3) | (hash >> 29));
             }
+
             return hash;
         }
 
@@ -71,14 +72,13 @@ namespace DiscUtils.Ntfs
             // Write out the security descriptor manually because on NTFS the DACL is written
             // before the Owner & Group.  Writing the components in the same order means the
             // hashes will match for identical Security Descriptors.
-
             ControlFlags controlFlags = _securityDescriptor.ControlFlags;
             buffer[offset + 0x00] = 1;
             buffer[offset + 0x01] = _securityDescriptor.ResourceManagerControl;
             Utilities.WriteBytesLittleEndian((ushort)controlFlags, buffer, offset + 0x02);
 
             // Blank out offsets, will fill later
-            for(int i = 0x04; i < 0x14; ++i)
+            for (int i = 0x04; i < 0x14; ++i)
             {
                 buffer[offset + i] = 0;
             }
@@ -145,7 +145,6 @@ namespace DiscUtils.Ntfs
         #region SID inheritance calculation
         internal static RawSecurityDescriptor CalcNewObjectDescriptor(RawSecurityDescriptor parent, bool isContainer)
         {
-
             RawAcl sacl = InheritAcl(parent.SystemAcl, isContainer);
             RawAcl dacl = InheritAcl(parent.DiscretionaryAcl, isContainer);
 
@@ -180,6 +179,7 @@ namespace DiscUtils.Ntfs
                     }
                 }
             }
+
             return newAcl;
         }
 

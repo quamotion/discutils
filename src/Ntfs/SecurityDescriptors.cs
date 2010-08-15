@@ -20,13 +20,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-using System.IO;
-using System.Security.AccessControl;
-
 namespace DiscUtils.Ntfs
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Security.AccessControl;
+
     internal sealed class SecurityDescriptors : IDiagnosticTraceable
     {
         private File _file;
@@ -70,10 +70,11 @@ namespace DiscUtils.Ntfs
         public RawSecurityDescriptor GetDescriptorById(uint id)
         {
             IdIndexData data;
-            if(_idIndex.TryGetValue(new IdIndexKey(id), out data))
+            if (_idIndex.TryGetValue(new IdIndexKey(id), out data))
             {
                 return ReadDescriptor(data).Descriptor;
             }
+
             return null;
         }
 
@@ -259,7 +260,7 @@ namespace DiscUtils.Ntfs
                 Utilities.WriteBytesLittleEndian(Id, buffer, offset + 0x04);
                 Utilities.WriteBytesLittleEndian(SdsOffset, buffer, offset + 0x08);
                 Utilities.WriteBytesLittleEndian(SdsLength, buffer, offset + 0x10);
-                //Array.Copy(new byte[] { (byte)'I', 0, (byte)'I', 0 }, 0, buffer, offset + 0x14, 4);
+                ////Array.Copy(new byte[] { (byte)'I', 0, (byte)'I', 0 }, 0, buffer, offset + 0x14, 4);
             }
 
             public int Size
@@ -370,6 +371,5 @@ namespace DiscUtils.Ntfs
                 return CompareTo(other.Hash);
             }
         }
-
     }
 }

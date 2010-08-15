@@ -20,11 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Ntfs
 {
+    using System.Globalization;
+    using System.IO;
+
     internal class DataRun
     {
         private long _runLength;
@@ -66,7 +66,7 @@ namespace DiscUtils.Ntfs
 
             _runLength = ReadVarLong(buffer, offset + 1, runLengthSize);
             _runOffset = ReadVarLong(buffer, offset + 1 + runLengthSize, runOffsetSize);
-            _isSparse = (runOffsetSize == 0);
+            _isSparse = runOffsetSize == 0;
 
             return 1 + runLengthSize + runOffsetSize;
         }
@@ -124,7 +124,8 @@ namespace DiscUtils.Ntfs
                 buffer[offset + pos] = (byte)(val & 0xFF);
                 val >>= 8;
                 pos++;
-            } while (val != 0 && val != -1);
+            }
+            while (val != 0 && val != -1);
 
             // Avoid appearing to have a negative number that is actually positive,
             // record an extra empty byte if needed.
@@ -150,11 +151,11 @@ namespace DiscUtils.Ntfs
             int len = 0;
             do
             {
-                lastByteHighBitSet = ((val & 0x80) != 0);
+                lastByteHighBitSet = (val & 0x80) != 0;
                 val >>= 8;
                 len++;
-            } while (val != 0 && val != -1) ;
-
+            }
+            while (val != 0 && val != -1);
 
             if ((isPositive && lastByteHighBitSet) || (!isPositive && !lastByteHighBitSet))
             {

@@ -20,7 +20,6 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 namespace DiscUtils.Iscsi
 {
     internal enum StatusClass
@@ -30,7 +29,6 @@ namespace DiscUtils.Iscsi
         InitiatorError = 2,
         TargetError = 3
     }
-
 
     internal class LoginResponse : BaseResponse
     {
@@ -78,8 +76,8 @@ namespace DiscUtils.Iscsi
 
         private void UnpackState(byte value)
         {
-            Transit = ((value & 0x80) != 0);
-            Continue = ((value & 0x40) != 0);
+            Transit = (value & 0x80) != 0;
+            Continue = (value & 0x40) != 0;
             CurrentStage = (LoginStages)((value >> 2) & 0x3);
             NextStage = (LoginStages)(value & 0x3);
         }

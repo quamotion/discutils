@@ -20,14 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-
 namespace DiscUtils.Xva
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+
     internal class DiskStream : SparseStream
     {
         private TarFile _archive;
@@ -83,12 +83,14 @@ namespace DiscUtils.Xva
             {
                 return _position;
             }
+
             set
             {
                 if (value > _length)
                 {
                     throw new IOException("Attempt to move beyond end of stream");
                 }
+
                 _position = value;
             }
         }
@@ -100,7 +102,7 @@ namespace DiscUtils.Xva
                 return 0;
             }
 
-            if(_position > _length)
+            if (_position > _length)
             {
                 throw new IOException("Attempt to read beyond end of stream");
             }
@@ -109,20 +111,22 @@ namespace DiscUtils.Xva
 
             if (_currentChunkIndex != chunk || _currentChunkData == null)
             {
-                if(_currentChunkData != null)
+                if (_currentChunkData != null)
                 {
                     _currentChunkData.Dispose();
                     _currentChunkData = null;
                 }
+
                 if (!_archive.TryOpenFile(string.Format(CultureInfo.InvariantCulture, @"{0}/{1:X8}", _dir, chunk), out _currentChunkData))
                 {
                     _currentChunkData = new ZeroStream(Sizes.OneMiB);
                 }
+
                 _currentChunkIndex = chunk;
             }
 
             long chunkOffset = _position - (chunk * Sizes.OneMiB);
-            int toRead = Math.Min((int)(Math.Min(Sizes.OneMiB - chunkOffset, _length - _position)), count);
+            int toRead = Math.Min((int)Math.Min(Sizes.OneMiB - chunkOffset, _length - _position), count);
 
             _currentChunkData.Position = chunkOffset;
 
@@ -180,6 +184,7 @@ namespace DiscUtils.Xva
                     {
                         ++i;
                     }
+
                     int start = i;
 
                     // Find next absent block

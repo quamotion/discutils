@@ -20,14 +20,14 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using DiscUtils.Vfs;
-
 namespace DiscUtils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
+    using DiscUtils.Vfs;
+
     /// <summary>
     /// FileSystemManager determines which file systems are present on a volume.
     /// </summary>
@@ -152,6 +152,7 @@ namespace DiscUtils
                     factories.Add((VfsFileSystemFactory)Activator.CreateInstance(type));
                 }
             }
+
             return factories;
         }
     }

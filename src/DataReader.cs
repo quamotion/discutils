@@ -20,10 +20,10 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System.IO;
-
 namespace DiscUtils
 {
+    using System.IO;
+
     /// <summary>
     /// Base class for reading binary data from a stream.
     /// </summary>
@@ -52,10 +52,15 @@ namespace DiscUtils
         }
 
         public abstract ushort ReadUInt16();
+
         public abstract int ReadInt32();
+
         public abstract uint ReadUInt32();
+
         public abstract long ReadInt64();
+
         public abstract ulong ReadUInt64();
+
         public abstract byte[] ReadBytes(int count);
     }
 
@@ -66,7 +71,8 @@ namespace DiscUtils
     {
         public LittleEndianDataReader(Stream stream)
             : base(stream)
-        { }
+        {
+        }
 
         public override ushort ReadUInt16()
         {
@@ -103,7 +109,8 @@ namespace DiscUtils
     {
         public BigEndianDataReader(Stream stream)
             : base(stream)
-        { }
+        {
+        }
 
         public override ushort ReadUInt16()
         {

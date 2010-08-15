@@ -20,12 +20,12 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using DiscUtils.Vfs;
-
 namespace DiscUtils.Udf
 {
+    using System;
+    using System.IO;
+    using DiscUtils.Vfs;
+
     [Flags]
     internal enum FileCharacteristic : byte
     {
@@ -46,7 +46,6 @@ namespace DiscUtils.Udf
         public ushort ImplementationUseLength;
         public byte[] ImplementationUse;
         public string Name;
-
 
         public int ReadFrom(byte[] buffer, int offset)
         {
