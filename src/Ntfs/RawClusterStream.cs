@@ -230,7 +230,7 @@ namespace DiscUtils.Ntfs
                 }
                 else
                 {
-                    focus += run.Length;
+                    focus = run.StartVcn + run.Length;
                 }
             }
         }
