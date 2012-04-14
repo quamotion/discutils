@@ -140,18 +140,6 @@ namespace VirtualDiskConvert
             }
         }
 
-        public static void Pump(Stream source, Stream dest)
-        {
-            byte[] buffer = new byte[512 * 1024];
-
-            int numRead = source.Read(buffer, 0, buffer.Length);
-            while (numRead != 0)
-            {
-                dest.Write(buffer, 0, numRead);
-                numRead = source.Read(buffer, 0, buffer.Length);
-            }
-        }
-
         private static void UpdateBiosGeometry(SparseStream contentStream, Geometry oldGeometry, Geometry newGeometry)
         {
             BiosPartitionTable partTable = new BiosPartitionTable(contentStream, oldGeometry);
