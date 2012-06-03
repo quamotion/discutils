@@ -133,9 +133,10 @@ namespace DiscUtils.Iso9660
             }
 
             // Ensure final padding data is zero'd
-            Array.Clear(buffer, offset + pos, IsoUtilities.SectorSize - (pos % IsoUtilities.SectorSize));
+            int finalPadLength = Utilities.RoundUp(pos, IsoUtilities.SectorSize) - pos;
+            Array.Clear(buffer, offset + pos, finalPadLength);
 
-            return pos;
+            return pos + finalPadLength;
         }
 
         private static int WriteMember(BuildDirectoryMember m, string nameOverride, Encoding nameEnc, byte[] buffer, int offset, Dictionary<BuildDirectoryMember, uint> locationTable, Encoding dataEnc)
