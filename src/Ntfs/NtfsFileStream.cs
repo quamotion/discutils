@@ -45,33 +45,51 @@ namespace DiscUtils.Ntfs
 
         public override bool CanRead
         {
-            get { return _baseStream.CanRead; }
+            get
+            {
+                AssertOpen();
+                return _baseStream.CanRead;
+            }
         }
 
         public override bool CanSeek
         {
-            get { return _baseStream.CanSeek; }
+            get
+            {
+                AssertOpen();
+                return _baseStream.CanSeek;
+            }
         }
 
         public override bool CanWrite
         {
-            get { return _baseStream.CanWrite; }
+            get
+            {
+                AssertOpen();
+                return _baseStream.CanWrite;
+            }
         }
 
         public override long Length
         {
-            get { return _baseStream.Length; }
+            get
+            {
+                AssertOpen();
+                return _baseStream.Length;
+            }
         }
 
         public override long Position
         {
             get
             {
+                AssertOpen();
                 return _baseStream.Position;
             }
 
             set
             {
+                AssertOpen();
                 using (new NtfsTransaction())
                 {
                     _baseStream.Position = value;
@@ -81,22 +99,34 @@ namespace DiscUtils.Ntfs
 
         public override IEnumerable<StreamExtent> Extents
         {
-            get { return _baseStream.Extents; }
+            get
+            {
+                AssertOpen();
+                return _baseStream.Extents;
+            }
         }
 
         public override void Close()
         {
+            if (_baseStream == null)
+            {
+                return;
+            }
+
             using (new NtfsTransaction())
             {
                 base.Close();
                 _baseStream.Close();
 
                 UpdateMetadata();
+
+                _baseStream = null;
             }
         }
 
         public override void Flush()
         {
+            AssertOpen();
             using (new NtfsTransaction())
             {
                 _baseStream.Flush();
@@ -107,6 +137,7 @@ namespace DiscUtils.Ntfs
 
         public override int Read(byte[] buffer, int offset, int count)
         {
+            AssertOpen();
             using (new NtfsTransaction())
             {
                 return _baseStream.Read(buffer, offset, count);
@@ -115,6 +146,7 @@ namespace DiscUtils.Ntfs
 
         public override long Seek(long offset, SeekOrigin origin)
         {
+            AssertOpen();
             using (new NtfsTransaction())
             {
                 return _baseStream.Seek(offset, origin);
@@ -123,6 +155,7 @@ namespace DiscUtils.Ntfs
 
         public override void SetLength(long value)
         {
+            AssertOpen();
             using (new NtfsTransaction())
             {
                 if (value != Length)
@@ -135,6 +168,7 @@ namespace DiscUtils.Ntfs
 
         public override void Write(byte[] buffer, int offset, int count)
         {
+            AssertOpen();
             using (new NtfsTransaction())
             {
                 _isDirty = true;
@@ -144,6 +178,7 @@ namespace DiscUtils.Ntfs
 
         public override void Clear(int count)
         {
+            AssertOpen();
             using (new NtfsTransaction())
             {
                 _isDirty = true;
@@ -171,6 +206,14 @@ namespace DiscUtils.Ntfs
                 // Write attribute changes back to the Master File Table
                 _file.UpdateRecordInMft();
                 _isDirty = false;
+            }
+        }
+
+        private void AssertOpen()
+        {
+            if (_baseStream == null)
+            {
+                throw new ObjectDisposedException(_entry.Details.FileName, "Attempt to use closed stream");
             }
         }
     }
