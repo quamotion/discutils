@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Quamotion.DiscUtils</id>
+    <version>$version$</version>
+    <authors>Kenneth Bell</authors>
+    <owners>Quamotion</owners>
+    <title>DiscUtils (for .NET and .NET Core)</title>
+    <description>Implementation of the ISO, UDF, FAT and NTFS file systems is now fairly stable. VHD, XVA, VMDK and VDI disk formats are implemented, as well as read/write Registry support. The library also includes a simple iSCSI initiator, for accessing disks via iSCSI and an NFS client implementation.</description>
+    <projectUrl>https://github.com/quamotion/discutils</projectUrl>
+    <licenseUrl>https://github.com/quamotion/discutils/blob/master/LICENSE.txt</licenseUrl>
+    <tags>DiscUtils, VHD, VDI, XVA, VMDK, ISO, NTFS, EXT2FS </tags>
+    <language>en-US</language>
+    <dependencies>
+      <dependency id="Mono.Posix" version="4.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\bin\Release\net20\DiscUtils.dll" target="lib\net20" />
+    <file src="src\bin\Release\net20\DiscUtils.pdb" target="lib\net20" />
+    <file src="src\bin\Release\netstandard1.5\DiscUtils.dll" target="lib\netstandard1.5" />
+    <file src="src\bin\Release\netstandard1.5\DiscUtils.pdb" target="lib\netstandard1.5" />
+  </files>
+</package>
