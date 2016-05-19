@@ -11,6 +11,7 @@
   "buildOptions": {
     "publicSign": true,
     "keyFile": "../discutils.snk",
+    "xmlDoc": true,
     "compile": {
       "include": "**/*.cs",
       "exclude": [

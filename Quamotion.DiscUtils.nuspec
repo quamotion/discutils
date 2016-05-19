@@ -16,9 +16,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="src\bin\Release\net20\DiscUtils.dll" target="lib\net20" />
-    <file src="src\bin\Release\net20\DiscUtils.pdb" target="lib\net20" />
-    <file src="src\bin\Release\netstandard1.5\DiscUtils.dll" target="lib\netstandard1.5" />
-    <file src="src\bin\Release\netstandard1.5\DiscUtils.pdb" target="lib\netstandard1.5" />
+    <file src="src\bin\Release\net20\src.dll" target="lib\net20\DiscUtils.dll" />
+    <file src="src\bin\Release\net20\src.xml" target="lib\net20\DiscUtils.xml" />
+    <file src="src\bin\Release\netstandard1.5\src.dll" target="lib\netstandard1.5\DiscUtils.dll" />
+    <file src="src\bin\Release\netstandard1.5\src.xml" target="lib\netstandard1.5\DiscUtils.xml" />
   </files>
 </package>
