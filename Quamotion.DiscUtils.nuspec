@@ -11,9 +11,6 @@
     <licenseUrl>https://github.com/quamotion/discutils/blob/master/LICENSE.txt</licenseUrl>
     <tags>DiscUtils, VHD, VDI, XVA, VMDK, ISO, NTFS, EXT2FS </tags>
     <language>en-US</language>
-    <dependencies>
-      <dependency id="Mono.Posix" version="4.0.0" />
-    </dependencies>
   </metadata>
   <files>
     <file src="src\bin\Release\net20\src.dll" target="lib\net20\DiscUtils.dll" />
