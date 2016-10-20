@@ -25,7 +25,7 @@ namespace DiscUtils.Ext
     using System.IO;
     using DiscUtils.Vfs;
 
-    internal sealed class VfsExtFileSystem : VfsReadOnlyFileSystem<DirEntry, File, Directory, Context>, IUnixFileSystem
+    internal sealed class VfsExtFileSystem : VfsReadOnlyFileSystem<DirEntry, File, Directory, Context>, IUnixFileSystem, ISizeSupportingFileSystem
     {
         internal const IncompatibleFeatures SupportedIncompatibleFeatures =
             IncompatibleFeatures.FileType
@@ -164,6 +164,35 @@ namespace DiscUtils.Ext
         private BlockGroup GetBlockGroup(uint index)
         {
             return _blockGroups[index];
+        }
+
+        /// <inheritdoc />
+        public long Size
+        {
+            get
+            {
+                var superBlock = Context.SuperBlock;
+                long blockCount = (superBlock.BlocksCountHigh << 32) | superBlock.BlocksCount;
+                long inodeSize = superBlock.InodesCount*superBlock.InodeSize;
+                return superBlock.BlockSize* blockCount - inodeSize;
+            }
+        }
+
+        /// <inheritdoc />
+        public long UsedSpace
+        {
+            get { return Size - AvailableSpace; }
+        }
+
+        /// <inheritdoc />
+        public long AvailableSpace
+        {
+            get
+            {
+                var superBlock = Context.SuperBlock;
+                long blockCount = (superBlock.FreeBlocksCountHigh << 32) | superBlock.FreeBlocksCount;
+                return superBlock.BlockSize * blockCount;
+            }
         }
     }
 }
