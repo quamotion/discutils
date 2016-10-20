@@ -32,7 +32,7 @@ namespace DiscUtils.Ntfs
     /// <summary>
     /// Class for accessing NTFS file systems.
     /// </summary>
-    public sealed class NtfsFileSystem : DiscFileSystem, IClusterBasedFileSystem, IWindowsFileSystem, IDiagnosticTraceable
+    public sealed class NtfsFileSystem : DiscFileSystem, IClusterBasedFileSystem, ISizeSupportingFileSystem, IWindowsFileSystem, IDiagnosticTraceable
     {
         private const FileAttributes NonSettableFileAttributes = FileAttributes.Directory | FileAttributes.Offline | FileAttributes.ReparsePoint;
 
@@ -2436,5 +2436,34 @@ namespace DiscUtils.Ntfs
                 throw new IOException("Invalid path: " + path);
             }
         }
+
+        /// <inheritdoc />
+        public long Size
+        {
+            get { return TotalClusters*ClusterSize; }
+        }
+
+        /// <inheritdoc />
+        public long UsedSpace
+        {
+            get
+            {
+                long usedCluster = 0;
+                var bitmap = _context.ClusterBitmap.Bitmap;
+                for (long i = 0; i < bitmap.Size; i++)
+                {
+                    var value = bitmap.GetByte(i);
+                    while (value != 0)
+                    {
+                        usedCluster++;
+                        value &= (byte)(value - 1);
+                    }
+                }
+                return usedCluster*ClusterSize;
+            }
+        }
+
+        /// <inheritdoc />
+        public long AvailableSpace { get { return Size - UsedSpace; } }
     }
 }

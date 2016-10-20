@@ -42,6 +42,8 @@ namespace DiscUtils.Ntfs
                 Utilities.Ceil(file.Context.BiosParameterBlock.TotalSectors64, file.Context.BiosParameterBlock.SectorsPerCluster));
         }
 
+        internal Bitmap Bitmap { get { return _bitmap; } }
+
         public void Dispose()
         {
             if (_bitmap != null)
