@@ -20,6 +20,8 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
+using System.Collections.Generic;
+
 namespace DiscUtils.Fat
 {
     using System;
@@ -96,6 +98,11 @@ namespace DiscUtils.Fat
         internal void FreeChain(uint head)
         {
             _buffer.FreeChain(head);
+        }
+
+        internal int NumEntries
+        {
+            get { return _buffer.NumEntries; }
         }
     }
 }

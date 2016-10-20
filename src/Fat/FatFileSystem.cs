@@ -32,7 +32,7 @@ namespace DiscUtils.Fat
     /// <summary>
     /// Class for accessing FAT file systems.
     /// </summary>
-    public sealed class FatFileSystem : DiscFileSystem
+    public sealed class FatFileSystem : DiscFileSystem,ISizeSupportingFileSystem
     {
         /// <summary>
         /// The Epoch for FAT file systems (1st Jan, 1980).
@@ -1956,5 +1956,28 @@ namespace DiscUtils.Fat
                 dir.SelfEntry = selfEntry;
             }
         }
+
+        /// <inheritdoc />
+        public long Size { get { return (TotalSectors - ReservedSectorCount - (FatSize * FatCount))*BytesPerSector; } }
+
+        /// <inheritdoc />
+        public long UsedSpace {
+            get
+            {
+                uint usedCluster = 0;
+                for (uint i = 2; i < Fat.NumEntries; i++)
+                {
+                    var fatValue = Fat.GetNext(i);
+                    if (!Fat.IsFree(fatValue))
+                    {
+                        usedCluster++;
+                    }
+                }
+                return usedCluster*SectorsPerCluster*BytesPerSector;
+            }
+        }
+
+        /// <inheritdoc />
+        public long AvailableSpace { get { return Size - UsedSpace; } }
     }
 }
