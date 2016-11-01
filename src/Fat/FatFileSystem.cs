@@ -1958,10 +1958,10 @@ namespace DiscUtils.Fat
         }
 
         /// <inheritdoc />
-        public long Size { get { return (TotalSectors - ReservedSectorCount - (FatSize * FatCount))*BytesPerSector; } }
+        public ulong Size { get { return (ulong)((TotalSectors - ReservedSectorCount - (FatSize * FatCount))*BytesPerSector); } }
 
         /// <inheritdoc />
-        public long UsedSpace {
+        public ulong UsedSpace {
             get
             {
                 uint usedCluster = 0;
@@ -1973,11 +1973,11 @@ namespace DiscUtils.Fat
                         usedCluster++;
                     }
                 }
-                return usedCluster*SectorsPerCluster*BytesPerSector;
+                return (ulong)(usedCluster *SectorsPerCluster*BytesPerSector);
             }
         }
 
         /// <inheritdoc />
-        public long AvailableSpace { get { return Size - UsedSpace; } }
+        public ulong AvailableSpace { get { return Size - UsedSpace; } }
     }
 }

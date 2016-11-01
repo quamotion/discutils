@@ -2438,13 +2438,13 @@ namespace DiscUtils.Ntfs
         }
 
         /// <inheritdoc />
-        public long Size
+        public ulong Size
         {
-            get { return TotalClusters*ClusterSize; }
+            get { return (ulong)(TotalClusters*ClusterSize); }
         }
 
         /// <inheritdoc />
-        public long UsedSpace
+        public ulong UsedSpace
         {
             get
             {
@@ -2459,11 +2459,11 @@ namespace DiscUtils.Ntfs
                         value &= (byte)(value - 1);
                     }
                 }
-                return usedCluster*ClusterSize;
+                return (ulong)(usedCluster *ClusterSize);
             }
         }
 
         /// <inheritdoc />
-        public long AvailableSpace { get { return Size - UsedSpace; } }
+        public ulong AvailableSpace { get { return Size - UsedSpace; } }
     }
 }

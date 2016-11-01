@@ -77,19 +77,19 @@ namespace DiscUtils.Ext
         }
 
         /// <inheritdoc />
-        public long Size
+        public ulong Size
         {
             get { return GetRealFileSystem<VfsExtFileSystem>().Size; }
         }
 
         /// <inheritdoc />
-        public long UsedSpace
+        public ulong UsedSpace
         {
             get { return GetRealFileSystem<VfsExtFileSystem>().UsedSpace; }
         }
 
         /// <inheritdoc />
-        public long AvailableSpace
+        public ulong AvailableSpace
         {
             get { return GetRealFileSystem<VfsExtFileSystem>().AvailableSpace; }
         }

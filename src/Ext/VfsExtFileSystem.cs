@@ -79,8 +79,6 @@ namespace DiscUtils.Ext
                 _blockGroups[i] = bg;
             }
 
-            RootDirectory = new Directory(Context, 2, GetInode(2));
-
             var journalSuperBlock = new JournalSuperBlock();
             if (superblock.JournalInode != 0)
             {
@@ -91,6 +89,7 @@ namespace DiscUtils.Ext
                 Context.JournalSuperblock = journalSuperBlock;
             }
 
+            RootDirectory = new Directory(Context, 2, GetInode(2));
         }
 
         public override string VolumeLabel
@@ -178,15 +177,15 @@ namespace DiscUtils.Ext
         }
 
         /// <inheritdoc />
-        public long Size
+        public ulong Size
         {
             get
             {
                 var superBlock = Context.SuperBlock;
-                long blockCount = (superBlock.BlocksCountHigh << 32) | superBlock.BlocksCount;
-                long inodeSize = superBlock.InodesCount*superBlock.InodeSize;
-                long overhead = 0;
-                long journalSize = 0;
+                ulong blockCount = (superBlock.BlocksCountHigh << 32) | superBlock.BlocksCount;
+                ulong inodeSize = superBlock.InodesCount*superBlock.InodeSize;
+                ulong overhead = 0;
+                ulong journalSize = 0;
                 if (superBlock.OverheadBlocksCount != 0)
                 {
                     overhead = superBlock.OverheadBlocksCount*superBlock.BlockSize;
@@ -200,18 +199,18 @@ namespace DiscUtils.Ext
         }
 
         /// <inheritdoc />
-        public long UsedSpace
+        public ulong UsedSpace
         {
             get { return Size - AvailableSpace; }
         }
 
         /// <inheritdoc />
-        public long AvailableSpace
+        public ulong AvailableSpace
         {
             get
             {
                 var superBlock = Context.SuperBlock;
-                long blockCount = (superBlock.FreeBlocksCountHigh << 32) | superBlock.FreeBlocksCount;
+                ulong blockCount = (superBlock.FreeBlocksCountHigh << 32) | superBlock.FreeBlocksCount;
                 return superBlock.BlockSize * blockCount;
             }
         }
