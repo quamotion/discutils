@@ -58,7 +58,7 @@ namespace DiscUtils.Ext
                 throw new IOException("Incompatible ext features present: " + (superblock.IncompatibleFeatures & ~SupportedIncompatibleFeatures));
             }
 
-            Context = new Context()
+            Context = new Context
             {
                 RawStream = stream,
                 SuperBlock = superblock,
@@ -80,6 +80,17 @@ namespace DiscUtils.Ext
             }
 
             RootDirectory = new Directory(Context, 2, GetInode(2));
+
+            var journalSuperBlock = new JournalSuperBlock();
+            if (superblock.JournalInode != 0)
+            {
+                var journalInode = GetInode(superblock.JournalInode);
+                var journalDataStream = journalInode.GetContentBuffer(Context);
+                var journalData = Utilities.ReadFully(journalDataStream, 0, 1024 + 12);
+                journalSuperBlock.ReadFrom(journalData, 0);
+                Context.JournalSuperblock = journalSuperBlock;
+            }
+
         }
 
         public override string VolumeLabel
@@ -174,7 +185,17 @@ namespace DiscUtils.Ext
                 var superBlock = Context.SuperBlock;
                 long blockCount = (superBlock.BlocksCountHigh << 32) | superBlock.BlocksCount;
                 long inodeSize = superBlock.InodesCount*superBlock.InodeSize;
-                return superBlock.BlockSize* blockCount - inodeSize;
+                long overhead = 0;
+                long journalSize = 0;
+                if (superBlock.OverheadBlocksCount != 0)
+                {
+                    overhead = superBlock.OverheadBlocksCount*superBlock.BlockSize;
+                }
+                if (Context.JournalSuperblock != null)
+                {
+                    journalSize = Context.JournalSuperblock.MaxLength * Context.JournalSuperblock.BlockSize;
+                }
+                return superBlock.BlockSize*blockCount - (inodeSize + overhead + journalSize);
             }
         }
 

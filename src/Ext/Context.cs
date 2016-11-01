@@ -32,5 +32,7 @@ namespace DiscUtils.Ext
         public SuperBlock SuperBlock { get; set; }
 
         public ExtFileSystemOptions Options { get; set; }
+
+        public JournalSuperBlock JournalSuperblock { get; set; }
     }
 }
