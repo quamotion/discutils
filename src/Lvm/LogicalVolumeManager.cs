@@ -32,14 +32,16 @@ namespace DiscUtils.Lvm
     /// </summary>
     public class LogicalVolumeManager
     {
-        private List<LogicalVolumeInfo> _devices;
+        private List<PhysicalVolume> _devices;
+        private List<MetadataVolumeGroupSection> _volumeGroups;
         /// <summary>
         /// Initializes a new instance of the LogicalVolumeManager class.
         /// </summary>
         /// <param name="disks">The initial set of disks to manage.</param>
         public LogicalVolumeManager(IEnumerable<VirtualDisk> disks)
         {
-            _devices = new List<LogicalVolumeInfo>();
+            _devices = new List<PhysicalVolume>();
+            _volumeGroups = new List<MetadataVolumeGroupSection>();
             foreach (var disk in disks)
             {
                 if (disk.IsPartitioned)
@@ -49,7 +51,7 @@ namespace DiscUtils.Lvm
                         PhysicalVolume pv;
                         if (PhysicalVolume.TryOpen(partition, out pv))
                         {
-
+                            _devices.Add(pv);
                         }
                     }
                 }
@@ -58,7 +60,17 @@ namespace DiscUtils.Lvm
                     PhysicalVolume pv;
                     if (PhysicalVolume.TryOpen(disk.Content, out pv))
                     {
-
+                        _devices.Add(pv);
+                    }
+                }
+            }
+            foreach (var device in _devices)
+            {
+                foreach (var vg in device.VgMetadata.ParsedMetadata.VolumeGroupSections)
+                {
+                    if (!_volumeGroups.Exists(x => x.Id == vg.Id))
+                    {
+                        _volumeGroups.Add(vg);
                     }
                 }
             }
@@ -83,7 +95,78 @@ namespace DiscUtils.Lvm
         /// <returns>An array of logical volumes.</returns>
         public LogicalVolumeInfo[] GetLogicalVolumes()
         {
-            throw new NotImplementedException();
+            List<LogicalVolumeInfo> result = new List<LogicalVolumeInfo>();
+            foreach (var vg in _volumeGroups)
+            {
+                foreach (var lv in vg.LogicalVolumes)
+                {
+                    var pvs = new Dictionary<string, PhysicalVolume>();
+                    bool allPvsAvailable = true;
+                    bool segmentTypesSupported = true;
+                    foreach (var segment in lv.Segments)
+                    {
+                        if (segment.Type != SegmentType.Striped)
+                            segmentTypesSupported = false;
+                        foreach (var stripe in segment.Stripes)
+                        {
+                            var pvAlias = stripe.PhysicalVolumeName;
+                            if (!pvs.ContainsKey(pvAlias))
+                            {
+                                var pvm = GetPhysicalVolumeMetadata(pvAlias);
+                                if (pvm == null)
+                                {
+                                    allPvsAvailable = false;
+                                    break;
+                                }
+                                var pv = GetPhysicalVolume(pvm.Id);
+                                if (pv == null)
+                                {
+                                    allPvsAvailable = false;
+                                    break;
+                                }
+                                pvs.Add(pvm.Name, pv);
+                            }
+                        }
+                        if (!allPvsAvailable || !segmentTypesSupported)
+                            break;
+                    }
+                    if (allPvsAvailable && segmentTypesSupported)
+                    {
+                        LogicalVolumeInfo lvi = new LogicalVolumeInfo(
+                            lv.Identity,
+                            null,
+                            lv.Open(pvs, vg.ExtentSize),
+                            lv.ExtentCount * (long) vg.ExtentSize * PhysicalVolume.SECTOR_SIZE,
+                            0,
+                            DiscUtils.LogicalVolumeStatus.Healthy);
+                        result.Add(lvi);
+                    }
+                }
+            }
+            return result.ToArray();
+        }
+
+        private PhysicalVolume GetPhysicalVolume(string id)
+        {
+            foreach (var pv in _devices)
+            {
+                if (pv.PvHeader.Uuid == id)
+                    return pv;
+            }
+            return null;
+        }
+
+        private MetadataPhysicalVolumeSection GetPhysicalVolumeMetadata(string name)
+        {
+            foreach (var vg in _volumeGroups)
+            {
+                foreach (var pv in vg.PhysicalVolumes)
+                {
+                    if (pv.Name == name)
+                        return pv;
+                }
+            }
+            return null;
         }
     }
 }

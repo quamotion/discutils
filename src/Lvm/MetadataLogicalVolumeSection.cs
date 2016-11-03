@@ -20,7 +20,6 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 namespace DiscUtils.Lvm
 {
     using System;
@@ -31,13 +30,15 @@ namespace DiscUtils.Lvm
     {
         public string Name;
         public string Id;
+        public Guid Identity;
         public LogicalVolumeStatus Status;
         public string[] Flags;
         public string CreationHost;
         public DateTime CreationTime;
         public ulong SegmentCount;
         public MetadataSegmentSection[] Segments;
-
+        private Dictionary<string, PhysicalVolume> _pvs;
+        private ulong _extentSize;
         internal void Parse(string head, TextReader data)
         {
             var segments = new List<MetadataSegmentSection>();
@@ -53,6 +54,12 @@ namespace DiscUtils.Lvm
                     {
                         case "id":
                             Id = Metadata.ParseStringValue(parameter.Value);
+                            byte[] guid = new byte[16];
+                            Utilities.StringToBytes(Id.Replace("-", String.Empty), guid, 0, 16);
+                            // Mark it as a version 4 GUID
+                            guid[7] = (byte)((guid[7] | (byte)0x40) & (byte)0x4f);
+                            guid[8] = (byte)((guid[8] | (byte)0x80) & (byte)0xbf);
+                            Identity = new Guid(guid);
                             break;
                         case "status":
                             var values = Metadata.ParseArrayValue(parameter.Value);
@@ -108,6 +115,94 @@ namespace DiscUtils.Lvm
             Segments = segments.ToArray();
         }
 
+        internal long ExtentCount
+        {
+            get
+            {
+                var length = 0L;
+                foreach (var segment in Segments)
+                {
+                    length += (long) segment.ExtentCount;
+                }
+                return length;
+            }
+        }
+
+        public SparseStreamOpenDelegate Open(Dictionary<string, PhysicalVolume> availablePvs, ulong extentSize)
+        {
+            _pvs = availablePvs;
+            _extentSize = extentSize;
+            return Open;
+        }
+
+        private SparseStream Open()
+        {
+            if ((Status & LogicalVolumeStatus.Read) == 0)
+                throw new IOException("volume is not readable");
+
+            var segments = new List<MetadataSegmentSection>();
+            foreach (var segment in Segments)
+            {
+                if (segment.Type != SegmentType.Striped)
+                    throw new IOException("unsupported segment type");
+                segments.Add(segment);
+            }
+            segments.Sort(CompareSegments);
+
+            // Sanity Check...
+            ulong pos = 0;
+            foreach (var segment in segments)
+            {
+                if (segment.StartExtent != pos)
+                {
+                    throw new IOException("Volume extents are non-contiguous");
+                }
+
+                pos += segment.ExtentCount;
+            }
+
+            List<SparseStream> streams = new List<SparseStream>();
+            foreach (var segment in segments)
+            {
+                streams.Add(OpenSegment(segment));
+            }
+            return new ConcatStream(Ownership.Dispose, streams.ToArray());
+        }
+
+        private SparseStream OpenSegment(MetadataSegmentSection segment)
+        {
+            if (segment.Stripes.Length != 1)
+            {
+                throw new IOException("invalid number of stripes");
+            }
+            var stripe = segment.Stripes[0];
+            PhysicalVolume pv;
+            if (!_pvs.TryGetValue(stripe.PhysicalVolumeName, out pv))
+            {
+                throw new IOException("missing pv");
+            }
+            if (pv.PvHeader.DiskAreas.Length != 1)
+            {
+                throw new IOException("invalid number od pv data areas");
+            }
+            var dataArea = pv.PvHeader.DiskAreas[0];
+            var start = dataArea.Offset + (stripe.StartExtentNumber*_extentSize*PhysicalVolume.SECTOR_SIZE);
+            var length = segment.ExtentCount*_extentSize*PhysicalVolume.SECTOR_SIZE;
+            return new SubStream(pv.Content, Ownership.None, (long) start, (long)length);
+        }
+
+        private int CompareSegments(MetadataSegmentSection x, MetadataSegmentSection y)
+        {
+            if (x.StartExtent > y.StartExtent)
+            {
+                return 1;
+            }
+            else if (x.StartExtent < y.StartExtent)
+            {
+                return -1;
+            }
+            return 0;
+        }
     }
 
     [Flags]

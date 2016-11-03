@@ -22,7 +22,6 @@
 
 namespace DiscUtils.Lvm
 {
-    using System;
     using System.IO;
     using DiscUtils.Partitions;
 
@@ -33,6 +32,8 @@ namespace DiscUtils.Lvm
 
         public readonly PhysicalVolumeLabel PhysicalVolumeLabel;
         public readonly PvHeader PvHeader;
+        public readonly VolumeGroupMetadata VgMetadata;
+        public Stream Content { get; private set; }
 
         public PhysicalVolume(PhysicalVolumeLabel physicalVolumeLabel, Stream content)
         {
@@ -48,7 +49,10 @@ namespace DiscUtils.Lvm
                 content.Position = (long) area.Offset;
                 buffer = Utilities.ReadFully(content, (int) area.Length);
                 metadata.ReadFrom(buffer, 0x0);
+                VgMetadata = metadata;
             }
+
+            Content = content;
         }
 
         public static bool TryOpen(PartitionInfo volumeInfo, out PhysicalVolume pv)
@@ -64,7 +68,7 @@ namespace DiscUtils.Lvm
             if (!SearchLabel(content, out label)) return false;
             pv = new PhysicalVolume(label, content);
             
-            return false;
+            return true;
         }
 
         private static bool SearchLabel(Stream content, out PhysicalVolumeLabel pvLabel)

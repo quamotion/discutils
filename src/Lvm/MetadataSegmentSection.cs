@@ -56,8 +56,69 @@ namespace DiscUtils.Lvm
                             break;
                         case "type":
                             var value = Metadata.ParseStringValue(parameter.Value);
-                            if (value == "striped")
-                                Type = SegmentType.Striped;
+                            switch (value)
+                            {
+                                case "striped":
+                                    Type = SegmentType.Striped;
+                                    break;
+                                case "zero":
+                                    Type = SegmentType.Zero;
+                                    break;
+                                case "error":
+                                    Type = SegmentType.Error;
+                                    break;
+                                case "free":
+                                    Type = SegmentType.Free;
+                                    break;
+                                case "snapshot":
+                                    Type = SegmentType.Snapshot;
+                                    break;
+                                case "mirror":
+                                    Type = SegmentType.Mirror;
+                                    break;
+                                case "raid1":
+                                    Type = SegmentType.Raid1;
+                                    break;
+                                case "raid10":
+                                    Type = SegmentType.Raid10;
+                                    break;
+                                case "raid4":
+                                    Type = SegmentType.Raid4;
+                                    break;
+                                case "raid5":
+                                    Type = SegmentType.Raid5;
+                                    break;
+                                case "raid5_la":
+                                    Type = SegmentType.Raid5La;
+                                    break;
+                                case "raid5_ra":
+                                    Type = SegmentType.Raid5Ra;
+                                    break;
+                                case "raid5_ls":
+                                    Type = SegmentType.Raid5Ls;
+                                    break;
+                                case "raid5_rs":
+                                    Type = SegmentType.Raid5Rs;
+                                    break;
+                                case "raid6":
+                                    Type = SegmentType.Raid6;
+                                    break;
+                                case "raid6_zr":
+                                    Type = SegmentType.Raid6Zr;
+                                    break;
+                                case "raid6_nr":
+                                    Type = SegmentType.Raid6Nr;
+                                    break;
+                                case "raid6_nc":
+                                    Type = SegmentType.Raid6Nc;
+                                    break;
+                                case "thin-pool":
+                                    Type = SegmentType.ThinPool;
+                                    break;
+                                case "thin":
+                                    Type = SegmentType.Thin;
+                                    break;
+                            }
                             break;
                         case "stripe_count":
                             StripeCount = Metadata.ParseNumericValue(parameter.Value);
@@ -106,7 +167,27 @@ namespace DiscUtils.Lvm
     [Flags]
     internal enum SegmentType
     {
+        //$ lvm segtypes, man(8) lvm
         None,
         Striped,
+        Zero,
+        Error,
+        Free,
+        Snapshot,
+        Mirror,
+        Raid1,
+        Raid10,
+        Raid4,
+        Raid5,
+        Raid5La,
+        Raid5Ra,
+        Raid5Ls,
+        Raid5Rs,
+        Raid6,
+        Raid6Zr,
+        Raid6Nr,
+        Raid6Nc,
+        ThinPool,
+        Thin,
     }
 }
