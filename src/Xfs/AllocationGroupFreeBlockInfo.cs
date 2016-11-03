@@ -27,34 +27,36 @@ namespace DiscUtils.Xfs
     internal class AllocationGroupFreeBlockInfo : IByteArraySerializable
     {
         public const uint AgfMagic = 0x58414746;
+        public const uint BtreeMagicOffset = 0x41425442;
+        public const uint BtreeMagicCount = 0x41425443;
         /// <summary>
         /// Specifies the magic number for the AGF sector: "XAGF" (0x58414746).
         /// </summary>
-        public uint Magic;
-        
+        public uint Magic { get; private set; }
+
         /// <summary>
         /// Set to XFS_AGF_VERSION which is currently 1.
         /// </summary>
-        public uint Version;
+        public uint Version { get; private set; }
 
         /// <summary>
         /// Specifies the AG number for the sector.
         /// </summary>
-        public uint SequenceNumber;
+        public uint SequenceNumber { get; private set; }
 
         /// <summary>
         /// Specifies the size of the AG in filesystem blocks. For all AGs except the last, this must be equal
         /// to the superblock's <see cref="SuperBlock.AgBlocks"/> value. For the last AG, this could be less than the
         /// <see cref="SuperBlock.AgBlocks"/> value. It is this value that should be used to determine the size of the AG.
         /// </summary>
-        public uint Length;
+        public uint Length { get; private set; }
 
         /// <summary>
         /// Specifies the block number for the root of the two free space B+trees.
         /// </summary>
-        public uint[] RootBlockNumbers;
-        
-        public uint Spare0;
+        public uint[] RootBlockNumbers { get; private set; }
+
+        public uint Spare0 { get; private set; }
 
         /// <summary>
         /// Specifies the level or depth of the two free space B+trees. For a fresh AG, this will be one, and
@@ -62,38 +64,48 @@ namespace DiscUtils.Xfs
         /// </summary>
         public uint[] Levels;
 
-        public uint Spare1;
+        public uint Spare1 { get; private set; }
 
         /// <summary>
         /// Specifies the index of the first "free list" block.
         /// </summary>
-        public uint FreeListFirst;
+        public uint FreeListFirst { get; private set; }
 
         /// <summary>
         /// Specifies the index of the last "free list" block.
         /// </summary>
-        public uint FreeListLast;
+        public uint FreeListLast { get; private set; }
 
         /// <summary>
         /// Specifies the number of blocks in the "free list".
         /// </summary>
-        public uint FreeListCount;
+        public uint FreeListCount { get; private set; }
 
         /// <summary>
         /// Specifies the current number of free blocks in the AG.
         /// </summary>
-        public uint FreeBlocks;
+        public uint FreeBlocks { get; private set; }
 
         /// <summary>
         /// Specifies the number of blocks of longest contiguous free space in the AG.
         /// </summary>
-        public uint Longest;
+        public uint Longest { get; private set; }
 
         /// <summary>
         /// Specifies the number of blocks used for the free space B+trees. This is only used if the
         /// XFS_SB_VERSION2_LAZYSBCOUNTBIT bit is set in <see cref="SuperBlock.Features2"/>.
         /// </summary>
-        public uint BTreeBlocks;
+        public uint BTreeBlocks { get; private set; }
+
+        /// <summary>
+        /// stores a sorted array of block offset and block counts in the leaves of the B+tree, sorted by the offset
+        /// </summary>
+        public BtreeHeader FreeSpaceOffset { get; private set; }
+
+        /// <summary>
+        /// stores a sorted array of block offset and block counts in the leaves of the B+tree, sorted by the count or size
+        /// </summary>
+        public BtreeHeader FreeSpaceCount { get; private set; }
 
         public int Size
         {

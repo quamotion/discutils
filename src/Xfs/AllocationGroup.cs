@@ -28,12 +28,16 @@ namespace DiscUtils.Xfs
 
     internal class AllocationGroup
     {
+        public const uint IbtMagic = 0x49414254;
+        public long Offset { get; private set; }
+
         public AllocationGroupFreeBlockInfo FreeBlockInfo { get; private set; }
 
         public AllocationGroupInodeBtreeInfo InodeBtreeInfo { get; private set; }
 
         public AllocationGroup(SuperBlock superblock, Stream data, long offset)
         {
+            Offset = offset;
             FreeBlockInfo = new AllocationGroupFreeBlockInfo();
             data.Position = offset + superblock.SectorSize;
             var agfData = Utilities.ReadFully(data, FreeBlockInfo.Size); 
@@ -50,6 +54,11 @@ namespace DiscUtils.Xfs
             if (InodeBtreeInfo.Magic != AllocationGroupInodeBtreeInfo.AgiMagic)
             {
                 throw new IOException("Invalid AGI magic - probably not an xfs file system");
+            }
+            InodeBtreeInfo.LoadBtree(data, superblock, offset);
+            if (InodeBtreeInfo.RootInodeBtree.Magic != IbtMagic)
+            {
+                throw new IOException("Invalid IBT magic - probably not an xfs file system");
             }
         }
     }

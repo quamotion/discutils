@@ -23,6 +23,7 @@
 namespace DiscUtils.Xfs
 {
     using System;
+    using System.IO;
 
     internal class AllocationGroupInodeBtreeInfo : IByteArraySerializable
     {
@@ -84,6 +85,11 @@ namespace DiscUtils.Xfs
         /// </summary>
         public int[] Unlinked { get; private set; }
 
+        /// <summary>
+        /// root of the inode B+tree
+        /// </summary>
+        public BtreeHeader RootInodeBtree { get; private set; }
+
         public int Size
         {
             get { return 296; }
@@ -107,6 +113,14 @@ namespace DiscUtils.Xfs
                 Unlinked[i] = Utilities.ToInt32BigEndian(buffer, offset + 0x28 + i*0x4);
             }
             return Size;
+        }
+
+        public void LoadBtree(Stream data, SuperBlock superBlock, long offset)
+        {
+            data.Position = offset + superBlock.Blocksize*Root;
+            RootInodeBtree = new BtreeHeader();
+            var buffer = Utilities.ReadFully(data, RootInodeBtree.Size);
+            RootInodeBtree.ReadFrom(buffer, 0);
         }
 
         public void WriteTo(byte[] buffer, int offset)
