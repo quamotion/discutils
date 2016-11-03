@@ -29,7 +29,7 @@ namespace DiscUtils.Xfs
 
     internal sealed class VfsXfsFileSystem :VfsReadOnlyFileSystem<DirEntry, File, Directory, Context>,IUnixFileSystem
     {
-        private AllocationGroupFreeBlockInfo[] _agf;
+        private AllocationGroup[] _allocationGroups;
 
         private static readonly int XFS_ALLOC_AGFL_RESERVE = 4;
 
@@ -47,20 +47,13 @@ namespace DiscUtils.Xfs
                 throw new IOException("Invalid superblock magic - probably not an xfs file system");
             }
 
-            _agf = new AllocationGroupFreeBlockInfo[superblock.AgCount];
+            _allocationGroups = new AllocationGroup[superblock.AgCount];
             long offset = 0;
-            for (int i = 0; i < _agf.Length; i++)
+            for (int i = 0; i < _allocationGroups.Length; i++)
             {
-                var agf = new AllocationGroupFreeBlockInfo();
-                stream.Position = offset + superblock.SectorSize;
-                 var agfData = Utilities.ReadFully(stream, agf.Size);
-                agf.ReadFrom(agfData, 0);
-                if (agf.Magic != AllocationGroupFreeBlockInfo.AgfMagic)
-                {
-                    throw new IOException("Invalid AGF magic - probably not an xfs file system");
-                }
-                _agf[i] = agf;
-                offset += agf.Length*superblock.Blocksize;
+                var ag = new AllocationGroup(superblock, stream, offset);
+                _allocationGroups[i] = ag;
+                offset += ag.FreeBlockInfo.Length*superblock.Blocksize;
             }
 
             Context = new Context
@@ -68,6 +61,8 @@ namespace DiscUtils.Xfs
                 RawStream = stream,
                 SuperBlock = superblock
             };
+
+            //TODO RootDirectory = new Directory(Context, superblock.RootInode, GetInode(superblock.RootInode));
         }
         
         public override string FriendlyName

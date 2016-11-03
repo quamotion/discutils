@@ -24,34 +24,33 @@
 namespace DiscUtils.Xfs
 {
     using System;
-    using System.Collections.Generic;
-    using DiscUtils.Vfs;
+    using System.IO;
 
-    internal class Directory : File, IVfsDirectory<DirEntry, File>
+    internal class AllocationGroup
     {
-        public Directory(Context context, uint inodeNum, Inode inode)
-            : base(context, inodeNum, inode)
-        {
-        }
+        public AllocationGroupFreeBlockInfo FreeBlockInfo { get; private set; }
 
-        public ICollection<DirEntry> AllEntries
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public AllocationGroupInodeBtreeInfo InodeBtreeInfo { get; private set; }
 
-        public DirEntry Self
+        public AllocationGroup(SuperBlock superblock, Stream data, long offset)
         {
-            get { throw new NotImplementedException(); }
-        }
+            FreeBlockInfo = new AllocationGroupFreeBlockInfo();
+            data.Position = offset + superblock.SectorSize;
+            var agfData = Utilities.ReadFully(data, FreeBlockInfo.Size); 
+            FreeBlockInfo.ReadFrom(agfData, 0);
+            if (FreeBlockInfo.Magic != AllocationGroupFreeBlockInfo.AgfMagic)
+            {
+                throw new IOException("Invalid AGF magic - probably not an xfs file system");
+            }
 
-        public DirEntry GetEntryByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DirEntry CreateNewFile(string name)
-        {
-            throw new NotImplementedException();
+            InodeBtreeInfo = new AllocationGroupInodeBtreeInfo();
+            data.Position = offset + superblock.SectorSize*2;
+            var agiData = Utilities.ReadFully(data, InodeBtreeInfo.Size);
+            InodeBtreeInfo.ReadFrom(agiData, 0);
+            if (InodeBtreeInfo.Magic != AllocationGroupInodeBtreeInfo.AgiMagic)
+            {
+                throw new IOException("Invalid AGI magic - probably not an xfs file system");
+            }
         }
     }
 }

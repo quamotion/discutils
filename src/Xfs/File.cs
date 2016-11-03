@@ -29,6 +29,16 @@ namespace DiscUtils.Xfs
 
     internal class File : IVfsFile
     {
+        private Context _context;
+        private uint _inodeNum;
+        private Inode _inode;
+
+        public File(Context context, uint inodeNum, Inode inode)
+        {
+            _context = context;
+            _inodeNum = inodeNum;
+            _inode = inode;
+        }
 
         public DateTime LastAccessTimeUtc
         {

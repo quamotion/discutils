@@ -1,5 +1,4 @@
 //
-// Copyright (c) 2008-2011, Kenneth Bell
 // Copyright (c) 2016, Bianco Veigel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24,32 +23,21 @@
 namespace DiscUtils.Xfs
 {
     using System;
-    using System.Collections.Generic;
-    using DiscUtils.Vfs;
+    using System.IO;
 
-    internal class Directory : File, IVfsDirectory<DirEntry, File>
+    internal class Inode : IByteArraySerializable
     {
-        public Directory(Context context, uint inodeNum, Inode inode)
-            : base(context, inodeNum, inode)
-        {
-        }
-
-        public ICollection<DirEntry> AllEntries
+        public int Size
         {
             get { throw new NotImplementedException(); }
         }
 
-        public DirEntry Self
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public DirEntry GetEntryByName(string name)
+        public int ReadFrom(byte[] buffer, int offset)
         {
             throw new NotImplementedException();
         }
 
-        public DirEntry CreateNewFile(string name)
+        public void WriteTo(byte[] buffer, int offset)
         {
             throw new NotImplementedException();
         }
