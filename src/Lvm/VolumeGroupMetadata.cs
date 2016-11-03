@@ -24,6 +24,7 @@ namespace DiscUtils.Lvm
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
 
     internal class VolumeGroupMetadata : IByteArraySerializable
     {
@@ -66,6 +67,9 @@ namespace DiscUtils.Lvm
             {
                 if ((location.Flags & RawLocationFlags.Ignored) != 0)
                     continue;
+                var checksum = PhysicalVolume.CalcCrc(buffer, (int) location.Offset, (int) location.Length);
+                if (location.Checksum != checksum)
+                    throw new IOException("invalid metadata checksum");
                 Metadata = Utilities.BytesToString(buffer, (int)location.Offset, (int)location.Length);
                 ParsedMetadata = Lvm.Metadata.Parse(Metadata);
                 break;
