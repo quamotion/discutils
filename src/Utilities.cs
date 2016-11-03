@@ -564,10 +564,10 @@ namespace DiscUtils
         /// this preserves those code points by removing the top 16 bits of each character.</remarks>
         public static void StringToBytes(string value, byte[] dest, int offset, int count)
         {
-            char[] chars = value.ToCharArray();
+            char[] chars = value.ToCharArray(0, Math.Min(value.Length, count));
 
             int i = 0;
-            while (i < chars.Length)
+            while (i < chars.Length && i < count)
             {
                 dest[i + offset] = (byte)chars[i];
                 ++i;
