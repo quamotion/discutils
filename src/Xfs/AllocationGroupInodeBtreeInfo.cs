@@ -115,10 +115,18 @@ namespace DiscUtils.Xfs
             return Size;
         }
 
-        public void LoadBtree(Stream data, SuperBlock superBlock, long offset)
+        public void LoadBtree(Context context, long offset)
         {
-            data.Position = offset + superBlock.Blocksize*Root;
-            RootInodeBtree = new BtreeHeader();
+            var data = context.RawStream;
+            data.Position = offset + context.SuperBlock.Blocksize*Root;
+            if (Level == 1)
+            {
+                RootInodeBtree = new BTreeInodeLeave();
+            }
+            else
+            {
+                RootInodeBtree = new BTreeInodeNode();
+            }
             var buffer = Utilities.ReadFully(data, RootInodeBtree.Size);
             RootInodeBtree.ReadFrom(buffer, 0);
         }

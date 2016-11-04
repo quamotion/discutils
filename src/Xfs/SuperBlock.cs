@@ -31,235 +31,235 @@ namespace DiscUtils.Xfs
         /// <summary>
         /// magic number == XFS_SB_MAGIC
         /// </summary>
-        public uint Magic;
+        public uint Magic { get; private set; }
         /// <summary>
         /// logical block size, bytes
         /// </summary>
-        public uint Blocksize;
+        public uint Blocksize { get; private set; }
 
         /// <summary>
         /// number of data blocks
         /// </summary>
-        public ulong DataBlocks;
+        public ulong DataBlocks { get; private set; }
 
         /// <summary>
         /// number of realtime blocks
         /// </summary>
-        public ulong RealtimeBlocks;
+        public ulong RealtimeBlocks { get; private set; }
 
         /// <summary>
         /// number of realtime extents
         /// </summary>
-        public ulong RealtimeExtents;
+        public ulong RealtimeExtents { get; private set; }
 
         /// <summary>
         /// user-visible file system unique id
         /// </summary>
-        public Guid UniqueId;
+        public Guid UniqueId { get; private set; }
 
         /// <summary>
         /// starting block of log if internal
         /// </summary>
-        public ulong Logstart;
+        public ulong Logstart { get; private set; }
 
         /// <summary>
         /// root inode number
         /// </summary>
-        public ulong RootInode;
+        public ulong RootInode { get; private set; }
 
         /// <summary>
         /// bitmap inode for realtime extents
         /// </summary>
-        public ulong RealtimeBitmapInode;
+        public ulong RealtimeBitmapInode { get; private set; }
 
         /// <summary>
         /// summary inode for rt bitmap
         /// </summary>
-        public ulong RealtimeSummaryInode;
+        public ulong RealtimeSummaryInode { get; private set; }
 
         /// <summary>
         /// realtime extent size, blocks
         /// </summary>
-        public uint RealtimeExtentSize;
+        public uint RealtimeExtentSize { get; private set; }
 
         /// <summary>
         /// size of an allocation group
         /// </summary>
-        public uint AgBlocks;
+        public uint AgBlocks { get; private set; }
 
         /// <summary>
         /// number of allocation groups
         /// </summary>
-        public uint AgCount;
+        public uint AgCount { get; private set; }
 
         /// <summary>
         /// number of rt bitmap blocks
         /// </summary>
-        public uint RealtimeBitmapBlocks;
+        public uint RealtimeBitmapBlocks { get; private set; }
 
         /// <summary>
         /// number of log blocks
         /// </summary>
-        public uint LogBlocks;
+        public uint LogBlocks { get; private set; }
 
         /// <summary>
         /// header version == XFS_SB_VERSION
         /// </summary>
-        public ushort Version;
+        public ushort Version { get; private set; }
 
         /// <summary>
         /// volume sector size, bytes
         /// </summary>
-        public ushort SectorSize;
+        public ushort SectorSize { get; private set; }
 
         /// <summary>
         /// inode size, bytes
         /// </summary>
-        public ushort InodeSize;
+        public ushort InodeSize { get; private set; }
 
         /// <summary>
         /// inodes per block
         /// </summary>
-        public ushort InodesPerBlock;
+        public ushort InodesPerBlock { get; private set; }
 
         /// <summary>
         /// file system name
         /// </summary>
-        public string FilesystemName;
+        public string FilesystemName { get; private set; }
 
         /// <summary>
         /// log2 of <see cref="Blocksize"/>
         /// </summary>
-        public byte BlocksizeLog2;
+        public byte BlocksizeLog2 { get; private set; }
 
         /// <summary>
         /// log2 of <see cref="SectorSize"/>
         /// </summary>
-        public byte SectorSizeLog2;
+        public byte SectorSizeLog2 { get; private set; }
 
         /// <summary>
         /// log2 of <see cref="InodeSize"/>
         /// </summary>
-        public byte InodeSizeLog2;
+        public byte InodeSizeLog2 { get; private set; }
 
         /// <summary>
         /// log2 of <see cref="InodesPerBlock"/>
         /// </summary>
-        public byte InodesPerBlockLog2;
+        public byte InodesPerBlockLog2 { get; private set; }
 
         /// <summary>
         /// log2 of <see cref="AgBlocks"/> (rounded up)
         /// </summary>
-        public byte AgBlocksLog2;
+        public byte AgBlocksLog2 { get; private set; }
 
         /// <summary>
         /// log2 of <see cref="RealtimeExtents"/>
         /// </summary>
-        public byte RealtimeExtentsLog2;
+        public byte RealtimeExtentsLog2 { get; private set; }
 
         /// <summary>
         /// mkfs is in progress, don't mount
         /// </summary>
-        public byte InProgress;
+        public byte InProgress { get; private set; }
 
         /// <summary>
         /// max % of fs for inode space
         /// </summary>
-        public byte InodesMaxPercent;
+        public byte InodesMaxPercent { get; private set; }
 
-         /*
-         * These fields must remain contiguous.  If you really
-         * want to change their layout, make sure you fix the
-         * code in xfs_trans_apply_sb_deltas().
-         */                           
+        /*
+        * These fields must remain contiguous.  If you really
+        * want to change their layout, make sure you fix the
+        * code in xfs_trans_apply_sb_deltas().
+        */
         #region statistics
-        
+
         /// <summary>
         /// allocated inodes
         /// </summary>
-        public ulong AllocatedInodes;
+        public ulong AllocatedInodes { get; private set; }
 
         /// <summary>
         /// free inodes
         /// </summary>
-        public ulong FreeInodes;
+        public ulong FreeInodes { get; private set; }
 
         /// <summary>
         /// free data blocks
         /// </summary>
-        public ulong FreeDataBlocks;
+        public ulong FreeDataBlocks { get; private set; }
 
         /// <summary>
         /// free realtime extents
         /// </summary>
-        public ulong FreeRealtimeExtents;
-        
+        public ulong FreeRealtimeExtents { get; private set; }
+
         #endregion
 
         /// <summary>
         /// user quota inode
         /// </summary>
-        public ulong UserQuotaInode;
-        
+        public ulong UserQuotaInode { get; private set; }
+
         /// <summary>
         /// group quota inode
         /// </summary>
-        public ulong GroupQuotaInode;
-        
+        public ulong GroupQuotaInode { get; private set; }
+
         /// <summary>
         /// quota flags
         /// </summary>
-        public ushort QuotaFlags;
+        public ushort QuotaFlags { get; private set; }
 
         /// <summary>
         /// misc. flags
         /// </summary>
-        public byte Flags;
-        
+        public byte Flags { get; private set; }
+
         /// <summary>
         /// shared version number
         /// </summary>
-        public byte SharedVersionNumber;
-        
+        public byte SharedVersionNumber { get; private set; }
+
         /// <summary>
         /// inode chunk alignment, fsblocks
         /// </summary>
-        public uint InodeChunkAlignment;
-        
+        public uint InodeChunkAlignment { get; private set; }
+
         /// <summary>
         /// stripe or raid unit
         /// </summary>
-        public uint Unit;
-        
+        public uint Unit { get; private set; }
+
         /// <summary>
         /// stripe or raid width
         /// </summary>
-        public uint Width;
+        public uint Width { get; private set; }
 
         /// <summary>
         /// log2 of dir block size (fsbs)
         /// </summary>
-        public byte DirBlockLog2;
-        
+        public byte DirBlockLog2 { get; private set; }
+
         /// <summary>
         /// log2 of the log sector size
         /// </summary>
-        public byte LogSectorSizeLog2;
-        
+        public byte LogSectorSizeLog2 { get; private set; }
+
         /// <summary>
         /// sector size for the log, bytes
         /// </summary>
-        public ushort LogSectorSize;
-        
+        public ushort LogSectorSize { get; private set; }
+
         /// <summary>
         /// stripe unit size for the log
         /// </summary>
-        public uint LogUnitSize;
-        
+        public uint LogUnitSize { get; private set; }
+
         /// <summary>
         /// additional feature bits
         /// </summary>
-        public uint Features2;
+        public uint Features2 { get; private set; }
 
         /*
         * bad features2 field as a result of failing to pad the sb structure to
@@ -279,40 +279,43 @@ namespace DiscUtils.Xfs
         /// the value in sb_features2 when formatting the incore superblock to
         /// the disk buffer.
         /// </summary>
-        public uint BadFeatures2;
+        public uint BadFeatures2 { get; private set; }
 
         /* version 5 superblock fields start here */
 
         /* feature masks */
-        public uint CompatibleFeatures;
-        public ReadOnlyCompatibleFeatures ReadOnlyCompatibleFeatures;
-        public uint IncompatibleFeatures;
-        public uint LogIncompatibleFeatures;
+        public uint CompatibleFeatures { get; private set; }
+
+        public ReadOnlyCompatibleFeatures ReadOnlyCompatibleFeatures { get; private set; }
+
+        public uint IncompatibleFeatures { get; private set; }
+
+        public uint LogIncompatibleFeatures { get; private set; }
 
         /// <summary>
         /// superblock crc
         /// </summary>
-        public uint Crc;
+        public uint Crc { get; private set; }
 
         /// <summary>
         /// sparse inode chunk alignment
         /// </summary>
-        public uint SparseInodeAlignment;
+        public uint SparseInodeAlignment { get; private set; }
 
         /// <summary>
         /// project quota inode
         /// </summary>
-        public ulong ProjectQuotaInode;
+        public ulong ProjectQuotaInode { get; private set; }
 
         /// <summary>
         /// last write sequence
         /// </summary>
-        public long Lsn;
+        public long Lsn { get; private set; }
 
         /// <summary>
         /// metadata file system unique id
         /// </summary>
-        public Guid MetaUuid;
+        public Guid MetaUuid { get; private set; }
 
         /* must be padded to 64 bit alignment */
 

@@ -24,7 +24,7 @@ namespace DiscUtils.Xfs
 {
     using System;
 
-    internal class BtreeHeader : IByteArraySerializable
+    internal abstract class BtreeHeader : IByteArraySerializable
     {
         public uint Magic { get; private set; }
 
@@ -36,12 +36,12 @@ namespace DiscUtils.Xfs
 
         public int RightSibling { get; private set; }
 
-        public int Size
+        public virtual int Size
         {
             get { return 16; }
         }
 
-        public int ReadFrom(byte[] buffer, int offset)
+        public virtual int ReadFrom(byte[] buffer, int offset)
         {
             Magic = Utilities.ToUInt32BigEndian(buffer, offset);
             Level = Utilities.ToUInt16BigEndian(buffer, offset + 0x4);
@@ -51,9 +51,11 @@ namespace DiscUtils.Xfs
             return Size;
         }
 
-        public void WriteTo(byte[] buffer, int offset)
+        public virtual void WriteTo(byte[] buffer, int offset)
         {
             throw new NotImplementedException();
         }
+
+        public abstract void LoadBtree(Context context);
     }
 }
