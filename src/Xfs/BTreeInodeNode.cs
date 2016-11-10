@@ -58,7 +58,7 @@ namespace DiscUtils.Xfs
             return Size;
         }
 
-        public override void LoadBtree(Context context)
+        public override void LoadBtree(AllocationGroup ag)
         {
             Children = new Dictionary<uint,BtreeHeader>(NumberOfRecords);
             for (int i = 0; i < NumberOfRecords; i++)
@@ -72,11 +72,11 @@ namespace DiscUtils.Xfs
                 {
                     child = new BTreeInodeNode();
                 }
-                var data = context.RawStream;
-                data.Position = (Pointer[i] * context.SuperBlock.Blocksize) + agoffset;
-                var buffer = Utilities.ReadFully(data, (int) context.SuperBlock.Blocksize);
+                var data = ag.Context.RawStream;
+                data.Position = (Pointer[i] * ag.Context.SuperBlock.Blocksize) + ag.Offset;
+                var buffer = Utilities.ReadFully(data, (int)ag.Context.SuperBlock.Blocksize);
                 child.ReadFrom(buffer, 0);
-                child.LoadBtree(context);
+                child.LoadBtree(ag);
                 Children.Add(Keys[i], child);
             }
         }

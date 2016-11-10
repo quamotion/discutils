@@ -127,7 +127,7 @@ namespace DiscUtils.Xfs
             {
                 RootInodeBtree = new BTreeInodeNode();
             }
-            var buffer = Utilities.ReadFully(data, RootInodeBtree.Size);
+            var buffer = Utilities.ReadFully(data, (int) context.SuperBlock.Blocksize);
             RootInodeBtree.ReadFrom(buffer, 0);
         }
 

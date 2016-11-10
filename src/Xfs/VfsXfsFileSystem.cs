@@ -29,8 +29,6 @@ namespace DiscUtils.Xfs
 
     internal sealed class VfsXfsFileSystem :VfsReadOnlyFileSystem<DirEntry, File, Directory, Context>,IUnixFileSystem
     {
-        private readonly AllocationGroup[] _allocationGroups;
-
         private static readonly int XFS_ALLOC_AGFL_RESERVE = 4;
 
         public VfsXfsFileSystem(Stream stream, FileSystemParameters parameters, bool ignoreRecovery = false)
@@ -53,16 +51,17 @@ namespace DiscUtils.Xfs
                 SuperBlock = superblock
             };
 
-            _allocationGroups = new AllocationGroup[superblock.AgCount];
+            var allocationGroups = new AllocationGroup[superblock.AgCount];
             long offset = 0;
-            for (int i = 0; i < _allocationGroups.Length; i++)
+            for (int i = 0; i < allocationGroups.Length; i++)
             {
                 var ag = new AllocationGroup(Context, offset);
-                _allocationGroups[i] = ag;
+                allocationGroups[ag.InodeBtreeInfo.SequenceNumber] = ag;
                 offset += ag.FreeBlockInfo.Length*superblock.Blocksize;
             }
+            Context.AllocationGroups = allocationGroups;
 
-            //TODO RootDirectory = new Directory(Context, superblock.RootInode, GetInode(superblock.RootInode));
+            RootDirectory = new Directory(Context, Context.GetInode(superblock.RootInode));
         }
         
         public override string FriendlyName
@@ -76,7 +75,22 @@ namespace DiscUtils.Xfs
         /// <inheritdoc />
         protected override File ConvertDirEntryToFile(DirEntry dirEntry)
         {
-            throw new NotImplementedException();
+            if (dirEntry.IsDirectory)
+            {
+                return new Directory(Context, dirEntry.Inode);
+            }
+            else if (dirEntry.IsSymlink)
+            {
+                throw new NotImplementedException();
+            }
+            else if (dirEntry.Inode.FileType == UnixFileType.Regular)
+            {
+                return new File(Context, dirEntry.Inode);
+            }
+            else
+            {
+                throw new NotSupportedException(String.Format("Type {0} is not supported in XFS", dirEntry.Inode.FileType));
+            }
         }
         
         public UnixFileSystemInfo GetUnixFileInfo(string path)

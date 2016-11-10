@@ -1,5 +1,4 @@
 //
-// Copyright (c) 2008-2011, Kenneth Bell
 // Copyright (c) 2016, Bianco Veigel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24,54 +23,39 @@
 namespace DiscUtils.Xfs
 {
     using System;
-    using System.Collections.Generic;
-    using DiscUtils.Vfs;
+    using System.IO;
 
-    internal class Directory : File, IVfsDirectory<DirEntry, File>
+    internal class Extent : IByteArraySerializable
     {
-        public Directory(Context context, Inode inode)
-            : base(context, inode)
+        /// <summary>
+        /// Number of Blocks
+        /// </summary>
+        public uint BlockCount { get; private set; }
+
+        public ulong StartBlock { get; private set; }
+
+        public ulong StartOffset { get; private set; }
+
+        public ExtentFlag Flag { get; private set; }
+
+        public int Size
         {
+            get { return 16; }
         }
 
-        public ICollection<DirEntry> AllEntries
+        public int ReadFrom(byte[] buffer, int offset)
         {
-            get
-            {
-                var result = new List<DirEntry>();
-                if (Inode.Format == InodeFormat.Local)
-                {
-                    //shortform directory
-                    var sfDir = new ShortformDirectory();
-                    sfDir.ReadFrom(Inode.DataFork, 0);
-                    foreach (var entry in sfDir.Entries)
-                    {
-                        result.Add(new DirEntry(entry, Context));
-                    }
-                }
-                return result;
-            }
+            ulong lower = Utilities.ToUInt64BigEndian(buffer, offset);
+            ulong middle = Utilities.ToUInt64BigEndian(buffer, offset + 0x2);
+            ulong upper = Utilities.ToUInt64BigEndian(buffer, offset + 0x8);
+            BlockCount = (uint)(lower & 0x001FFFFF);
+            StartBlock = (middle >> 5) & 0x000FFFFFFFFFFFFF;
+            StartOffset = (upper >> 9) & 0x003FFFFFFFFFFFFF;
+            Flag = (ExtentFlag) ((buffer[offset + 0x0] >> 6) & 0x3);
+            return Size;
         }
 
-        public DirEntry Self
-        {
-            get { return null; }
-        }
-
-        public DirEntry GetEntryByName(string name)
-        {
-            foreach (DirEntry entry in AllEntries)
-            {
-                if (entry.FileName == name)
-                {
-                    return entry;
-                }
-            }
-
-            return null;
-        }
-
-        public DirEntry CreateNewFile(string name)
+        public void WriteTo(byte[] buffer, int offset)
         {
             throw new NotImplementedException();
         }

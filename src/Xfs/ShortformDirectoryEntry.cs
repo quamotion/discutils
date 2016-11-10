@@ -1,5 +1,4 @@
 //
-// Copyright (c) 2008-2011, Kenneth Bell
 // Copyright (c) 2016, Bianco Veigel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24,54 +23,47 @@
 namespace DiscUtils.Xfs
 {
     using System;
-    using System.Collections.Generic;
-    using DiscUtils.Vfs;
+    using System.IO;
 
-    internal class Directory : File, IVfsDirectory<DirEntry, File>
+    internal class ShortformDirectoryEntry : IByteArraySerializable
     {
-        public Directory(Context context, Inode inode)
-            : base(context, inode)
+        private readonly bool _useShortInode;
+
+        public ShortformDirectoryEntry(bool useShortInode)
         {
+            _useShortInode = useShortInode;
         }
 
-        public ICollection<DirEntry> AllEntries
+        public byte NameLength { get; private set; }
+
+        public ushort Offset { get; private set; }
+
+        public string Name { get; private set; }
+
+        public ulong Inode { get; private set; }
+
+        public int Size
         {
-            get
+            get { return 0x3 + NameLength + (_useShortInode ? 4 : 8); }
+        }
+
+        public int ReadFrom(byte[] buffer, int offset)
+        {
+            NameLength = buffer[offset];
+            Offset = Utilities.ToUInt16BigEndian(buffer, offset + 0x1);
+            Name = Utilities.BytesToString(buffer, offset + 0x3, NameLength);
+            if (_useShortInode)
             {
-                var result = new List<DirEntry>();
-                if (Inode.Format == InodeFormat.Local)
-                {
-                    //shortform directory
-                    var sfDir = new ShortformDirectory();
-                    sfDir.ReadFrom(Inode.DataFork, 0);
-                    foreach (var entry in sfDir.Entries)
-                    {
-                        result.Add(new DirEntry(entry, Context));
-                    }
-                }
-                return result;
+                Inode = Utilities.ToUInt32BigEndian(buffer, offset + 0x3 + NameLength);
             }
-        }
-
-        public DirEntry Self
-        {
-            get { return null; }
-        }
-
-        public DirEntry GetEntryByName(string name)
-        {
-            foreach (DirEntry entry in AllEntries)
+            else
             {
-                if (entry.FileName == name)
-                {
-                    return entry;
-                }
+                Inode = Utilities.ToUInt64BigEndian(buffer, offset + 0x3 + NameLength);
             }
-
-            return null;
+            return Size;
         }
 
-        public DirEntry CreateNewFile(string name)
+        public void WriteTo(byte[] buffer, int offset)
         {
             throw new NotImplementedException();
         }

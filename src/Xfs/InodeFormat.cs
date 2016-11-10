@@ -22,40 +22,31 @@
 
 namespace DiscUtils.Xfs
 {
-    using System;
-
-    internal abstract class BtreeHeader : IByteArraySerializable
+    internal enum InodeFormat : byte
     {
-        public uint Magic { get; private set; }
+        /// <summary>
+        /// character and block devices
+        /// </summary>
+        Dev,
 
-        public ushort Level { get; private set; }
+        /// <summary>
+        /// all metadata associated with the file is within the inode
+        /// </summary>
+        Local,
 
-        public ushort NumberOfRecords { get; private set; }
+        /// <summary>
+        /// the inode contains an array of extents to other filesystem blocks which contain the associated metadata or data
+        /// </summary>
+        Extents,
 
-        public int LeftSibling { get; private set; }
+        /// <summary>
+        /// the inode contains a B+tree root node which points to filesystem blocks containing the metadata or data 
+        /// </summary>
+        Btree,
 
-        public int RightSibling { get; private set; }
-
-        public virtual int Size
-        {
-            get { return 16; }
-        }
-
-        public virtual int ReadFrom(byte[] buffer, int offset)
-        {
-            Magic = Utilities.ToUInt32BigEndian(buffer, offset);
-            Level = Utilities.ToUInt16BigEndian(buffer, offset + 0x4);
-            NumberOfRecords = Utilities.ToUInt16BigEndian(buffer, offset + 0x6);
-            LeftSibling = Utilities.ToInt32BigEndian(buffer, offset + 0x8);
-            RightSibling = Utilities.ToInt32BigEndian(buffer, offset + 0xC);
-            return 16;
-        }
-
-        public virtual void WriteTo(byte[] buffer, int offset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public abstract void LoadBtree(AllocationGroup ag);
+        /// <summary>
+        /// currently not used
+        /// </summary>
+        Uuid
     }
 }

@@ -29,82 +29,55 @@ namespace DiscUtils.Xfs
 
     internal class File : IVfsFile
     {
-        private Context _context;
-        private uint _inodeNum;
-        private Inode _inode;
+        protected readonly Context Context;
+        protected readonly Inode Inode;
+        private IBuffer _content;
 
-        public File(Context context, uint inodeNum, Inode inode)
+        public File(Context context, Inode inode)
         {
-            _context = context;
-            _inodeNum = inodeNum;
-            _inode = inode;
+            Context = context;
+            Inode = inode;
         }
 
         public DateTime LastAccessTimeUtc
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return Inode.AccessTime; }
+            set { throw new NotImplementedException(); }
         }
 
         public DateTime LastWriteTimeUtc
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return Inode.ModificationTime; }
+            set { throw new NotImplementedException(); }
         }
 
         public DateTime CreationTimeUtc
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return Inode.CreationTime; }
+            set { throw new NotImplementedException(); }
         }
 
         public FileAttributes FileAttributes
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return Utilities.FileAttributesFromUnixFileType(Inode.FileType); }
+            set { throw new NotImplementedException(); }
         }
 
         public long FileLength
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return (long) Inode.Length; }
         }
 
         public IBuffer FileContent
         {
             get
             {
-                throw new NotImplementedException();
+                if (_content == null)
+                {
+                    _content = Inode.GetContentBuffer(Context);
+                }
+
+                return _content;
             }
         }
         

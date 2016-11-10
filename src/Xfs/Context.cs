@@ -31,5 +31,17 @@ namespace DiscUtils.Xfs
         public Stream RawStream { get; set; }
 
         public SuperBlock SuperBlock { get; set; }
+
+        public AllocationGroup[] AllocationGroups { get; set; }
+
+        public Inode GetInode(ulong number)
+        {
+            var inode = new Inode(number, this);
+            AllocationGroup group = AllocationGroups[inode.AllocationGroup];
+            group.LoadInode(inode);
+            if (inode.Magic != Inode.InodeMagic)
+                throw new IOException("invalid inode magic");
+            return inode;
+        }
     }
 }

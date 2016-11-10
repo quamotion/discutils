@@ -29,15 +29,19 @@ namespace DiscUtils.Xfs
     internal class AllocationGroup
     {
         public const uint IbtMagic = 0x49414254;
+
         public long Offset { get; private set; }
 
         public AllocationGroupFreeBlockInfo FreeBlockInfo { get; private set; }
 
         public AllocationGroupInodeBtreeInfo InodeBtreeInfo { get; private set; }
 
+        public Context Context { get; set; }
+
         public AllocationGroup(Context context, long offset)
         {
             Offset = offset;
+            Context = context;
             var data = context.RawStream;
             var superblock = context.SuperBlock;
             FreeBlockInfo = new AllocationGroupFreeBlockInfo();
@@ -62,6 +66,18 @@ namespace DiscUtils.Xfs
             {
                 throw new IOException("Invalid IBT magic - probably not an xfs file system");
             }
+            if (InodeBtreeInfo.SequenceNumber != FreeBlockInfo.SequenceNumber)
+            {
+                throw new IOException("inconsistent AG sequence numbers");
+            }
+        }
+
+        public void LoadInode(Inode inode)
+        {
+            var offset = Offset + (inode.AgBlock*Context.SuperBlock.Blocksize) + (inode.BlockOffset * Context.SuperBlock.InodeSize);
+            Context.RawStream.Position = offset;
+            var data = Utilities.ReadFully(Context.RawStream, (int) Context.SuperBlock.InodeSize);
+            inode.ReadFrom(data, 0);
         }
     }
 }

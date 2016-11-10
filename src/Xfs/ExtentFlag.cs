@@ -22,40 +22,10 @@
 
 namespace DiscUtils.Xfs
 {
-    using System;
-
-    internal abstract class BtreeHeader : IByteArraySerializable
+    internal enum ExtentFlag : byte
     {
-        public uint Magic { get; private set; }
-
-        public ushort Level { get; private set; }
-
-        public ushort NumberOfRecords { get; private set; }
-
-        public int LeftSibling { get; private set; }
-
-        public int RightSibling { get; private set; }
-
-        public virtual int Size
-        {
-            get { return 16; }
-        }
-
-        public virtual int ReadFrom(byte[] buffer, int offset)
-        {
-            Magic = Utilities.ToUInt32BigEndian(buffer, offset);
-            Level = Utilities.ToUInt16BigEndian(buffer, offset + 0x4);
-            NumberOfRecords = Utilities.ToUInt16BigEndian(buffer, offset + 0x6);
-            LeftSibling = Utilities.ToInt32BigEndian(buffer, offset + 0x8);
-            RightSibling = Utilities.ToInt32BigEndian(buffer, offset + 0xC);
-            return 16;
-        }
-
-        public virtual void WriteTo(byte[] buffer, int offset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public abstract void LoadBtree(AllocationGroup ag);
+        Normal,
+        Unwritten,
+        Invalid
     }
 }

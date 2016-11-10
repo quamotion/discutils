@@ -29,54 +29,63 @@ namespace DiscUtils.Xfs
 
     internal class DirEntry : VfsDirEntry
     {
+        private readonly ShortformDirectoryEntry _entry;
+        private readonly Context _context;
+
+        public DirEntry(ShortformDirectoryEntry entry, Context context)
+        {
+            _entry = entry;
+            _context = context;
+            Inode = _context.GetInode(_entry.Inode);
+        }
+
+        public Inode Inode { get; private set; }
+
         public override bool IsDirectory
         {
-            get { throw new NotImplementedException(); }
+            get { return Inode.FileType == UnixFileType.Directory; }
         }
 
         public override bool IsSymlink
         {
-            get { throw new NotImplementedException(); }
+            get { return Inode.FileType == UnixFileType.Link; }
         }
 
-        public override string FileName
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override string FileName { get { return _entry.Name; } }
 
         public override bool HasVfsTimeInfo
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
         public override DateTime LastAccessTimeUtc
         {
-            get { throw new NotImplementedException(); }
+            get { return Inode.AccessTime; }
         }
 
         public override DateTime LastWriteTimeUtc
         {
-            get { throw new NotImplementedException(); }
+            get { return Inode.ModificationTime; }
         }
 
         public override DateTime CreationTimeUtc
         {
-            get { throw new NotImplementedException(); }
+            get { return Inode.CreationTime; }
         }
 
         public override bool HasVfsFileAttributes
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
         public override FileAttributes FileAttributes
         {
-            get { throw new NotImplementedException(); }
+            get { return Utilities.FileAttributesFromUnixFileType(Inode.FileType); ; }
         }
 
         public override long UniqueCacheId
         {
-            get { throw new NotImplementedException(); }
+            get { return ((long)Inode.AllocationGroup) << 32 | Inode.RelativeInodeNumber; }
         }
     }
 }

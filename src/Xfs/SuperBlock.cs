@@ -319,6 +319,10 @@ namespace DiscUtils.Xfs
 
         /* must be padded to 64 bit alignment */
 
+        public uint RelativeInodeMask { get; private set; }
+
+        public uint AgInodeMask { get; private set; }
+
         public int Size
         {
             get { return 264; }
@@ -381,6 +385,11 @@ namespace DiscUtils.Xfs
             ProjectQuotaInode = Utilities.ToUInt64BigEndian(buffer, offset + 0xE8);
             Lsn = Utilities.ToInt64BigEndian(buffer, offset + 0xF0);
             MetaUuid = Utilities.ToGuidBigEndian(buffer, offset + 0xF8);
+
+
+            var agOffset = AgBlocksLog2 + InodesPerBlockLog2;
+            RelativeInodeMask = 0xffffffff >> (32-agOffset);
+            AgInodeMask = ~RelativeInodeMask;
             return 264;
         }
 

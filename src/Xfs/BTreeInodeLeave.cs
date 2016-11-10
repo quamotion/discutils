@@ -49,7 +49,7 @@ namespace DiscUtils.Xfs
             return Size;
         }
 
-        public override void LoadBtree(Context context)
+        public override void LoadBtree(AllocationGroup ag)
         {
             
         }
