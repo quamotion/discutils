@@ -20,44 +20,28 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
+
 namespace DiscUtils.Xfs
 {
     using System;
-    using System.IO;
+    using System.Collections.Generic;
 
-    internal class Extent : IByteArraySerializable
+    internal class ExtentStream : BuiltStream
     {
-        /// <summary>
-        /// Number of Blocks
-        /// </summary>
-        public uint BlockCount { get; private set; }
-
-        public ulong StartBlock { get; private set; }
-
-        public ulong StartOffset { get; private set; }
-
-        public ExtentFlag Flag { get; private set; }
-
-        public int Size
+        /// <inheritdoc />
+        public ExtentStream(long length, List<BuilderExtent> extents) 
+            : base(length, extents)
         {
-            get { return 16; }
         }
 
-        public int ReadFrom(byte[] buffer, int offset)
+        /// <inheritdoc />
+        public override int Read(byte[] buffer, int offset, int count)
         {
-            ulong lower = Utilities.ToUInt64BigEndian(buffer, offset + 0x8);
-            ulong middle = Utilities.ToUInt64BigEndian(buffer, offset + 0x6);
-            ulong upper = Utilities.ToUInt64BigEndian(buffer, offset + 0);
-            BlockCount = (uint)(lower & 0x001FFFFF);
-            StartBlock = (middle >> 5) & 0x000FFFFFFFFFFFFF;
-            StartOffset = (upper >> 9) & 0x003FFFFFFFFFFFFF;
-            Flag = (ExtentFlag) ((buffer[offset + 0x0] >> 6) & 0x3);
-            return Size;
-        }
-
-        public void WriteTo(byte[] buffer, int offset)
-        {
-            throw new NotImplementedException();
+            if (Position + count > Length)
+            {
+                count = (int) (Length - Position);
+            }
+            return base.Read(buffer, offset, count);
         }
     }
 }

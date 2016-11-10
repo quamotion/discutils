@@ -20,13 +20,11 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-using DiscUtils.Udf;
-using DiscUtils.Vhd;
-
 namespace DiscUtils.Xfs
 {
     using System;
     using System.IO;
+    using System.Collections.Generic;
 
     internal class Inode : IByteArraySerializable
     {
@@ -269,11 +267,35 @@ namespace DiscUtils.Xfs
             throw new NotImplementedException();
         }
 
+        private Extent[] GetExtents()
+        {
+            var result = new Extent[Extents];
+            int offset = Forkoff;
+            for (int i = 0; i < Extents; i++)
+            {
+                var extent = new Extent();
+                offset += extent.ReadFrom(DataFork, offset);
+                result[i] = extent;
+            }
+            return result;
+        }
+
         public IBuffer GetContentBuffer(Context context)
         {
-            if (Format == InodeFormat.Extents)
+            if (Format == InodeFormat.Local)
             {
-                throw new NotImplementedException();
+                return new StreamBuffer(new MemoryStream(DataFork), Ownership.Dispose);
+            }
+            else if (Format == InodeFormat.Extents)
+            {
+                var extents = GetExtents();
+                var builderExtents = new List<BuilderExtent>(extents.Length);
+                foreach (var extent in extents)
+                {
+                    var substream = new SubStream(context.RawStream, (long) (extent.StartBlock * context.SuperBlock.Blocksize), extent.BlockCount * context.SuperBlock.Blocksize);
+                    builderExtents.Add(new BuilderSparseStreamExtent((long) extent.StartOffset,substream));
+                }
+                return new StreamBuffer(new ExtentStream((long) this.Length, builderExtents), Ownership.Dispose);
             }
             throw new NotImplementedException();
         }

@@ -81,7 +81,7 @@ namespace DiscUtils.Xfs
             }
             else if (dirEntry.IsSymlink)
             {
-                throw new NotImplementedException();
+                return new Symlink(Context, dirEntry.Inode);
             }
             else if (dirEntry.Inode.FileType == UnixFileType.Regular)
             {

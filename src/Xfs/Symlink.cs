@@ -1,5 +1,4 @@
 //
-// Copyright (c) 2008-2011, Kenneth Bell
 // Copyright (c) 2016, Bianco Veigel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -21,63 +20,31 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
+
 namespace DiscUtils.Xfs
 {
-    using System;
-    using System.Collections.Generic;
+    using System.IO;
     using DiscUtils.Vfs;
 
-    internal class Directory : File, IVfsDirectory<DirEntry, File>
+    internal class Symlink : File, IVfsSymlink<DirEntry, File>
     {
-        public Directory(Context context, Inode inode)
+        public Symlink(Context context, Inode inode)
             : base(context, inode)
         {
         }
 
-        public ICollection<DirEntry> AllEntries
+        public string TargetPath
         {
             get
             {
-                var result = new List<DirEntry>();
-                if (Inode.Format == InodeFormat.Local)
+                if (Inode.Format != InodeFormat.Local && Inode.Format != InodeFormat.Extents)
                 {
-                    //shortform directory
-                    var sfDir = new ShortformDirectory();
-                    sfDir.ReadFrom(Inode.DataFork, 0);
-                    foreach (var entry in sfDir.Entries)
-                    {
-                        result.Add(new DirEntry(entry, Context));
-                    }
+                    throw new IOException("invalid Inode format for symlink");
                 }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-                return result;
+                IBuffer content = FileContent;
+                byte[] data = Utilities.ReadFully(content, 0, (int) content.Capacity);
+                return Utilities.BytesToZString(data, 0, data.Length).Replace('/', '\\');
             }
-        }
-
-        public DirEntry Self
-        {
-            get { return null; }
-        }
-
-        public DirEntry GetEntryByName(string name)
-        {
-            foreach (DirEntry entry in AllEntries)
-            {
-                if (entry.FileName == name)
-                {
-                    return entry;
-                }
-            }
-
-            return null;
-        }
-
-        public DirEntry CreateNewFile(string name)
-        {
-            throw new NotImplementedException();
         }
     }
 }
