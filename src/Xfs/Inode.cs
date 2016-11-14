@@ -267,7 +267,7 @@ namespace DiscUtils.Xfs
             throw new NotImplementedException();
         }
 
-        private Extent[] GetExtents()
+        public Extent[] GetExtents()
         {
             var result = new Extent[Extents];
             int offset = Forkoff;
@@ -289,15 +289,29 @@ namespace DiscUtils.Xfs
             else if (Format == InodeFormat.Extents)
             {
                 var extents = GetExtents();
-                var builderExtents = new List<BuilderExtent>(extents.Length);
-                foreach (var extent in extents)
-                {
-                    var substream = new SubStream(context.RawStream, (long) (extent.StartBlock * context.SuperBlock.Blocksize), extent.BlockCount * context.SuperBlock.Blocksize);
-                    builderExtents.Add(new BuilderSparseStreamExtent((long) extent.StartOffset,substream));
-                }
-                return new StreamBuffer(new ExtentStream((long) this.Length, builderExtents), Ownership.Dispose);
+                return BufferFromExtentList(context, extents);
+            }
+            else if (Format == InodeFormat.Btree)
+            {
+                var tree = new BTreeExtentRoot();
+                tree.ReadFrom(DataFork, 0);
+                tree.LoadBtree(context);
+                var extents = tree.GetExtents();
+                return BufferFromExtentList(context, extents);
             }
             throw new NotImplementedException();
+        }
+
+        public IBuffer BufferFromExtentList(Context context, IList<Extent> extents)
+        {
+            var builderExtents = new List<BuilderExtent>(extents.Count);
+            foreach (var extent in extents)
+            {
+                var blockOffset = extent.GetOffset(context);
+                var substream = new SubStream(context.RawStream, blockOffset, extent.BlockCount*context.SuperBlock.Blocksize);
+                builderExtents.Add(new BuilderSparseStreamExtent((long) extent.StartOffset * context.SuperBlock.Blocksize, substream));
+            }
+            return new StreamBuffer(new ExtentStream((long) this.Length, builderExtents), Ownership.Dispose);
         }
     }
 }

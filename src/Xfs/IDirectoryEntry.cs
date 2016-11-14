@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) 2016, Bianco Veigel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -23,33 +23,11 @@
 namespace DiscUtils.Xfs
 {
     using System;
-    using System.Text;
-
-    /// <summary>
-    /// XFS file system options.
-    /// </summary>
-    public sealed class XfsFileSystemOptions : DiscFileSystemOptions
+    
+    internal interface IDirectoryEntry
     {
-        internal XfsFileSystemOptions()
-        {
-            FileNameEncoding = Encoding.UTF8;
-        }
+        byte[] Name { get; }
 
-        internal XfsFileSystemOptions(FileSystemParameters parameters)
-        {
-            if (parameters != null && parameters.FileNameEncoding != null)
-            {
-                FileNameEncoding = parameters.FileNameEncoding;
-            }
-            else
-            {
-                FileNameEncoding = Encoding.UTF8;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the character encoding used for file names.
-        /// </summary>
-        public Encoding FileNameEncoding { get; set; }
+        ulong Inode { get; }
     }
 }

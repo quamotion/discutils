@@ -33,6 +33,8 @@ namespace DiscUtils.Xfs
         public SuperBlock SuperBlock { get; set; }
 
         public AllocationGroup[] AllocationGroups { get; set; }
+        
+        public XfsFileSystemOptions Options { get; set; }
 
         public Inode GetInode(ulong number)
         {

@@ -33,13 +33,13 @@ namespace DiscUtils.Xfs
 
         public ushort Tag { get; private set; }
 
-        public override int Size { get { return Length + 0x2; } }
+        public override int Size { get { return Length; } }
 
         public override int ReadFrom(byte[] buffer, int offset)
         {
             Freetag = Utilities.ToUInt16BigEndian(buffer, offset);
             Length = Utilities.ToUInt16BigEndian(buffer, offset + 0x2);
-            Tag = Utilities.ToUInt16BigEndian(buffer, offset + Length);
+            Tag = Utilities.ToUInt16BigEndian(buffer, offset + Length - 0x2);
             return Size;
         }
 

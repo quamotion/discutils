@@ -23,50 +23,42 @@
 namespace DiscUtils.Xfs
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
-    internal class BlockDirectoryDataEntry : BlockDirectoryData, IDirectoryEntry
+    internal class BTreeExtentLeave : BTreeExtentHeader
     {
-        public ulong Inode { get; private set; }
-
-        public byte NameLength { get; private set; }
-
-        public byte[] Name { get; private set; }
-
-        public ushort Tag { get; private set; }
+        public Extent[] Extents { get; private set; }
 
         public override int Size
         {
-            get
-            {
-                var size = 0xb + NameLength;
-                var padding = size%8;
-                if (padding != 0)
-                    return size + (8 - padding);
-                return size;
-            }
+            get { return base.Size + (NumberOfRecords * 0x10); }
         }
 
         public override int ReadFrom(byte[] buffer, int offset)
         {
-            Inode = Utilities.ToUInt64BigEndian(buffer, offset);
-            NameLength = buffer[offset + 0x8];
-            Name = Utilities.ToByteArray(buffer, offset + 0x9, NameLength);
-            var padding = 6 - ((NameLength + 1)%8);
-            offset += padding;
-            Tag = Utilities.ToUInt16BigEndian(buffer, offset + 0x9 + NameLength);
+            offset += base.ReadFrom(buffer, offset);
+            if (Level != 0)
+                throw new IOException("invalid B+tree level - expected 0");
+            Extents = new Extent[NumberOfRecords];
+            for (int i = 0; i < NumberOfRecords; i++)
+            {
+                var rec = new Extent();
+                offset += rec.ReadFrom(buffer, offset);
+                Extents[i] = rec;
+            }
             return Size;
         }
 
-        public void WriteTo(byte[] buffer, int offset)
+        /// <inheritdoc />
+        public override void LoadBtree(Context context)
         {
-            throw new NotImplementedException();
         }
 
         /// <inheritdoc />
-        public override string ToString()
+        public override IList<Extent> GetExtents()
         {
-            return $"{Inode}: {Utilities.BytesToString(Name, 0, NameLength)}";
+            return Extents;
         }
     }
 }

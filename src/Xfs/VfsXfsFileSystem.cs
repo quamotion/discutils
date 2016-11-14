@@ -20,7 +20,6 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 namespace DiscUtils.Xfs
 {
     using System;
@@ -31,7 +30,7 @@ namespace DiscUtils.Xfs
     {
         private static readonly int XFS_ALLOC_AGFL_RESERVE = 4;
 
-        public VfsXfsFileSystem(Stream stream, FileSystemParameters parameters, bool ignoreRecovery = false)
+        public VfsXfsFileSystem(Stream stream, FileSystemParameters parameters)
             :base(new XfsFileSystemOptions(parameters))
         {
             stream.Position = 0;
@@ -48,7 +47,8 @@ namespace DiscUtils.Xfs
             Context = new Context
             {
                 RawStream = stream,
-                SuperBlock = superblock
+                SuperBlock = superblock,
+                Options = (XfsFileSystemOptions) Options
             };
 
             var allocationGroups = new AllocationGroup[superblock.AgCount];
@@ -77,7 +77,7 @@ namespace DiscUtils.Xfs
         {
             if (dirEntry.IsDirectory)
             {
-                return new Directory(Context, dirEntry.Inode);
+                return dirEntry.CachedDirectory ?? (dirEntry.CachedDirectory = new Directory(Context, dirEntry.Inode));
             }
             else if (dirEntry.IsSymlink)
             {

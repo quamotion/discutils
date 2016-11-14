@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) 2016, Bianco Veigel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -23,33 +23,44 @@
 namespace DiscUtils.Xfs
 {
     using System;
-    using System.Text;
+    using System.Collections.Generic;
 
-    /// <summary>
-    /// XFS file system options.
-    /// </summary>
-    public sealed class XfsFileSystemOptions : DiscFileSystemOptions
+    internal abstract class BTreeExtentHeader : IByteArraySerializable
     {
-        internal XfsFileSystemOptions()
+        public const uint BtreeMagic = 0x424d4150;
+
+        public uint Magic { get; private set; }
+
+        public ushort Level { get; protected set; }
+
+        public ushort NumberOfRecords { get; protected set; }
+
+        public long LeftSibling { get; private set; }
+
+        public long RightSibling { get; private set; }
+
+        public virtual int Size
         {
-            FileNameEncoding = Encoding.UTF8;
+            get { return 24; }
         }
 
-        internal XfsFileSystemOptions(FileSystemParameters parameters)
+        public virtual int ReadFrom(byte[] buffer, int offset)
         {
-            if (parameters != null && parameters.FileNameEncoding != null)
-            {
-                FileNameEncoding = parameters.FileNameEncoding;
-            }
-            else
-            {
-                FileNameEncoding = Encoding.UTF8;
-            }
+            Magic = Utilities.ToUInt32BigEndian(buffer, offset);
+            Level = Utilities.ToUInt16BigEndian(buffer, offset + 0x4);
+            NumberOfRecords = Utilities.ToUInt16BigEndian(buffer, offset + 0x6);
+            LeftSibling = Utilities.ToInt64BigEndian(buffer, offset + 0x8);
+            RightSibling = Utilities.ToInt64BigEndian(buffer, offset + 0xC);
+            return 24;
         }
 
-        /// <summary>
-        /// Gets or sets the character encoding used for file names.
-        /// </summary>
-        public Encoding FileNameEncoding { get; set; }
+        public virtual void WriteTo(byte[] buffer, int offset)
+        {
+            throw new NotImplementedException();
+        }
+
+        public abstract void LoadBtree(Context context);
+
+        public abstract IList<Extent> GetExtents();
     }
 }

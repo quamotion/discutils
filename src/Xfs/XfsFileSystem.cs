@@ -45,8 +45,8 @@ namespace DiscUtils.Xfs
         /// <param name="stream">The stream containing the ext file system.</param>
         /// <param name="parameters">The generic file system parameters (only file name encoding is honoured).</param>
         /// <param name="ignoreRecovery">Ignore the Incompatible ext feature NeedsRecovery</param>
-        public XfsFileSystem(Stream stream, FileSystemParameters parameters, bool ignoreRecovery = false)
-            : base(new VfsXfsFileSystem(stream, parameters, ignoreRecovery))
+        public XfsFileSystem(Stream stream, FileSystemParameters parameters)
+            : base(new VfsXfsFileSystem(stream, parameters))
         {
         }
 

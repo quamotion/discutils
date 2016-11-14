@@ -323,6 +323,8 @@ namespace DiscUtils.Xfs
 
         public uint AgInodeMask { get; private set; }
 
+        public uint DirBlockSize { get; private set; }
+
         public int Size
         {
             get { return 264; }
@@ -386,10 +388,11 @@ namespace DiscUtils.Xfs
             Lsn = Utilities.ToInt64BigEndian(buffer, offset + 0xF0);
             MetaUuid = Utilities.ToGuidBigEndian(buffer, offset + 0xF8);
 
-
             var agOffset = AgBlocksLog2 + InodesPerBlockLog2;
             RelativeInodeMask = 0xffffffff >> (32-agOffset);
             AgInodeMask = ~RelativeInodeMask;
+
+            DirBlockSize = Blocksize << DirBlockLog2;
             return 264;
         }
 

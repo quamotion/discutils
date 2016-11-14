@@ -69,7 +69,7 @@ namespace DiscUtils.Xfs
             }
             else
             {
-                throw new IOException("Empty directory inode - undefined");
+                count = 0;
             }
             Entries = new ShortformDirectoryEntry[count];
             for (int i = 0; i < count; i++)

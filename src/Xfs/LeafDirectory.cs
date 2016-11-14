@@ -23,19 +23,16 @@
 namespace DiscUtils.Xfs
 {
     using System;
-    using System.IO;
     using System.Collections.Generic;
 
-    internal class BlockDirectory : IByteArraySerializable
+    internal class LeafDirectory : IByteArraySerializable
     {
-        public const uint HeaderMagic = 0x58443242;
+        public const uint HeaderMagic = 0x58443244;
+
+        public const ulong LeafOffset = (1* (1UL << (32 + 3)));
 
         public uint Magic { get; private set; }
-
-        public uint LeafCount { get; private set; }
-
-        public uint LeafStale { get; private set; }
-
+        
         public BlockDirectoryDataFree[] BestFree { get; private set; }
 
         public BlockDirectoryData[] Entries { get; private set; }
@@ -56,11 +53,9 @@ namespace DiscUtils.Xfs
                 offset += free.ReadFrom(buffer, offset);
                 BestFree[i] = free;
             }
-
-            LeafStale = Utilities.ToUInt32BigEndian(buffer, buffer.Length - 0x4);
-            LeafCount = Utilities.ToUInt32BigEndian(buffer, buffer.Length - 0x8);
+            
             var entries = new List<BlockDirectoryData>();
-            var eof = buffer.Length - 0x8 - LeafCount*0x8;
+            var eof = buffer.Length;
             while (offset < eof)
             {
                 BlockDirectoryData entry;

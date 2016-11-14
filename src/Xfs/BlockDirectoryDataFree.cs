@@ -33,7 +33,7 @@ namespace DiscUtils.Xfs
 
         public int Size
         {
-            get { return 32; }
+            get { return 0x4; }
         }
 
         public int ReadFrom(byte[] buffer, int offset)

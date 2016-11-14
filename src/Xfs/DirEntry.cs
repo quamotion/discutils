@@ -29,16 +29,23 @@ namespace DiscUtils.Xfs
 
     internal class DirEntry : VfsDirEntry
     {
-        private readonly ShortformDirectoryEntry _entry;
+        private readonly IDirectoryEntry _entry;
         private readonly Context _context;
+        private string _name;
 
-        public DirEntry(ShortformDirectoryEntry entry, Context context)
+        internal Directory CachedDirectory { get; set; }
+
+        private DirEntry(Context context)
         {
-            _entry = entry;
             _context = context;
-            Inode = _context.GetInode(_entry.Inode);
         }
 
+        public DirEntry(IDirectoryEntry entry, Context context):this(context)
+        {
+            _entry = entry;
+            _name = _context.Options.FileNameEncoding.GetString(_entry.Name);
+            Inode = _context.GetInode(_entry.Inode);
+        }
         public Inode Inode { get; private set; }
 
         public override bool IsDirectory
@@ -51,7 +58,7 @@ namespace DiscUtils.Xfs
             get { return Inode.FileType == UnixFileType.Link; }
         }
 
-        public override string FileName { get { return _entry.Name; } }
+        public override string FileName { get { return _name; } }
 
         public override bool HasVfsTimeInfo
         {

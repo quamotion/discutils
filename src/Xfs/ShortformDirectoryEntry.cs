@@ -25,7 +25,7 @@ namespace DiscUtils.Xfs
     using System;
     using System.IO;
 
-    internal class ShortformDirectoryEntry : IByteArraySerializable
+    internal class ShortformDirectoryEntry : IByteArraySerializable, IDirectoryEntry
     {
         private readonly bool _useShortInode;
 
@@ -38,7 +38,7 @@ namespace DiscUtils.Xfs
 
         public ushort Offset { get; private set; }
 
-        public string Name { get; private set; }
+        public byte[] Name { get; private set; }
 
         public ulong Inode { get; private set; }
 
@@ -51,7 +51,7 @@ namespace DiscUtils.Xfs
         {
             NameLength = buffer[offset];
             Offset = Utilities.ToUInt16BigEndian(buffer, offset + 0x1);
-            Name = Utilities.BytesToString(buffer, offset + 0x3, NameLength);
+            Name = Utilities.ToByteArray(buffer, offset + 0x3, NameLength);
             if (_useShortInode)
             {
                 Inode = Utilities.ToUInt32BigEndian(buffer, offset + 0x3 + NameLength);
@@ -66,6 +66,12 @@ namespace DiscUtils.Xfs
         public void WriteTo(byte[] buffer, int offset)
         {
             throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"{Inode}: {Utilities.BytesToString(Name, 0, NameLength)}";
         }
     }
 }

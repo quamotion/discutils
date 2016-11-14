@@ -59,5 +59,33 @@ namespace DiscUtils.Xfs
         {
             throw new NotImplementedException();
         }
+
+        public long GetOffset(Context context)
+        {
+            return GetOffset(context, StartBlock);
+        }
+
+        public static long GetOffset(Context context, ulong block)
+        {
+            var daddr = (long)((block >> context.SuperBlock.AgBlocksLog2) * context.SuperBlock.AgBlocks + (block & (1u << context.SuperBlock.AgBlocksLog2) - 1u)) << (context.SuperBlock.BlocksizeLog2 - 9);
+            return daddr * 512;
+        }
+
+        public byte[] GetData(Context context)
+        {
+            return GetData(context, context.SuperBlock.Blocksize*BlockCount);
+        }
+
+        public byte[] GetData(Context context, uint count)
+        {
+            context.RawStream.Position = GetOffset(context);
+            return Utilities.ReadFully(context.RawStream, (int) count);
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"[{StartOffset},{StartBlock},{BlockCount},{Flag}]";
+        }
     }
 }

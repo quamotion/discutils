@@ -24,6 +24,7 @@
 namespace DiscUtils.Xfs
 {
     using System;
+    using System.IO;
     using System.Collections.Generic;
     using DiscUtils.Vfs;
 
@@ -34,11 +35,15 @@ namespace DiscUtils.Xfs
         {
         }
 
+        private Dictionary<string,DirEntry> _allEntries;
+
         public ICollection<DirEntry> AllEntries
         {
             get
             {
-                var result = new List<DirEntry>();
+                if (_allEntries != null)
+                    return new List<DirEntry>(_allEntries.Values);
+                var result = new Dictionary<string, DirEntry>();
                 if (Inode.Format == InodeFormat.Local)
                 {
                     //shortform directory
@@ -46,14 +51,69 @@ namespace DiscUtils.Xfs
                     sfDir.ReadFrom(Inode.DataFork, 0);
                     foreach (var entry in sfDir.Entries)
                     {
-                        result.Add(new DirEntry(entry, Context));
+                        result.Add(Context.Options.FileNameEncoding.GetString(entry.Name), new DirEntry(entry, Context));
+                    }
+                }
+                else if (Inode.Format == InodeFormat.Extents)
+                {
+                    if (Inode.Extents == 1)
+                    {
+                        var blockDir = new BlockDirectory();
+
+                        var dirContent = Inode.GetContentBuffer(Context);
+                        var buffer = Utilities.ReadAll(dirContent);
+                        blockDir.ReadFrom(buffer, 0);
+                        if (blockDir.Magic != BlockDirectory.HeaderMagic)
+                            throw new IOException("invalid block directory magic");
+                        AddDirEntries(blockDir.Entries, result);
+                    }
+                    else
+                    {
+                        var extents = Inode.GetExtents();
+                        AddLeafDirExtentEntries(extents, result);
                     }
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    var header = new BTreeExtentRoot();
+                    header.ReadFrom(Inode.DataFork, 0);
+                    header.LoadBtree(Context);
+                    var extents = header.GetExtents();
+                    AddLeafDirExtentEntries(extents, result);
                 }
-                return result;
+                _allEntries = result;
+                return result.Values;
+            }
+        }
+
+        private void AddLeafDirExtentEntries(IList<Extent> extents, Dictionary<string, DirEntry> target)
+        {
+            var leafOffset = LeafDirectory.LeafOffset / Context.SuperBlock.Blocksize;
+
+            foreach (var extent in extents)
+            {
+                if (extent.StartOffset < leafOffset)
+                {
+                    var leafDir = new LeafDirectory();
+                    var buffer = extent.GetData(Context, Context.SuperBlock.DirBlockSize);
+                    leafDir.ReadFrom(buffer, 0);
+                    if (leafDir.Magic != LeafDirectory.HeaderMagic)
+                        throw new IOException("invalid leaf directory magic");
+                    AddDirEntries(leafDir.Entries, target);
+
+                }
+            }
+        }
+
+        private void AddDirEntries(BlockDirectoryData[] entries, Dictionary<string, DirEntry> target)
+        {
+            foreach (var entry in entries)
+            {
+                IDirectoryEntry dirEntry = entry as IDirectoryEntry;
+                if (dirEntry == null) continue;
+                var name = Context.Options.FileNameEncoding.GetString(dirEntry.Name);
+                if (name == "." || name == "..") continue;
+                target.Add(name, new DirEntry(dirEntry, Context));
             }
         }
 
