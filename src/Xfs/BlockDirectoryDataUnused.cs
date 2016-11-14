@@ -22,9 +22,6 @@
 
 namespace DiscUtils.Xfs
 {
-    using System;
-    using System.IO;
-
     internal class BlockDirectoryDataUnused : BlockDirectoryData
     {
         public ushort Freetag { get; private set; }
@@ -41,11 +38,6 @@ namespace DiscUtils.Xfs
             Length = Utilities.ToUInt16BigEndian(buffer, offset + 0x2);
             Tag = Utilities.ToUInt16BigEndian(buffer, offset + Length - 0x2);
             return Size;
-        }
-
-        public void WriteTo(byte[] buffer, int offset)
-        {
-            throw new NotImplementedException();
         }
     }
 }

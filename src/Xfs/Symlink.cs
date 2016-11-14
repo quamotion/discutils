@@ -43,7 +43,7 @@ namespace DiscUtils.Xfs
                 }
                 IBuffer content = FileContent;
                 byte[] data = Utilities.ReadFully(content, 0, (int) content.Capacity);
-                return Utilities.BytesToZString(data, 0, data.Length).Replace('/', '\\');
+                return Context.Options.FileNameEncoding.GetString(data, 0, data.Length).Replace('/', '\\');
             }
         }
     }

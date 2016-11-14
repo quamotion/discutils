@@ -22,9 +22,6 @@
 
 namespace DiscUtils.Xfs
 {
-    using System;
-    using System.IO;
-
     internal class BlockDirectoryDataEntry : BlockDirectoryData, IDirectoryEntry
     {
         public ulong Inode { get; private set; }
@@ -56,11 +53,6 @@ namespace DiscUtils.Xfs
             offset += padding;
             Tag = Utilities.ToUInt16BigEndian(buffer, offset + 0x9 + NameLength);
             return Size;
-        }
-
-        public void WriteTo(byte[] buffer, int offset)
-        {
-            throw new NotImplementedException();
         }
 
         /// <inheritdoc />
