@@ -98,6 +98,15 @@ namespace DiscUtils.Ext
         public byte LogGroupsPerFlex;
         public uint OverheadBlocksCount;
 
+        public bool Has64Bit
+        {
+            get
+            {
+                return (IncompatibleFeatures & IncompatibleFeatures.SixtyFourBit) ==
+                       IncompatibleFeatures.SixtyFourBit && DescriptorSize == 8;
+            }
+        }
+
         public uint BlockSize
         {
             get { return (uint)(1024 << (int)LogBlockSize); }

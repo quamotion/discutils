@@ -69,13 +69,15 @@ namespace DiscUtils.Ext
             long blockDescStart = (superblock.FirstDataBlock + 1) * (long)superblock.BlockSize;
 
             stream.Position = blockDescStart;
-            byte[] blockDescData = Utilities.ReadFully(stream, (int)numGroups * BlockGroup.DescriptorSize);
+            var bgDescSize = superblock.Has64Bit ? BlockGroup64.DescriptorSize64 : BlockGroup.DescriptorSize;
+            byte[] blockDescData = Utilities.ReadFully(stream, (int)numGroups * bgDescSize);
 
             _blockGroups = new BlockGroup[numGroups];
+
             for (int i = 0; i < numGroups; ++i)
             {
-                BlockGroup bg = new BlockGroup();
-                bg.ReadFrom(blockDescData, i * BlockGroup.DescriptorSize);
+                BlockGroup bg = superblock.Has64Bit ? new BlockGroup64() : new BlockGroup();
+                bg.ReadFrom(blockDescData, i * bgDescSize);
                 _blockGroups[i] = bg;
             }
 
@@ -210,8 +212,26 @@ namespace DiscUtils.Ext
             get
             {
                 var superBlock = Context.SuperBlock;
-                ulong blockCount = (superBlock.FreeBlocksCountHigh << 32) | superBlock.FreeBlocksCount;
-                return superBlock.BlockSize * blockCount;
+                if (superBlock.Has64Bit)
+                {
+                    ulong free = 0;
+                    //ext4 64Bit Feature
+                    foreach (BlockGroup64 blockGroup in _blockGroups)
+                    {
+                        free += (uint) (blockGroup.FreeBlocksCountHigh << 16 | blockGroup.FreeBlocksCount);
+                    }
+                    return superBlock.BlockSize*free;
+                }
+                else
+                {
+                    ulong free = 0;
+                    //ext4 64Bit Feature
+                    foreach (var blockGroup in _blockGroups)
+                    {
+                        free += blockGroup.FreeBlocksCount;
+                    }
+                    return superBlock.BlockSize * free;
+                }
             }
         }
     }
