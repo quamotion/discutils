@@ -23,6 +23,7 @@
 namespace DiscUtils.Nfs
 {
     using System;
+
     internal sealed class Nfs3FileSystemStat
     {
         public Nfs3FileSystemStat(XdrDataReader reader)

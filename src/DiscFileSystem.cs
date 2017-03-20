@@ -479,6 +479,21 @@ namespace DiscUtils
             return null;
         }
 
+        /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public abstract long Size { get; }
+
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public abstract long UsedSpace { get; }
+
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public abstract long AvailableSpace { get; }
+
 #region IDisposable Members
 
         /// <summary>
@@ -497,21 +512,6 @@ namespace DiscUtils
         protected virtual void Dispose(bool disposing)
         {
         }
-
-        /// <summary>
-        /// Size of the Filesystem in bytes
-        /// </summary>
-        public abstract long Size { get; }
-
-        /// <summary>
-        /// Used space of the Filesystem in bytes
-        /// </summary>
-        public abstract long UsedSpace { get; }
-
-        /// <summary>
-        /// Available space of the Filesystem in bytes
-        /// </summary>
-        public abstract long AvailableSpace { get; }
 
         #endregion
     }

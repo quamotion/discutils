@@ -28,6 +28,8 @@ namespace DiscUtils.Xfs
 
     internal sealed class VfsXfsFileSystem :VfsReadOnlyFileSystem<DirEntry, File, Directory, Context>,IUnixFileSystem
     {
+        private static readonly int XFS_ALLOC_AGFL_RESERVE = 4;
+
         public VfsXfsFileSystem(Stream stream, FileSystemParameters parameters)
             :base(new XfsFileSystemOptions(parameters))
         {

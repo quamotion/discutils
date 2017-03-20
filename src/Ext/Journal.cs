@@ -23,7 +23,6 @@
 namespace DiscUtils.Ext
 {
     using System.IO;
-    using DiscUtils.Vfs;
 
     internal class JournalSuperBlock : IByteArraySerializable
     {
@@ -33,7 +32,6 @@ namespace DiscUtils.Ext
         /// <inheritdoc />
         public int Size { get { return 1024; } }
         
-
         /// <inheritdoc />
         public int ReadFrom(byte[] buffer, int offset)
         {
