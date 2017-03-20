@@ -709,6 +709,30 @@ namespace DiscUtils.Nfs
         }
 
         /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public override ulong Size
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
+
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public override ulong UsedSpace
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
+
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public override ulong AvailableSpace
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
+
+        /// <summary>
         /// Disposes of this instance, freeing up any resources used.
         /// </summary>
         /// <param name="disposing"><c>true</c> if called from Dispose, else <c>false</c>.</param>

@@ -107,5 +107,29 @@ namespace DiscUtils.HfsPlus
                 return new File(Context, dirEntry.NodeId, dirEntry.CatalogFileInfo);
             }
         }
+
+        /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public override ulong Size
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
+
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public override ulong UsedSpace
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
+
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public override ulong AvailableSpace
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace DiscUtils.Ext
     using System.IO;
     using DiscUtils.Vfs;
 
-    internal sealed class VfsExtFileSystem : VfsReadOnlyFileSystem<DirEntry, File, Directory, Context>, IUnixFileSystem, ISizeSupportingFileSystem
+    internal sealed class VfsExtFileSystem : VfsReadOnlyFileSystem<DirEntry, File, Directory, Context>, IUnixFileSystem
     {
         internal const IncompatibleFeatures SupportedIncompatibleFeatures =
             IncompatibleFeatures.FileType
@@ -178,8 +178,10 @@ namespace DiscUtils.Ext
             return _blockGroups[index];
         }
 
-        /// <inheritdoc />
-        public ulong Size
+        /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public override ulong Size
         {
             get
             {
@@ -200,14 +202,18 @@ namespace DiscUtils.Ext
             }
         }
 
-        /// <inheritdoc />
-        public ulong UsedSpace
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public override ulong UsedSpace
         {
             get { return Size - AvailableSpace; }
         }
 
-        /// <inheritdoc />
-        public ulong AvailableSpace
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public override ulong AvailableSpace
         {
             get
             {

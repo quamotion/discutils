@@ -757,6 +757,30 @@ namespace DiscUtils
         {
             return new DiscFileSystemInfo(this, path);
         }
+        
+        /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public override ulong Size
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
+
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public override ulong UsedSpace
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
+
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public override ulong AvailableSpace
+        {
+            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+        }
 
         private string[] CleanItems(string[] dirtyItems)
         {

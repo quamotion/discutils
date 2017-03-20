@@ -32,7 +32,7 @@ namespace DiscUtils.Ntfs
     /// <summary>
     /// Class for accessing NTFS file systems.
     /// </summary>
-    public sealed class NtfsFileSystem : DiscFileSystem, IClusterBasedFileSystem, ISizeSupportingFileSystem, IWindowsFileSystem, IDiagnosticTraceable
+    public sealed class NtfsFileSystem : DiscFileSystem, IClusterBasedFileSystem, IWindowsFileSystem, IDiagnosticTraceable
     {
         private const FileAttributes NonSettableFileAttributes = FileAttributes.Directory | FileAttributes.Offline | FileAttributes.ReparsePoint;
 
@@ -2437,14 +2437,18 @@ namespace DiscUtils.Ntfs
             }
         }
 
-        /// <inheritdoc />
-        public ulong Size
+        /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public override ulong Size
         {
             get { return (ulong)(TotalClusters*ClusterSize); }
         }
 
-        /// <inheritdoc />
-        public ulong UsedSpace
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public override ulong UsedSpace
         {
             get
             {
@@ -2463,7 +2467,9 @@ namespace DiscUtils.Ntfs
             }
         }
 
-        /// <inheritdoc />
-        public ulong AvailableSpace { get { return Size - UsedSpace; } }
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public override ulong AvailableSpace { get { return Size - UsedSpace; } }
     }
 }

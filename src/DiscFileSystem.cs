@@ -498,6 +498,21 @@ namespace DiscUtils
         {
         }
 
-#endregion
+        /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public abstract ulong Size { get; }
+
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public abstract ulong UsedSpace { get; }
+
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public abstract ulong AvailableSpace { get; }
+
+        #endregion
     }
 }

@@ -511,6 +511,30 @@ namespace DiscUtils.Vfs
         }
 
         /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public override ulong Size
+        {
+            get { return _wrapped.Size; }
+        }
+
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public override ulong UsedSpace
+        {
+            get { return _wrapped.UsedSpace; }
+        }
+
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public override ulong AvailableSpace
+        {
+            get { return _wrapped.AvailableSpace; }
+        }
+
+        /// <summary>
         /// Provides access to the actual file system implementation.
         /// </summary>
         /// <typeparam name="TDirEntry">The concrete type representing directory entries.</typeparam>

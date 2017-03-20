@@ -28,7 +28,7 @@ namespace DiscUtils.Ext
     /// <summary>
     /// Read-only access to ext file system.
     /// </summary>
-    public sealed class ExtFileSystem : VfsFileSystemFacade, IUnixFileSystem, ISizeSupportingFileSystem
+    public sealed class ExtFileSystem : VfsFileSystemFacade, IUnixFileSystem
     {
         /// <summary>
         /// Initializes a new instance of the ExtFileSystem class.
@@ -74,24 +74,6 @@ namespace DiscUtils.Ext
             superblock.ReadFrom(superblockData, 0);
 
             return superblock.Magic == SuperBlock.Ext2Magic;
-        }
-
-        /// <inheritdoc />
-        public ulong Size
-        {
-            get { return GetRealFileSystem<VfsExtFileSystem>().Size; }
-        }
-
-        /// <inheritdoc />
-        public ulong UsedSpace
-        {
-            get { return GetRealFileSystem<VfsExtFileSystem>().UsedSpace; }
-        }
-
-        /// <inheritdoc />
-        public ulong AvailableSpace
-        {
-            get { return GetRealFileSystem<VfsExtFileSystem>().AvailableSpace; }
         }
     }
 }

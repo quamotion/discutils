@@ -32,7 +32,7 @@ namespace DiscUtils.Fat
     /// <summary>
     /// Class for accessing FAT file systems.
     /// </summary>
-    public sealed class FatFileSystem : DiscFileSystem,ISizeSupportingFileSystem
+    public sealed class FatFileSystem : DiscFileSystem
     {
         /// <summary>
         /// The Epoch for FAT file systems (1st Jan, 1980).
@@ -1957,11 +1957,15 @@ namespace DiscUtils.Fat
             }
         }
 
-        /// <inheritdoc />
-        public ulong Size { get { return (ulong)((TotalSectors - ReservedSectorCount - (FatSize * FatCount))*BytesPerSector); } }
+        /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public override ulong Size { get { return (ulong)((TotalSectors - ReservedSectorCount - (FatSize * FatCount))*BytesPerSector); } }
 
-        /// <inheritdoc />
-        public ulong UsedSpace {
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public override ulong UsedSpace {
             get
             {
                 uint usedCluster = 0;
@@ -1977,7 +1981,9 @@ namespace DiscUtils.Fat
             }
         }
 
-        /// <inheritdoc />
-        public ulong AvailableSpace { get { return Size - UsedSpace; } }
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public override ulong AvailableSpace { get { return Size - UsedSpace; } }
     }
 }
