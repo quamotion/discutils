@@ -713,7 +713,7 @@ namespace DiscUtils.Nfs
         /// </summary>
         public override ulong Size
         {
-            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+            get { return _client.FsStat(_client.RootHandle).TotalSizeBytes; }
         }
 
         /// <summary>
@@ -721,7 +721,7 @@ namespace DiscUtils.Nfs
         /// </summary>
         public override ulong UsedSpace
         {
-            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+            get { return Size - AvailableSpace; }
         }
 
         /// <summary>
@@ -729,7 +729,7 @@ namespace DiscUtils.Nfs
         /// </summary>
         public override ulong AvailableSpace
         {
-            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+            get { return _client.FsStat(_client.RootHandle).FreeSpaceBytes; }
         }
 
         /// <summary>
