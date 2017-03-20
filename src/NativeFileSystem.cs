@@ -763,7 +763,11 @@ namespace DiscUtils
         /// </summary>
         public override ulong Size
         {
-            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+            get
+            {
+                DriveInfo info = new DriveInfo(_basePath);
+                return (ulong) info.TotalSize;
+            }
         }
 
         /// <summary>
@@ -771,7 +775,7 @@ namespace DiscUtils
         /// </summary>
         public override ulong UsedSpace
         {
-            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+            get { return Size - AvailableSpace; }
         }
 
         /// <summary>
@@ -779,7 +783,11 @@ namespace DiscUtils
         /// </summary>
         public override ulong AvailableSpace
         {
-            get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
+            get
+            {
+                DriveInfo info = new DriveInfo(_basePath);
+                return (ulong)info.AvailableFreeSpace;
+            }
         }
 
         private string[] CleanItems(string[] dirtyItems)
