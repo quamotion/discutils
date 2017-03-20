@@ -513,7 +513,7 @@ namespace DiscUtils.Vfs
         /// <summary>
         /// Size of the Filesystem in bytes
         /// </summary>
-        public override ulong Size
+        public override long Size
         {
             get { return _wrapped.Size; }
         }
@@ -521,7 +521,7 @@ namespace DiscUtils.Vfs
         /// <summary>
         /// Used space of the Filesystem in bytes
         /// </summary>
-        public override ulong UsedSpace
+        public override long UsedSpace
         {
             get { return _wrapped.UsedSpace; }
         }
@@ -529,7 +529,7 @@ namespace DiscUtils.Vfs
         /// <summary>
         /// Available space of the Filesystem in bytes
         /// </summary>
-        public override ulong AvailableSpace
+        public override long AvailableSpace
         {
             get { return _wrapped.AvailableSpace; }
         }

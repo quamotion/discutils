@@ -501,17 +501,17 @@ namespace DiscUtils
         /// <summary>
         /// Size of the Filesystem in bytes
         /// </summary>
-        public abstract ulong Size { get; }
+        public abstract long Size { get; }
 
         /// <summary>
         /// Used space of the Filesystem in bytes
         /// </summary>
-        public abstract ulong UsedSpace { get; }
+        public abstract long UsedSpace { get; }
 
         /// <summary>
         /// Available space of the Filesystem in bytes
         /// </summary>
-        public abstract ulong AvailableSpace { get; }
+        public abstract long AvailableSpace { get; }
 
         #endregion
     }

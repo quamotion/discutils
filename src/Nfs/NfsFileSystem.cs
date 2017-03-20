@@ -711,15 +711,15 @@ namespace DiscUtils.Nfs
         /// <summary>
         /// Size of the Filesystem in bytes
         /// </summary>
-        public override ulong Size
+        public override long Size
         {
-            get { return _client.FsStat(_client.RootHandle).TotalSizeBytes; }
+            get { return (long) _client.FsStat(_client.RootHandle).TotalSizeBytes; }
         }
 
         /// <summary>
         /// Used space of the Filesystem in bytes
         /// </summary>
-        public override ulong UsedSpace
+        public override long UsedSpace
         {
             get { return Size - AvailableSpace; }
         }
@@ -727,9 +727,9 @@ namespace DiscUtils.Nfs
         /// <summary>
         /// Available space of the Filesystem in bytes
         /// </summary>
-        public override ulong AvailableSpace
+        public override long AvailableSpace
         {
-            get { return _client.FsStat(_client.RootHandle).FreeSpaceBytes; }
+            get { return (long) _client.FsStat(_client.RootHandle).FreeSpaceBytes; }
         }
 
         /// <summary>

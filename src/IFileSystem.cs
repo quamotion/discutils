@@ -354,16 +354,16 @@ namespace DiscUtils
         /// <summary>
         /// Size of the Filesystem in bytes
         /// </summary>
-        ulong Size { get; }
+        long Size { get; }
 
         /// <summary>
         /// Used space of the Filesystem in bytes
         /// </summary>
-        ulong UsedSpace { get; }
+        long UsedSpace { get; }
 
         /// <summary>
         /// Available space of the Filesystem in bytes
         /// </summary>
-        ulong AvailableSpace { get; }
+        long AvailableSpace { get; }
     }
 }

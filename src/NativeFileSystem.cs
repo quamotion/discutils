@@ -761,19 +761,19 @@ namespace DiscUtils
         /// <summary>
         /// Size of the Filesystem in bytes
         /// </summary>
-        public override ulong Size
+        public override long Size
         {
             get
             {
                 DriveInfo info = new DriveInfo(_basePath);
-                return (ulong) info.TotalSize;
+                return info.TotalSize;
             }
         }
 
         /// <summary>
         /// Used space of the Filesystem in bytes
         /// </summary>
-        public override ulong UsedSpace
+        public override long UsedSpace
         {
             get { return Size - AvailableSpace; }
         }
@@ -781,12 +781,12 @@ namespace DiscUtils
         /// <summary>
         /// Available space of the Filesystem in bytes
         /// </summary>
-        public override ulong AvailableSpace
+        public override long AvailableSpace
         {
             get
             {
                 DriveInfo info = new DriveInfo(_basePath);
-                return (ulong)info.AvailableFreeSpace;
+                return info.AvailableFreeSpace;
             }
         }
 

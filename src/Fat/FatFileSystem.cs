@@ -1960,12 +1960,12 @@ namespace DiscUtils.Fat
         /// <summary>
         /// Size of the Filesystem in bytes
         /// </summary>
-        public override ulong Size { get { return (ulong)((TotalSectors - ReservedSectorCount - (FatSize * FatCount))*BytesPerSector); } }
+        public override long Size { get { return ((TotalSectors - ReservedSectorCount - (FatSize * FatCount))*BytesPerSector); } }
 
         /// <summary>
         /// Used space of the Filesystem in bytes
         /// </summary>
-        public override ulong UsedSpace {
+        public override long UsedSpace {
             get
             {
                 uint usedCluster = 0;
@@ -1977,13 +1977,13 @@ namespace DiscUtils.Fat
                         usedCluster++;
                     }
                 }
-                return (ulong)(usedCluster *SectorsPerCluster*BytesPerSector);
+                return (usedCluster *SectorsPerCluster*BytesPerSector);
             }
         }
 
         /// <summary>
         /// Available space of the Filesystem in bytes
         /// </summary>
-        public override ulong AvailableSpace { get { return Size - UsedSpace; } }
+        public override long AvailableSpace { get { return Size - UsedSpace; } }
     }
 }

@@ -94,20 +94,20 @@ namespace DiscUtils.Xfs
         /// <summary>
         /// Size of the Filesystem in bytes
         /// </summary>
-        public override ulong Size
+        public override long Size
         {
             get
             {
                 var superblock = Context.SuperBlock;
                 var lsize = superblock.Logstart != 0 ? superblock.LogBlocks : 0;
-                return (superblock.DataBlocks - lsize) * superblock.Blocksize;
+                return (long) ((superblock.DataBlocks - lsize) * superblock.Blocksize);
             }
         }
 
         /// <summary>
         /// Used space of the Filesystem in bytes
         /// </summary>
-        public override ulong UsedSpace
+        public override long UsedSpace
         {
             get { return Size - AvailableSpace; }
         }
@@ -115,7 +115,7 @@ namespace DiscUtils.Xfs
         /// <summary>
         /// Available space of the Filesystem in bytes
         /// </summary>
-        public override ulong AvailableSpace
+        public override long AvailableSpace
         {
             get
             {
@@ -138,7 +138,7 @@ namespace DiscUtils.Xfs
                     }
                     alloc_set_aside += superblock.AgCount * rmapMaxlevels;
                 }
-                return (fdblocks - alloc_set_aside) * superblock.Blocksize;
+                return (long) ((fdblocks - alloc_set_aside) * superblock.Blocksize);
             }
         }
 

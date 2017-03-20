@@ -205,7 +205,7 @@ namespace DiscUtils.Udf
             /// <summary>
             /// Size of the Filesystem in bytes
             /// </summary>
-            public override ulong Size
+            public override long Size
             {
                 get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
             }
@@ -213,7 +213,7 @@ namespace DiscUtils.Udf
             /// <summary>
             /// Used space of the Filesystem in bytes
             /// </summary>
-            public override ulong UsedSpace
+            public override long UsedSpace
             {
                 get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
             }
@@ -221,7 +221,7 @@ namespace DiscUtils.Udf
             /// <summary>
             /// Available space of the Filesystem in bytes
             /// </summary>
-            public override ulong AvailableSpace
+            public override long AvailableSpace
             {
                 get { throw new NotSupportedException("Filesystem size is not (yet) supported"); }
             }

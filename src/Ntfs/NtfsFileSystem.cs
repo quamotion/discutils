@@ -2440,15 +2440,15 @@ namespace DiscUtils.Ntfs
         /// <summary>
         /// Size of the Filesystem in bytes
         /// </summary>
-        public override ulong Size
+        public override long Size
         {
-            get { return (ulong)(TotalClusters*ClusterSize); }
+            get { return TotalClusters*ClusterSize; }
         }
 
         /// <summary>
         /// Used space of the Filesystem in bytes
         /// </summary>
-        public override ulong UsedSpace
+        public override long UsedSpace
         {
             get
             {
@@ -2463,13 +2463,13 @@ namespace DiscUtils.Ntfs
                         value &= (byte)(value - 1);
                     }
                 }
-                return (ulong)(usedCluster *ClusterSize);
+                return (usedCluster *ClusterSize);
             }
         }
 
         /// <summary>
         /// Available space of the Filesystem in bytes
         /// </summary>
-        public override ulong AvailableSpace { get { return Size - UsedSpace; } }
+        public override long AvailableSpace { get { return Size - UsedSpace; } }
     }
 }
