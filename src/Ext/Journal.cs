@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2011, Kenneth Bell
+// Copyright (c) 2016, Bianco Veigel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
@@ -20,54 +20,41 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-namespace DiscUtils.Nfs
+namespace DiscUtils.Ext
 {
     using System.IO;
 
-    internal enum PortMapperProtocol
+    internal class JournalSuperBlock : IByteArraySerializable
     {
-        Tcp = 6,
-        Udp = 17
-    }
-
-    internal sealed class PortMapper : RpcProgram
-    {
-        public const int ProgramIdentifier = 100000;
-        public const int ProgramVersion = 2;
-
-        public PortMapper(RpcClient client)
-            : base(client)
+        public uint BlockSize;
+        public uint MaxLength;
+        public const uint Magic = 0xC03B3998;
+        /// <inheritdoc />
+        public int Size { get { return 1024; } }
+        
+        /// <inheritdoc />
+        public int ReadFrom(byte[] buffer, int offset)
         {
-        }
-
-        public override int Identifier
-        {
-            get { return ProgramIdentifier; }
-        }
-
-        public override int Version
-        {
-            get { return ProgramVersion; }
-        }
-
-        public int GetPort(int program, int version, PortMapperProtocol protocol)
-        {
-            MemoryStream ms = new MemoryStream();
-            XdrDataWriter writer = StartCallMessage(ms, null, NfsProc3.Lookup);
-            writer.Write(program);
-            writer.Write(version);
-            writer.Write((uint)protocol);
-            writer.Write((uint)0);
-
-            RpcReply reply = DoSend(ms);
-            if (reply.Header.IsSuccess)
+            var magic = Utilities.ToUInt32BigEndian(buffer, offset);
+            if (magic != Magic)
             {
-                return (int)reply.BodyReader.ReadUInt32();
+                throw new IOException("Invalid journal magic - probably not an Ext file system");
             }
-            else
+            var blocktype = Utilities.ToUInt32BigEndian(buffer, offset + 0x4);
+            if (blocktype != 3 && blocktype != 4)
             {
-                throw new RpcException(reply.Header.ReplyHeader);
+                throw new IOException("Invalid journal block type - no superblock found");
             }
+            BlockSize = Utilities.ToUInt32BigEndian(buffer, offset + 0xc);
+            MaxLength = Utilities.ToUInt32BigEndian(buffer, offset + 0x10);
+
+            return 1024;
+        }
+
+        /// <inheritdoc />
+        public void WriteTo(byte[] buffer, int offset)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace DiscUtils.Ext
     using System.Text;
 
     /// <summary>
-    /// FAT file system options.
+    /// ext file system options.
     /// </summary>
     public sealed class ExtFileSystemOptions : DiscFileSystemOptions
     {

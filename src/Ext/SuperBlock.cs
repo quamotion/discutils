@@ -72,6 +72,7 @@ namespace DiscUtils.Ext
 
         public byte PreallocateBlockCount;
         public byte DirPreallocateBlockCount;
+        public uint ReservedGDTBlocks;
 
         public Guid JournalSuperBlockUniqueId;
         public uint JournalInode;
@@ -95,6 +96,16 @@ namespace DiscUtils.Ext
         public ulong MultiMountProtectionBlock;
         public uint RaidStripeWidth;
         public byte LogGroupsPerFlex;
+        public uint OverheadBlocksCount;
+
+        public bool Has64Bit
+        {
+            get
+            {
+                return (IncompatibleFeatures & IncompatibleFeatures.SixtyFourBit) ==
+                       IncompatibleFeatures.SixtyFourBit && DescriptorSize == 8;
+            }
+        }
 
         public uint BlockSize
         {
@@ -147,7 +158,7 @@ namespace DiscUtils.Ext
 
             PreallocateBlockCount = buffer[offset + 204];
             DirPreallocateBlockCount = buffer[offset + 205];
-
+            ReservedGDTBlocks = Utilities.ToUInt16LittleEndian(buffer, offset + 206);
             JournalSuperBlockUniqueId = Utilities.ToGuidLittleEndian(buffer, offset + 208);
             JournalInode = Utilities.ToUInt32LittleEndian(buffer, offset + 224);
             JournalDevice = Utilities.ToUInt32LittleEndian(buffer, offset + 228);
@@ -180,6 +191,8 @@ namespace DiscUtils.Ext
             MultiMountProtectionBlock = Utilities.ToUInt64LittleEndian(buffer, offset + 260);
             RaidStripeWidth = Utilities.ToUInt32LittleEndian(buffer, offset + 268);
             LogGroupsPerFlex = buffer[offset + 272];
+
+            OverheadBlocksCount = Utilities.ToUInt32LittleEndian(buffer, offset + 584);
 
             return 1024;
         }

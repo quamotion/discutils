@@ -2436,5 +2436,40 @@ namespace DiscUtils.Ntfs
                 throw new IOException("Invalid path: " + path);
             }
         }
+
+        /// <summary>
+        /// Size of the Filesystem in bytes
+        /// </summary>
+        public override long Size
+        {
+            get { return TotalClusters*ClusterSize; }
+        }
+
+        /// <summary>
+        /// Used space of the Filesystem in bytes
+        /// </summary>
+        public override long UsedSpace
+        {
+            get
+            {
+                long usedCluster = 0;
+                var bitmap = _context.ClusterBitmap.Bitmap;
+                for (long i = 0; i < bitmap.Size; i++)
+                {
+                    var value = bitmap.GetByte(i);
+                    while (value != 0)
+                    {
+                        usedCluster++;
+                        value &= (byte)(value - 1);
+                    }
+                }
+                return (usedCluster *ClusterSize);
+            }
+        }
+
+        /// <summary>
+        /// Available space of the Filesystem in bytes
+        /// </summary>
+        public override long AvailableSpace { get { return Size - UsedSpace; } }
     }
 }

@@ -52,7 +52,7 @@ namespace DiscUtils.Nfs
         public List<Nfs3Export> Exports()
         {
             MemoryStream ms = new MemoryStream();
-            XdrDataWriter writer = StartCallMessage(ms, null, 5);
+            XdrDataWriter writer = StartCallMessage(ms, null, NfsProc3.Readlink);
 
             RpcReply reply = DoSend(ms);
             if (reply.Header.IsSuccess)
@@ -74,7 +74,7 @@ namespace DiscUtils.Nfs
         public Nfs3MountResult Mount(string dirPath)
         {
             MemoryStream ms = new MemoryStream();
-            XdrDataWriter writer = StartCallMessage(ms, _client.Credentials, 1);
+            XdrDataWriter writer = StartCallMessage(ms, _client.Credentials, NfsProc3.GetAttr);
             writer.Write(dirPath);
 
             RpcReply reply = DoSend(ms);

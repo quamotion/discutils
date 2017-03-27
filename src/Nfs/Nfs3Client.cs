@@ -34,6 +34,7 @@ namespace DiscUtils.Nfs
         private Nfs3FileHandle _rootHandle;
         private Nfs3FileSystemInfo _fsInfo;
         private Dictionary<Nfs3FileHandle, Nfs3FileAttributes> _cachedAttributes;
+        private Dictionary<Nfs3FileHandle, Nfs3FileSystemStat> _cachedStats;
 
         public Nfs3Client(string address, RpcCredentials credentials, string mountPoint)
         {
@@ -47,6 +48,7 @@ namespace DiscUtils.Nfs
             _fsInfo = fsiResult.FileSystemInfo;
             _cachedAttributes = new Dictionary<Nfs3FileHandle, Nfs3FileAttributes>();
             _cachedAttributes[_rootHandle] = fsiResult.PostOpAttributes;
+            _cachedStats = new Dictionary<Nfs3FileHandle, Nfs3FileSystemStat>();
         }
 
         public Nfs3FileHandle RootHandle
@@ -244,6 +246,27 @@ namespace DiscUtils.Nfs
             if (result.Status != Nfs3Status.Ok)
             {
                 throw new Nfs3Exception(result.Status);
+            }
+        }
+
+        public Nfs3FileSystemStat FsStat(Nfs3FileHandle handle)
+        {
+            Nfs3FileSystemStat result;
+            if (_cachedStats.TryGetValue(handle, out result))
+            {
+                //increase caching to at least one second to prevent multiple RPC calls for single Size calculation
+                if (result.InvariantUntil > DateTime.Now.AddSeconds(-1))
+                    return result;
+            }
+            Nfs3FileSystemStatResult getResult = _nfsClient.FileSystemStat(handle);
+            if (getResult.Status == Nfs3Status.Ok)
+            {
+                _cachedStats[handle] = getResult.FileSystemStat;
+                return getResult.FileSystemStat;
+            }
+            else
+            {
+                throw new Nfs3Exception(getResult.Status);
             }
         }
 

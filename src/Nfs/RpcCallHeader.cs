@@ -34,7 +34,7 @@ namespace DiscUtils.Nfs
 
         public uint Version { get; set; }
 
-        public uint Proc { get; set; }
+        public NfsProc3 Proc { get; set; }
 
         public RpcAuthentication Credentials { get; set; }
 
@@ -45,7 +45,7 @@ namespace DiscUtils.Nfs
             writer.Write(RpcVersion);
             writer.Write(Program);
             writer.Write(Version);
-            writer.Write(Proc);
+            writer.Write((uint) Proc);
             Credentials.Write(writer);
             Verifier.Write(writer);
         }
