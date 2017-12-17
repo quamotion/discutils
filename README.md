@@ -1,3 +1,7 @@
+# This repository has moved
+
+DiscUtils has moved! Head over to https://github.com/discutils/discutils for the latest source code.
+
 # Project Description
 
 [![Build status](https://ci.appveyor.com/api/projects/status/s8xnp94r6ywiwpp8?svg=true)](https://ci.appveyor.com/project/qmfrederik/discutils)
